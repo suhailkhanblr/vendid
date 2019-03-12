@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/dashboard_item_image_view_layout"
+        android:layout_width="@dimen/dashboard_item_image_view_width"
+        android:layout_height="@dimen/dashboard_item_image_view_height"
+        android:layout_marginStart="@dimen/margin_twelve"
+        android:layout_marginTop="@dimen/default_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/dashboard_item_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_background_gray"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_demo_item" />
+
+    </FrameLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dashboard_item_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin"
+        android:gravity="left"
+        android:text="RS 20000091"
+        android:textColor="@color/denied_red"
+        android:textSize="@dimen/text_size_normal"
+        app:layout_constraintEnd_toEndOf="@+id/dashboard_item_image_view_layout"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintStart_toStartOf="@+id/dashboard_item_image_view_layout"
+        app:layout_constraintTop_toBottomOf="@+id/dashboard_item_image_view_layout" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dashboard_item_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginEnd="8dp"
+        android:text="Mountain View Villallglkgkgkgkjgjkgkjgkjgkgkjgjgkjkkgjg"
+        android:textColor="@color/black_color_text"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintEnd_toEndOf="@+id/dashboard_item_image_view_layout"
+        app:layout_constraintStart_toStartOf="@+id/dashboard_item_price"
+        app:layout_constraintTop_toBottomOf="@+id/dashboard_item_price" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dashboard_item_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_xsmall"
+        android:text="27 km"
+        android:textColor="@color/dark_gray"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintEnd_toEndOf="@+id/dashboard_item_price"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/dashboard_item_description"
+        app:layout_constraintTop_toBottomOf="@+id/dashboard_item_description" />
+
+</android.support.constraint.ConstraintLayout>

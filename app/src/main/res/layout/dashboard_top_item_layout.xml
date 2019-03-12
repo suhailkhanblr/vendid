@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white_background">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/dashboard_category_menu_layout"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/bottom_navigation_bar_height"
+            android:backgroundTint="@color/black_color_text"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="@dimen/margin_small"
+            android:weightSum="5">
+
+            <LinearLayout
+                android:id="@+id/ic_home_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_motor" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:ellipsize="end"
+                    android:textSize="@dimen/small_text_size"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/dark_gray"
+                    android:fontFamily="@font/roboto_regular"
+                    android:singleLine="true"
+                    android:text="@string/motors" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ic_property_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_property" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/small_text_size"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:ellipsize="end"
+                    android:textColor="@color/dark_gray"
+                    android:fontFamily="@font/roboto_regular"
+                    android:singleLine="true"
+                    android:text="@string/property" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ic_classified_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_classified" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/small_text_size"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:ellipsize="end"
+                    android:textColor="@color/dark_gray"
+                    android:fontFamily="@font/roboto_regular"
+                    android:singleLine="true"
+                    android:text="@string/classified" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ic_jobs_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_jobs" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/small_text_size"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/dark_gray"
+                    android:fontFamily="@font/roboto_regular"
+                    android:singleLine="true"
+                    android:text="@string/jobs" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ic_community_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_community" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:textSize="@dimen/small_text_size"
+                    android:autoSizeMinTextSize="@dimen/small_text_size"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="end"
+                    android:textColor="@color/dark_gray"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/community" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/top_layout_category_separator"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/bottom_navigation_bar_divider_height"
+            android:background="@color/light_gray_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dashboard_category_menu_layout" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/continue_browsing_parent_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_fifteen"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top_layout_category_separator">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/continue_browsing_item_image_view"
+                android:layout_width="@dimen/dashboard_continue_browsing_image_layout_size"
+                android:layout_height="@dimen/dashboard_continue_browsing_image_layout_size"
+                android:background="@drawable/rounded_background_gray"
+                android:scaleType="centerInside"
+                android:layout_marginLeft="@dimen/margin_ten"
+                android:src="@drawable/ic_classified"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/continue_browsing_text_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_ten"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/continue_browsing_item_image_view"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/continue_browsing"
+                    android:textColor="@color/denied_red"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/browsing_path_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginRight="@dimen/margin_fifteen"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/continue_browsing_path_demo"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="@dimen/small_text_size" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/top_layout_browsing_history_separator"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/bottom_navigation_bar_divider_height"
+                android:background="@color/light_gray_background"
+                android:layout_marginTop="@dimen/default_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/continue_browsing_item_image_view" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_twenty"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/continue_browsing_parent_layout">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:fontFamily="@font/roboto_regular"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:text="@string/top_picks_in_classified"
+                android:textColor="@color/black_color_text"
+                android:textSize="@dimen/text_size_sixteen" />
+
+        </FrameLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+</FrameLayout>

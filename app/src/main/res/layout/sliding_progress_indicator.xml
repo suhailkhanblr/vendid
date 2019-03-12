@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_overlay">
+
+    <com.agrawalsuneet.dotsloader.loaders.SlidingLoader
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:slidingloader_animDur="1000"
+        app:slidingloader_distanceToMove="12"
+        app:slidingloader_dotsDist="6dp"
+        app:slidingloader_dotsRadius="14dp"
+        app:slidingloader_firstDotColor="@color/colorPrimaryDark"
+        app:slidingloader_secondDotColor="@color/colorPrimaryDark"
+        app:slidingloader_thirdDotColor="@color/colorPrimaryDark" />
+
+</FrameLayout>
