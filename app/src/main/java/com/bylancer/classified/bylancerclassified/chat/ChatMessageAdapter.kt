@@ -1,4 +1,4 @@
-package com.bylancer.classified.bylancerclassified.webservices.chat
+package com.bylancer.classified.bylancerclassified.chat
 
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.utils.AppConstants
 import com.bylancer.classified.bylancerclassified.utils.SessionState
+import com.bylancer.classified.bylancerclassified.webservices.chat.ChatMessageModel
 
 class ChatMessageAdapter(val mChatMessageListModel: List<ChatMessageModel>): RecyclerView.Adapter<ChatMessageAdapter.ChatViewHolder>() {
 
@@ -27,7 +28,7 @@ class ChatMessageAdapter(val mChatMessageListModel: List<ChatMessageModel>): Rec
 
     override fun onBindViewHolder(chatViewHolder: ChatViewHolder, position: Int) {
         val chatModel = mChatMessageListModel.get(position)
-        if (chatModel.senderId != null && !chatModel.senderId.equals(SessionState.instance.userId)) {
+        if (chatModel != null && chatModel.senderId != null && !chatModel.senderId.equals(SessionState.instance.userId)) {
             chatViewHolder.clientUserChatParentLayout.visibility = View.GONE
             chatViewHolder.currentUserChatParentLayout.visibility = View.VISIBLE
             if (AppConstants.ASSET_TYPE_TEXT.equals(chatModel.mtype)) {

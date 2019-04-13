@@ -1,4 +1,4 @@
-package com.bylancer.classified.bylancerclassified.login
+package com.bylancer.classified.bylancerclassified.appconfig
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -23,5 +23,11 @@ class AppConfigModel {
     @SerializedName("policy_page_link")
     @Expose
     var policyPageLink: String? = null
+    @SerializedName("categories")
+    @Expose
+    var categories: List<Category>? = null
+    @SerializedName("languages")
+    @Expose
+    var languages: List<Language>? = null
 
 }

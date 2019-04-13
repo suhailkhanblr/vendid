@@ -29,6 +29,7 @@
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginTop="@dimen/margin_forty"
             android:layout_marginEnd="@dimen/default_margin"
+            android:gravity="center"
             android:text="@string/login_with_email"
             android:textColor="@color/black_color_text"
             android:fontFamily="@font/roboto_light"
@@ -145,8 +146,6 @@
             android:enabled="false"
             android:textColor="@color/login_button_text_color"
             android:background="@drawable/rounded_login_button_states"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_forget_password_text_view" />
 
     </android.support.constraint.ConstraintLayout>

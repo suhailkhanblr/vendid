@@ -19,7 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/chat_back_image_view"
             android:layout_width="wrap_content"
@@ -113,6 +112,7 @@
             android:textSize="@dimen/text_size_normal"
             android:onClick="onClick"
             android:gravity="center"
+            android:visibility="gone"
             android:src="@drawable/ic_chat_attachment" />
 
         <android.support.v7.widget.AppCompatImageView

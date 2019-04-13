@@ -2,7 +2,6 @@ package com.bylancer.classified.bylancerclassified.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import android.view.View
@@ -27,7 +26,13 @@ import android.text.Spanned
 import android.text.style.ClickableSpan
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
+import com.bylancer.classified.bylancerclassified.appconfig.AppConfigModel
 import com.bylancer.classified.bylancerclassified.utils.LanguagePack
+import com.google.gson.Gson
 
 class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<UserRegistrationStatus> {
     private var callbackManager: CallbackManager? = null
@@ -40,7 +45,9 @@ class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<
         }
 
         app_name_login_text_view.text = if (SessionState.instance.appName != null) SessionState.instance.appName else ""
-        getAppConfig()
+        sign_up_to_continue_text_view.text = LanguagePack.getString(getString(R.string.sign_up_to_continue))
+        login_with_email_text_view.text = LanguagePack.getString(getString(R.string.login_with_email))
+        sign_up_with_email_text_view.text = LanguagePack.getString(getString(R.string.sign_up_with_email))
         setTermsAndCondition()
     }
 
@@ -138,9 +145,7 @@ class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.USER_ID.toString(), responseBody.userId!!)
                 SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
 
-                Utility.showSnackBar(login_screen_parent_layout, LanguagePack.getString("You have successfully logged in"), this)
-                startActivity(DashboardActivity::class.java, true)
-                finish()
+                fetchLanguagePackDetails()
             } else {
                 Utility.showSnackBar(login_screen_parent_layout, LanguagePack.getString("Username or email is already occupied"), this)
             }
@@ -149,6 +154,27 @@ class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<
         }
     }
 
+    private fun fetchLanguagePackDetails() {
+        var mRequestQueue = Volley.newRequestQueue(this)
+
+        //String Request initialized
+        var mStringRequest = StringRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, com.android.volley.Response.Listener<String> { response ->
+            LanguagePack.instance.saveLanguageData(this@LoginActivity, response)
+            LanguagePack.instance.setLanguageData(response)
+            moveToDashboard()
+        }, com.android.volley.Response.ErrorListener {
+            moveToDashboard()
+        })
+
+        mRequestQueue.add(mStringRequest)
+    }
+
+    private fun moveToDashboard() {
+        Utility.removeProgressBar(register_user_sliding_progress_indicator)
+        Utility.showSnackBar(login_screen_parent_layout, LanguagePack.getString("You have successfully logged in"), this)
+        startActivity(DashboardActivity::class.java, true)
+        finish()
+    }
     private fun setTermsAndCondition() {
         val span = Spannable.Factory.getInstance().newSpannable(LanguagePack.getString(getString(R.string.privacy_policy)))
         span.setSpan(object : ClickableSpan() {
@@ -174,35 +200,5 @@ class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<
         bundle.putString(AppConstants.TERMS_CONDITION_TITLE, LanguagePack.getString(getString(titleId)))
         bundle.putString(AppConstants.TERMS_CONDITION_URL, url)
         startActivity(TermsAndConditionWebView ::class.java, false, bundle)
-    }
-
-    /**
-     * Getting App Config
-     */
-    private fun getAppConfig() {
-        register_user_sliding_progress_indicator.visibility = View.VISIBLE
-        RetrofitController.fetchAppConfig(object: Callback<AppConfigModel> {
-            override fun onFailure(call: Call<AppConfigModel>?, t: Throwable?) {
-                Utility.removeProgressBar(register_user_sliding_progress_indicator)
-                Utility.showSnackBar(login_screen_parent_layout, LanguagePack.getString(getString(R.string.internet_issue)), this@LoginActivity)
-            }
-
-            override fun onResponse(call: Call<AppConfigModel>?, response: Response<AppConfigModel>?) {
-                Utility.removeProgressBar(register_user_sliding_progress_indicator)
-                if (response != null && response.isSuccessful) {
-                    val appConfigUrl = response.body()
-                    SessionState.instance.termsConditionUrl = appConfigUrl.termsPageLink!!
-                    SessionState.instance.appName = appConfigUrl.appName!!
-                    SessionState.instance.privacyPolicyUrl = appConfigUrl.policyPageLink!!
-                    SessionState.instance.detectLiveLocation = appConfigUrl.detectLiveLocation!!
-                    SessionState.instance.defaultCountry = appConfigUrl.defaultCountry!!
-
-                    app_name_login_text_view.text = SessionState.instance.appName
-                } else {
-                    Utility.showSnackBar(login_screen_parent_layout, LanguagePack.getString(getString(R.string.internet_issue)), this@LoginActivity)
-                }
-            }
-
-        })
     }
 }

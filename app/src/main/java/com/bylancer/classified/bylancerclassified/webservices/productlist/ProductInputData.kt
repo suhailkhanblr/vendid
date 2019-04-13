@@ -5,4 +5,7 @@ class ProductInputData {
     var limit: String = ""
     var countryCode: String = ""
     var status: String = ""
+    var userId: String = ""
+    var categoryId: String = ""
+    var subCategoryId: String = ""
 }

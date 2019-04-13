@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "270782395282",
+    "firebase_url": "https://bylancer-classified.firebaseio.com",
+    "project_id": "bylancer-classified",
+    "storage_bucket": "bylancer-classified.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270782395282:android:72c1811af5549e34",
+        "android_client_info": {
+          "package_name": "com.bylancer.classified.bylancerclassified"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "270782395282-oo2n02t0l86io092h0b8raaeokej3qad.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bylancer.classified.bylancerclassified",
+            "certificate_hash": "5eb79db057fee42c2ffa3b2208aa14731709f750"
+          }
+        },
+        {
+          "client_id": "270782395282-s6ttr509l2uqgbfvm795prd6kgju9cqt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0-OM0ewp9bzbOaTS4DwvWcRnDfPdXuiU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "270782395282-s6ttr509l2uqgbfvm795prd6kgju9cqt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

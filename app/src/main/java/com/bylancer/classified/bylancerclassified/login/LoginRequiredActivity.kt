@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
+import com.bylancer.classified.bylancerclassified.utils.LanguagePack
+import kotlinx.android.synthetic.main.fragment_login_required.*
 
 
 /**
@@ -19,6 +21,9 @@ class LoginRequiredActivity : BylancerBuilderActivity(), View.OnClickListener {
     override fun initialize(savedInstanceState: Bundle?) {
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         setFinishOnTouchOutside(false)
+
+        login_required_text_view.text = LanguagePack.getString(getString(R.string.login_required))
+        login_required_sub_text_view.text = LanguagePack.getString(getString(R.string.must_login))
     }
 
     override fun onClick(view: View?) {

@@ -45,6 +45,7 @@
             android:text="@string/sign_up_to_continue"
             android:textColor="@color/black_color_text"
             android:textSize="@dimen/text_size_twenty"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/app_name_login_text_view" />

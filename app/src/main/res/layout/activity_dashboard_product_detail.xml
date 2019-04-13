@@ -79,6 +79,7 @@
                 android:src="@drawable/ic_sms"/>
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/product_detail_screen_sms_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_ten"
@@ -107,6 +108,7 @@
                 android:tint="@color/white_background"/>
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/product_detail_screen_email_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_ten"
@@ -134,6 +136,7 @@
                 android:src="@drawable/ic_phone"/>
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/product_detail_screen_call_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_ten"
@@ -162,6 +165,7 @@
                 android:tint="@color/white_background"/>
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/product_detail_screen_chat_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_ten"
@@ -226,9 +230,11 @@
 
                         <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/product_detail_favorite_image_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/product_detail_fav_image_dimen"
+                            android:layout_height="@dimen/product_detail_fav_image_dimen"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            android:onClick="onClick"
+                            android:scaleType="fitXY"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:srcCompat="@drawable/ic_favorite_small"/>
@@ -312,8 +318,8 @@
                                 app:srcCompat="@drawable/login_required_icon" />
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/textView"
-                                android:layout_width="wrap_content"
+                                android:id="@+id/login_to_know_more_text_View"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/margin_ten"
                                 android:layout_marginEnd="@dimen/default_margin"

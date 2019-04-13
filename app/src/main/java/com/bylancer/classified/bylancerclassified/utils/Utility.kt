@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -61,7 +63,7 @@ class Utility {
 
         fun showSnackBar(view: View, msg:String, context: Context) {
             if (view != null && context != null) {
-                val snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
+                val snackbar = Snackbar.make(view, LanguagePack.getString(msg), Snackbar.LENGTH_LONG)
                 val sbView = snackbar.getView()
                 val textView = sbView.findViewById<TextView>(android.support.design.R.id.snackbar_text)
                 textView.typeface = ResourcesCompat.getFont(context, R.font.roboto_bold)
@@ -370,6 +372,12 @@ class Utility {
         fun valueInDp(sizeInDp : Int, context: Context): Int {
             val scale = context.resources.getDisplayMetrics().density
             return ((sizeInDp*scale + 0.5f).toInt())
+        }
+
+        fun isNetworkAvailable(context: Context): Boolean {
+            val connectivityManager: ConnectivityManager = context.getSystemService (Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected
         }
 
     }

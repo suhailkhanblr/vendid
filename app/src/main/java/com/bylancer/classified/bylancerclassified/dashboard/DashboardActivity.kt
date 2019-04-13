@@ -2,7 +2,10 @@ package com.bylancer.classified.bylancerclassified.dashboard
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
@@ -13,14 +16,21 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.widget.Toast
+import com.bylancer.classified.bylancerclassified.alarm.NotificationMessagesFragment
+import com.bylancer.classified.bylancerclassified.chat.GroupChatFragment
 import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
 import com.bylancer.classified.bylancerclassified.settings.SettingsFragment
 import com.bylancer.classified.bylancerclassified.utils.SessionState
 import com.bylancer.classified.bylancerclassified.utils.Utility
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 class DashboardActivity : BylancerBuilderActivity() {
     val dashboardFragment = DashboardFragment()
+    val notificationMessageFragment = NotificationMessagesFragment()
+    val groupChatFragment = GroupChatFragment()
     val settingsFragment = SettingsFragment()
     val MY_PERMISSIONS_REQUEST_LOCATION = 88
 
@@ -32,6 +42,8 @@ class DashboardActivity : BylancerBuilderActivity() {
 
         Utility.checkLocationAndPhonePermission(MY_PERMISSIONS_REQUEST_LOCATION, this)
 
+        initializeNotification()
+
         bottom_navigation_menu.setOnNavigationItemSelectedListener { menuItem -> when(menuItem.itemId) {
             R.id.action_home -> {
                 commitFragment(0)
@@ -39,15 +51,15 @@ class DashboardActivity : BylancerBuilderActivity() {
             }
             R.id.action_alarm -> {
                 if (SessionState.instance.isLoggedIn) {
-                    Utility.showSnackBar(dashboard_screen_parent_layout, "Work In Progress", this)
+                    commitFragment(1)
                 } else  {
                     startActivity(LoginRequiredActivity::class.java, false)
                 }
                 true
             }
-            R.id.action_upload -> {
+            R.id.action_chat -> {
                 if (SessionState.instance.isLoggedIn) {
-                    Utility.showSnackBar(dashboard_screen_parent_layout, "Work In Progress", this)
+                    commitFragment(3)
                 } else  {
                     startActivity(LoginRequiredActivity::class.java, false)
                 }
@@ -66,6 +78,49 @@ class DashboardActivity : BylancerBuilderActivity() {
                 true
             }
         }}
+    }
+
+    private fun initializeNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            val channelId = getString(R.string.default_notification_channel_id)
+            val channelName = getString(R.string.default_notification_channel_name)
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager?.createNotificationChannel(NotificationChannel(channelId,
+                    channelName, NotificationManager.IMPORTANCE_LOW))
+
+
+            // Handle possible data accompanying notification message.
+            // [START handle_data_extras]
+            intent.extras?.let {
+                for (key in it.keySet()) {
+                    val value = intent.extras.get(key)
+                }
+            }
+            // [END handle_data_extras]
+
+
+            FirebaseInstanceId.getInstance().instanceId
+                    .addOnCompleteListener(OnCompleteListener { task ->
+                        if (!task.isSuccessful) {
+                            return@OnCompleteListener
+                        }
+
+                        subscribeToTopic()
+                        // Get new Instance ID token
+                        val token = task.result?.token
+                    })
+
+        }
+    }
+
+    private fun subscribeToTopic() {
+        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.default_notification_topic))
+                .addOnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+
+                    }
+                }
     }
 
     @SuppressLint("RestrictedApi")
@@ -96,6 +151,8 @@ class DashboardActivity : BylancerBuilderActivity() {
         val fragmentTransaction = supportFragmentManager.beginTransaction();
         when(tabPosition) {
             0 -> fragmentTransaction.replace(R.id.fragment_container, dashboardFragment, dashboardFragment::class.simpleName)
+            1 -> fragmentTransaction.replace(R.id.fragment_container, notificationMessageFragment, notificationMessageFragment::class.simpleName)
+            3 -> fragmentTransaction.replace(R.id.fragment_container, groupChatFragment, groupChatFragment::class.simpleName)
             4 -> fragmentTransaction.replace(R.id.fragment_container, settingsFragment, settingsFragment::class.simpleName)
             else -> {}
         }

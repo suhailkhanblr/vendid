@@ -1,8 +1,7 @@
 package com.bylancer.classified.bylancerclassified.utils
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
+import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
 
 class SessionState private constructor() {
     var isLogin: Boolean = false
@@ -23,6 +22,10 @@ class SessionState private constructor() {
     var selectedState: String = ""
     var selectedCity: String = ""
     var selectedLanguage: String = ""
+    var continueBrowsingText: String = ""
+    var continueBrowsingCategoryId: String = ""
+    var continueBrowsingSubCategoryId: String = ""
+    var continueBrowsingImage: String = ""
 
     val isLoggedIn: Boolean
         get() = isLogin
@@ -48,6 +51,12 @@ class SessionState private constructor() {
             this.selectedState = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_STATE.toString(), "")
             this.selectedCity = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_CITY.toString(), "")
             this.selectedLanguage = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE.toString(), "")
+            this.continueBrowsingText = prefs.getString(AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_TEXT.toString(), "")
+            this.continueBrowsingCategoryId = prefs.getString(AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_CATEGORY_ID.toString(), "")
+            this.continueBrowsingSubCategoryId = prefs.getString(AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_SUB_CATEGORY_ID.toString(), "")
+            this.continueBrowsingImage = prefs.getString(AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_IMAGE.toString(), "")
+            LanguagePack.instance.setLanguageData(prefs.getString(AppConstants.Companion.PREFERENCES.LANGUAGE_PACK.toString(), ""))
+            AppConfigDetail.initialize(prefs.getString(AppConstants.Companion.PREFERENCES.APP_CONFIG.toString(), ""))
         }
     }
 
@@ -83,6 +92,9 @@ class SessionState private constructor() {
         this.userId = ""
         this.deviceId = ""
         this.profilePicUrl = ""
+        this.continueBrowsingSubCategoryId = ""
+        this.continueBrowsingCategoryId = ""
+        this.continueBrowsingText = ""
     }
 
     companion object {

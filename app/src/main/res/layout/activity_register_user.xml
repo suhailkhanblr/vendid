@@ -30,6 +30,7 @@
             android:layout_marginTop="@dimen/margin_forty"
             android:layout_marginEnd="@dimen/default_margin"
             android:text="@string/sign_up_app"
+            android:gravity="center"
             android:textColor="@color/black_color_text"
             android:fontFamily="@font/roboto_light"
             android:textStyle="bold"

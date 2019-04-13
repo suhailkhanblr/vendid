@@ -43,4 +43,14 @@ abstract class BylancerBuilderFragment : Fragment() {
         intent.putExtra(AppConstants.BUNDLE, extra)
         startActivity(intent)
     }
+
+    fun startActivity(clazz: Class<out Activity>, isNewTask:Boolean, bundle: Bundle) {
+        val intent = Intent(context, clazz)
+        intent.putExtra(AppConstants.BUNDLE, bundle)
+        if(isNewTask) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        startActivity(intent)
+    }
 }

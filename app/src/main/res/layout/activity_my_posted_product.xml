@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_posted_product_parent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_background"
+    android:orientation="vertical"
+    tools:context=".settings.MyFavoritesActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_twenty">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/my_products_back_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:onClick="onClick"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin"
+            app:srcCompat="@drawable/ic_backward" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/my_products_title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_condensed_bold"
+            android:text="@string/my_favorites"
+            android:layout_gravity="center"
+            android:textColor="@color/gray_color_text"
+            android:textSize="@dimen/text_size_twenty"
+            android:gravity="center"
+            android:textStyle="bold" />
+
+    </FrameLayout>
+
+    <View
+        android:id="@+id/my_products_title_separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_navigation_bar_divider_height"
+        android:layout_marginStart="@dimen/margin_twenty_five"
+        android:layout_marginTop="@dimen/margin_ten"
+        android:layout_marginEnd="@dimen/margin_thirty"
+        android:background="@color/light_gray"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_ten">
+
+        <LinearLayout
+            android:id="@+id/no_my_products_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/progress_view_dashboard_height"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_star_big" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/no_my_products_added"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/denied_red"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_fifteen"
+                android:textSize="@dimen/text_size_normal"
+                android:fontFamily="@font/roboto_regular"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/my_products_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </FrameLayout>
+
+</LinearLayout>

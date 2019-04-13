@@ -1,7 +1,6 @@
 package com.bylancer.classified.bylancerclassified.dashboard
 
 import android.Manifest
-import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
@@ -33,16 +32,18 @@ import android.support.constraint.ConstraintSet
 import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.AppCompatEditText
 import android.support.v7.widget.AppCompatTextView
-import android.text.Html
 import android.view.Gravity
 import android.widget.TextView
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Button
 import com.bylancer.classified.bylancerclassified.chat.ChatActivity
+import com.bylancer.classified.bylancerclassified.database.DatabaseTaskAsyc
 import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
 import com.bylancer.classified.bylancerclassified.utils.LanguagePack
+import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferData
+import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferStatus
 import com.bylancer.classified.bylancerclassified.widgets.CustomAlertDialog
+import com.gmail.samehadar.iosdialog.IOSDialog
 
 class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<DashboardDetailModel>, View.OnClickListener,
         OnMapReadyCallback {
@@ -54,6 +55,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
     var phoneNumber: String? = null
     var ownerEmail: String? = null
     var mDashboardDetailModel:DashboardDetailModel? = null
+    var iosDialog: IOSDialog? = null
 
     override fun setLayoutView() = R.layout.activity_dashboard_product_detail
 
@@ -67,6 +69,22 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission()
         }
+
+        iosDialog = Utility.showProgressView(this@DashboardProductDetailActivity, LanguagePack.getString("Sending..."))
+
+        product_detail_screen_sms_text_view.text = LanguagePack.getString(getString(R.string.sms))
+        product_detail_screen_email_text_view.text = LanguagePack.getString(getString(R.string.email_id))
+        product_detail_screen_call_text_view.text = LanguagePack.getString(getString(R.string.call))
+        product_detail_screen_chat_text_view.text = LanguagePack.getString(getString(R.string.chat))
+        make_an_offer_text_view.text = LanguagePack.getString(getString(R.string.make_an_offer))
+        login_to_know_more_text_View.text = LanguagePack.getString(getString(R.string.login_to_know_more))
+        product_detail_age.text = LanguagePack.getString(getString(R.string.age))
+        start_login_screen_button.text = LanguagePack.getString(getString(R.string.login))
+        product_detail_posted_by.text = LanguagePack.getString(getString(R.string.posted_by))
+        product_detail_phone_number.text = LanguagePack.getString(getString(R.string.phone_number))
+        product_detail_product_status.text = LanguagePack.getString(getString(R.string.status))
+        product_detail_description.text = LanguagePack.getString(getString(R.string.description))
+        product_detail_location.text = LanguagePack.getString(getString(R.string.location))
 
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.product_detail_product_map) as SupportMapFragment?
@@ -137,11 +155,16 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
         ownerEmail = dashboardDetailModel.sellerEmail
         product_detail_location_detail.text = dashboardDetailModel.country + " > " + dashboardDetailModel.state + " > " + dashboardDetailModel.city
 
+        DatabaseTaskAsyc(this@DashboardProductDetailActivity,
+                mDashboardDetailModel!!, product_detail_favorite_image_view, dashboard_product_detail_parent_layout, true).execute()
+
         var parentLayoutIdToMatchConstraint = product_detail_product_status_separator.id
         if(dashboardDetailModel.customData != null) {
             for(i in 0..(dashboardDetailModel.customData!!.size - 1)) {
                 val customDataElement = dashboardDetailModel.customData!![i]
-                parentLayoutIdToMatchConstraint = addCustomDataDynamically(parentLayoutIdToMatchConstraint, customDataElement.title!!, customDataElement.value!!)
+                if (customDataElement != null && customDataElement.title != null && customDataElement.value != null) {
+                    parentLayoutIdToMatchConstraint = addCustomDataDynamically(parentLayoutIdToMatchConstraint, customDataElement.title!!, customDataElement.value!!)
+                }
             }
         }
 
@@ -180,7 +203,11 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             R.id.make_an_offer_text_view -> {
                 if (SessionState.instance.isLoggedIn) {
                     if(mDashboardDetailModel != null && product_detail_price_text_view != null) {
-                        makeAnOffer(product_detail_price_text_view.text.toString())
+                        if (!SessionState.instance.email.equals(mDashboardDetailModel?.sellerEmail)) {
+                            makeAnOffer(product_detail_price_text_view.text.toString())
+                        } else {
+                            Utility.showSnackBar(dashboard_product_detail_parent_layout, getString(R.string.posted_by_you), this@DashboardProductDetailActivity)
+                        }
                     }
                 } else {
                     startActivity(LoginRequiredActivity::class.java, false)
@@ -198,7 +225,10 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             }
             R.id.product_detail_favorite_image_view -> {
                 if (SessionState.instance.isLoggedIn) {
-
+                    if (mDashboardDetailModel != null) {
+                        DatabaseTaskAsyc(this@DashboardProductDetailActivity,
+                                mDashboardDetailModel!!, product_detail_favorite_image_view, dashboard_product_detail_parent_layout, false).execute()
+                    }
                 } else {
                     startActivity(LoginRequiredActivity::class.java, false)
                 }
@@ -213,11 +243,15 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             R.id.product_detail_screen_chat -> {
                 if (SessionState.instance.isLoggedIn) {
                     if (mDashboardDetailModel != null && mDashboardDetailModel!!.sellerUsername != null) {
-                        val bundle = Bundle()
-                        bundle.putString(AppConstants.CHAT_TITLE, mDashboardDetailModel!!.sellerName)
-                        bundle.putString(AppConstants.CHAT_USER_NAME, mDashboardDetailModel!!.sellerUsername)
-                        bundle.putString(AppConstants.CHAT_USER_IMAGE, mDashboardDetailModel!!.sellerImage)
-                        startActivity(ChatActivity::class.java, false, bundle)
+                        if (!SessionState.instance.email.equals(mDashboardDetailModel!!.sellerEmail)) {
+                            val bundle = Bundle()
+                            bundle.putString(AppConstants.CHAT_TITLE, mDashboardDetailModel!!.sellerName)
+                            bundle.putString(AppConstants.CHAT_USER_NAME, mDashboardDetailModel!!.sellerUsername)
+                            bundle.putString(AppConstants.CHAT_USER_IMAGE, mDashboardDetailModel!!.sellerImage)
+                            startActivity(ChatActivity::class.java, false, bundle)
+                        } else {
+                            Utility.showSnackBar(dashboard_product_detail_parent_layout, getString(R.string.posted_by_you), this@DashboardProductDetailActivity)
+                        }
                     } else {
                         Utility.showSnackBar(dashboard_product_detail_parent_layout, getString(R.string.some_wrong), this@DashboardProductDetailActivity)
                     }
@@ -311,7 +345,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
 
         val captionTextView = TextView(this)
         captionTextView.id = View.generateViewId()
-        captionTextView.text = captionText
+        captionTextView.text = LanguagePack.getString(captionText)
         captionTextView.setTextColor(resources.getColor(R.color.disable_icon_color))
         captionTextView.setPadding(Utility.valueInDp(10, this), Utility.valueInDp(10, this), Utility.valueInDp(10, this), Utility.valueInDp(10, this));
         post_login_product_detail_layout.addView(captionTextView, 0)
@@ -376,19 +410,54 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
         val dialogCancelButton = makeAnOfferDialog.findViewById(R.id.bid_cancel_button) as AppCompatButton
 
         dialogTitle.text = LanguagePack.getString("Make an Offer")
-        dialogSubTitle.text = LanguagePack.getString("Seller asking price is ") + "\""+ askingPrice +"\""
+        dialogSubTitle.text = LanguagePack.getString("Seller asking price is") + " \""+ askingPrice +"\""
+       // dialogSubTitle.text = String.format(LanguagePack.getString("Seller asking price is \" %s \""), askingPrice)
         dialogConfirmButton.text = LanguagePack.getString("Confirm")
         dialogCancelButton.text = LanguagePack.getString("Cancel")
 
         dialogConfirmButton.setOnClickListener() {
             //Utility.hideKeyboardFromDialogs(this@DashboardProductDetailActivity)
+            if (dialogEditText.text.isNullOrEmpty()) {
+                return@setOnClickListener
+            }
             makeAnOfferDialog.dismiss()
-            Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString(getString(R.string.offer_submitted)), this@DashboardProductDetailActivity)
+            iosDialog?.show()
+            sendMakeAnOfferRequest(dialogEditText.text.toString())
         }
         dialogCancelButton.setOnClickListener() {
            // Utility.hideKeyboardFromDialogs(this@DashboardProductDetailActivity)
             makeAnOfferDialog.dismiss()
         }
 
+    }
+
+    private fun sendMakeAnOfferRequest(offer : String) {
+        val makeAnOfferData = MakeAnOfferData()
+        makeAnOfferData.email = mDashboardDetailModel?.sellerEmail!!
+        makeAnOfferData.message = SessionState.instance.displayName + " " + LanguagePack.getString("is interested to buy") + " ${mDashboardDetailModel?.title!!} " + LanguagePack.getString("at") + " " + Utility.decodeUnicode(mDashboardDetailModel?.currency!!)+ " $offer "
+        makeAnOfferData.ownerName = mDashboardDetailModel?.sellerName!!
+        makeAnOfferData.productId = mDashboardDetailModel?.id!!
+        makeAnOfferData.productName = mDashboardDetailModel?.title!!
+        makeAnOfferData.userId = mDashboardDetailModel?.sellerEmail!!
+        makeAnOfferData.type = "make_offer"
+        makeAnOfferData.senderId = SessionState.instance.userId
+        makeAnOfferData.senderName = SessionState.instance.displayName
+        makeAnOfferData.subject = LanguagePack.getString("Offer from") + " " + getString(R.string.app_name)
+        RetrofitController.makeAnOffer(makeAnOfferData,object: Callback<MakeAnOfferStatus> {
+            override fun onFailure(call: Call<MakeAnOfferStatus>?, t: Throwable?) {
+                removeProgressBar()
+                Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString(getString(R.string.internet_issue)), this@DashboardProductDetailActivity)
+            }
+
+            override fun onResponse(call: Call<MakeAnOfferStatus>?, response: Response<MakeAnOfferStatus>?) {
+                removeProgressBar()
+                Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString(getString(R.string.offer_submitted)), this@DashboardProductDetailActivity)
+            }
+
+        })
+    }
+
+    private fun removeProgressBar() {
+        if (iosDialog != null) iosDialog?.dismiss()
     }
 }

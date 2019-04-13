@@ -3,13 +3,13 @@ package com.bylancer.classified.bylancerclassified.dashboard
 
 import android.os.Bundle
 import android.app.Fragment
+import android.content.Context
 import android.os.Handler
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import android.view.animation.Animation
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.fragments.BylancerBuilderFragment
-import com.bylancer.classified.bylancerclassified.utils.GridSpacingItemDecoration
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.productlist.ProductInputData
 import com.bylancer.classified.bylancerclassified.webservices.productlist.ProductsData
@@ -19,14 +19,17 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.view.animation.AnimationUtils
 import android.widget.TextView
-import com.bylancer.classified.bylancerclassified.utils.AppConstants
-import com.bylancer.classified.bylancerclassified.utils.Utility
 import android.widget.Toast
 import ir.mirrajabi.searchdialog.core.SearchResultListener
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
-import com.bylancer.classified.bylancerclassified.utils.LanguagePack
 import android.graphics.Typeface
+import android.support.v7.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
+import com.bylancer.classified.bylancerclassified.appconfig.SubCategory
+import com.bylancer.classified.bylancerclassified.utils.*
 import kotlinx.android.synthetic.main.activity_dashboard.*
+import kotlinx.android.synthetic.main.dashboard_top_item_layout.*
 
 /**
  * A simple [Fragment] subclass.
@@ -40,17 +43,32 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
 
     override fun setLayoutView() = R.layout.fragment_dashboard
 
-    override fun initialize(savedInstanceState: Bundle?) {
+    override fun initialize(savedInstanceState: Bundle?) { //
+        dashboard_category_menu_recycler_view.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        dashboard_category_menu_recycler_view.setHasFixedSize(false)
+        val parentActivity: DashboardActivity = (activity as DashboardActivity?)!!
+        dashboard_category_menu_recycler_view.adapter = DashboardCategoryAdapter(AppConfigDetail.category!!, parentActivity)
+
         dashboard_recycler_view.layoutManager = GridLayoutManager(context, SPAN_COUNT);
         dashboard_recycler_view.setHasFixedSize(false)
         dashboard_recycler_view.isNestedScrollingEnabled = false
         dashboard_recycler_view.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, 10, false))
+
+        top_picks_in_classified.text = LanguagePack.getString(getString(R.string.top_picks_in_classified))
+        dashboard_search_button.text = LanguagePack.getString(getString(R.string.search_text))
 
         dashboard_search_button.setOnClickListener() {showItemSearchBar()}
         animateProgressView()
         Handler().postDelayed({
             fetchProductList()
         }, 2000)
+
+        continue_browsing_parent_layout.setOnClickListener() {
+            val bundle = Bundle()
+            bundle.putString(AppConstants.CATEGORY, SessionState.instance.continueBrowsingCategoryId)
+            bundle.putString(AppConstants.SUB_CATEGORY, SessionState.instance.continueBrowsingSubCategoryId)
+            startActivity(ProductByCategoryActivity::class.java, bundle)
+        }
     }
 
     private fun showItemSearchBar() {
@@ -58,11 +76,19 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
                 DashboardSearchItemModel(LanguagePack.getString("Property for Sale")), DashboardSearchItemModel(LanguagePack.getString("Property for Rent")), DashboardSearchItemModel(LanguagePack.getString("Jobs")),
                 DashboardSearchItemModel(LanguagePack.getString("Community")))
 
+        if (AppConfigDetail.category != null) {
+            searchItemList.clear()
+            for (categoryName in AppConfigDetail.category!!) {
+                searchItemList.add(DashboardSearchItemModel(LanguagePack.getString(categoryName.name!!)))
+            }
+        }
+
         val simpleSearchDialogCompat = SimpleSearchDialogCompat(context, LanguagePack.getString("Search..."),
                 LanguagePack.getString("What are you looking for?"), null, searchItemList,
                 SearchResultListener<DashboardSearchItemModel> { dialog, item, position ->
-                    if (item != null) {
-                        productsBasedOnSearchBar(item.title!!)
+                    if (AppConfigDetail.category != null ) {
+                        showSubCategoryInSearchBar(context!!, AppConfigDetail.category!!.get(position).subCategory!!, AppConfigDetail.category!!.get(position).id!!,
+                                AppConfigDetail.category!!.get(position).name!!, AppConfigDetail.category!!.get(position).picture!!)
                     }
 
                     dialog.dismiss()
@@ -90,8 +116,73 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
         }
     }
 
-    private fun productsBasedOnSearchBar(searchedItem: String) {
+    private fun showSubCategoryInSearchBar(context: Context, subCategory: List<SubCategory>, categoryId: String, categoryName:String, iconUrl: String) {
+        var searchItemList = arrayListOf<DashboardSearchItemModel>(DashboardSearchItemModel(LanguagePack.getString("All")), DashboardSearchItemModel(LanguagePack.getString("Property for Rent")), DashboardSearchItemModel(LanguagePack.getString("Jobs")),
+                DashboardSearchItemModel(LanguagePack.getString("Motors")), DashboardSearchItemModel(LanguagePack.getString("Classifieds")),
+                DashboardSearchItemModel(LanguagePack.getString("Property for Sale")), DashboardSearchItemModel(LanguagePack.getString("Property for Rent")), DashboardSearchItemModel(LanguagePack.getString("Jobs")),
+                DashboardSearchItemModel(LanguagePack.getString("Community")))
 
+        if (subCategory != null) {
+            searchItemList.clear()
+            searchItemList.add(DashboardSearchItemModel(LanguagePack.getString("All")))
+            for (subCategoryName in subCategory!!) {
+                searchItemList.add(DashboardSearchItemModel(LanguagePack.getString(subCategoryName.name!!)))
+            }
+        }
+
+        val simpleSearchDialogCompat = SimpleSearchDialogCompat(context, LanguagePack.getString("Search..."),
+                LanguagePack.getString("What are you looking for?"), null, searchItemList,
+                SearchResultListener<DashboardSearchItemModel> { dialog, item, position ->
+                    SessionState.instance.continueBrowsingText = categoryName + " | " + item.title!!
+                    SessionState.instance.continueBrowsingCategoryId = categoryId
+                    SessionState.instance.continueBrowsingImage = iconUrl
+                    SessionState.instance.continueBrowsingSubCategoryId = if (position == 0) "0" else subCategory.get(position - 1).id!!
+                    SessionState.instance.saveValuesToPreferences(context, AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_TEXT.toString(), SessionState.instance.continueBrowsingText)
+                    SessionState.instance.saveValuesToPreferences(context, AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_CATEGORY_ID.toString(), SessionState.instance.continueBrowsingCategoryId)
+                    SessionState.instance.saveValuesToPreferences(context, AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_SUB_CATEGORY_ID.toString(), SessionState.instance.continueBrowsingSubCategoryId)
+                    SessionState.instance.saveValuesToPreferences(context, AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_IMAGE.toString(), SessionState.instance.continueBrowsingImage)
+                    if (!subCategory.isNullOrEmpty()) {
+                        val bundle = Bundle()
+                        bundle.putString(AppConstants.CATEGORY, categoryId)
+                        val subCategoryId: String = if (position == 0) "0" else subCategory.get(position - 1).id!!
+                        bundle.putString(AppConstants.SUB_CATEGORY, subCategoryId)
+                        startActivity(ProductByCategoryActivity::class.java, bundle)
+                    }
+
+                    dialog.dismiss()
+                })
+        simpleSearchDialogCompat.show()
+        //simpleSearchDialogCompat.setOnDismissListener { Utility.hideKeyboardFromDialogs(activity!!) }
+        val typeface = Typeface.createFromAsset(context?.assets,
+                "fonts/roboto_italic.ttf")
+        if (simpleSearchDialogCompat.titleTextView != null) {
+            simpleSearchDialogCompat.titleTextView.setTextColor(context.resources.getColor(R.color.shadow_black))
+        }
+
+        if (simpleSearchDialogCompat.searchBox != null) {
+            simpleSearchDialogCompat.searchBox.setTextColor(context.resources.getColor(R.color.shadow_black))
+            simpleSearchDialogCompat.searchBox.typeface = typeface
+            simpleSearchDialogCompat.searchBox.setHintTextColor(context.resources.getColor(R.color.light_gray))
+        }
+        if (simpleSearchDialogCompat.recyclerView != null && simpleSearchDialogCompat.recyclerView.findViewHolderForAdapterPosition(0) != null
+                && simpleSearchDialogCompat.recyclerView.findViewHolderForAdapterPosition(0)!!.itemView  != null){
+            if ((simpleSearchDialogCompat.recyclerView.findViewHolderForAdapterPosition(0)!!.itemView) is TextView) {
+                val recyclerTextView = simpleSearchDialogCompat.recyclerView.findViewHolderForAdapterPosition(0)!!.itemView as TextView
+                recyclerTextView.setTextColor(context.resources.getColor(R.color.shadow_black))
+                recyclerTextView.typeface = typeface
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (SessionState.instance.continueBrowsingSubCategoryId.isNullOrEmpty()) {
+            continue_browsing_parent_layout.visibility = View.GONE
+        } else {
+            continue_browsing_text_view.text = LanguagePack.getString(getString(R.string.continue_browsing))
+            browsing_path_text_view.text = SessionState.instance.continueBrowsingText
+            Glide.with(context!!).load(SessionState.instance.continueBrowsingImage).into(continue_browsing_item_image_view)
+        }
     }
 
     private fun animateProgressView() {
@@ -141,8 +232,8 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
     }
 
     override fun onFailure(call: Call<List<ProductsData>>?, t: Throwable?) {
-        progress_view_dashboard_frame.visibility = View.GONE
-        progress_view_dashboard.clearAnimation()
+        if (progress_view_dashboard_frame != null) progress_view_dashboard_frame.visibility = View.GONE
+        if (progress_view_dashboard != null) progress_view_dashboard.clearAnimation()
         animUpDown = null
     }
 

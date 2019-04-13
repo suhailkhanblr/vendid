@@ -3,15 +3,24 @@ package com.bylancer.classified.bylancerclassified.settings
 
 import android.os.Bundle
 import android.app.Fragment
+import android.content.Intent
 import android.graphics.Rect
+import android.net.Uri
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.view.View
 import android.view.ViewTreeObserver
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.bylancer.classified.bylancerclassified.R
+import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
 import com.bylancer.classified.bylancerclassified.fragments.BylancerBuilderFragment
 import com.bylancer.classified.bylancerclassified.login.LoginActivity
+import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
+import com.bylancer.classified.bylancerclassified.login.TermsAndConditionWebView
 import com.bylancer.classified.bylancerclassified.utils.AppConstants
+import com.bylancer.classified.bylancerclassified.utils.LanguagePack
 import com.bylancer.classified.bylancerclassified.utils.SessionState
 import com.bylancer.classified.bylancerclassified.utils.Utility
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
@@ -24,14 +33,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 /**
- * A simple [Fragment] subclass.
+ * A settings [Fragment] class.
  *
  */
 class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener {
@@ -44,13 +47,20 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener {
     override fun setLayoutView() = R.layout.fragment_settings
 
     override fun initialize(savedInstanceState: Bundle?) {
+        initializeTextViewsWithLanguagePack()
+
         settings_login_sign_up_frame.setOnClickListener(this)
+        settings_terms_condition_frame.setOnClickListener(this)
+        settings_my_fav_frame.setOnClickListener(this)
+        settings_my_ads_frame.setOnClickListener(this)
+        settings_support_frame.setOnClickListener(this)
         if (SessionState.instance.isLoggedIn) {
             settings_login_sign_up_icon.setImageResource(R.drawable.ic_settings_logout)
-            settings_login_sign_up_text.setText(getString(R.string.log_out))
+            settings_login_sign_up_text.text = LanguagePack.getString(getString(R.string.log_out))
+        } else {
+            settings_login_sign_up_text.text = LanguagePack.getString(getString(R.string.login_sign_up))
         }
 
-        settings_country_spinner.setHint("Select country") //change title of spinner-dialog programmatically
         settings_country_spinner.setHintTextColor(resources.getColor(R.color.light_gray)) //change title of spinner-dialog programmatically
         if (!AppConstants.EMPTY.equals(SessionState.instance.selectedCountry)) {
             settings_country_spinner.setText(SessionState.instance.selectedCountry)
@@ -76,6 +86,7 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener {
         if (!AppConstants.EMPTY.equals(SessionState.instance.selectedState)) {
             settings_state_spinner.setText(SessionState.instance.selectedState)
         }
+
         settings_state_spinner.setOnItemClickListener{ position ->
             SessionState.instance.selectedState = if (stateList.get(position) != null) stateList.get(position).name!! else ""
             SessionState.instance.saveValuesToPreferences(context!!, AppConstants.Companion.PREFERENCES.SELECTED_STATE.toString(),
@@ -90,27 +101,94 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener {
         if (!AppConstants.EMPTY.equals(SessionState.instance.selectedCity)) {
             settings_city_spinner.setText(SessionState.instance.selectedCity)
         }
+
         settings_city_spinner.setOnItemClickListener{ position ->
             SessionState.instance.selectedCity = if (cityList.get(position) != null) cityList.get(position).name!! else ""
             SessionState.instance.saveValuesToPreferences(context!!, AppConstants.Companion.PREFERENCES.SELECTED_CITY.toString(),
                     if (cityList.get(position) != null) cityList.get(position).name!! else "")
         }
 
+        if (LanguagePack.instance.languagePackData == null) {
+            fetchLanguagePackDetails()
+        } else {
+            initializeLanguagePack()
+        }
+    }
+
+    private fun fetchLanguagePackDetails() {
+        var mRequestQueue = Volley.newRequestQueue(context)
+
+        //String Request initialized
+        var mStringRequest = StringRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, com.android.volley.Response.Listener<String> { response ->
+            LanguagePack.instance.saveLanguageData(context!!, response)
+            LanguagePack.instance.setLanguageData(response)
+            initializeLanguagePack()
+        }, com.android.volley.Response.ErrorListener {
+            initializeLanguagePack()
+        })
+
+        mRequestQueue.add(mStringRequest)
+    }
+
+    private fun initializeTextViewsWithLanguagePack() {
+        appCompatTextView.text = LanguagePack.getString(getString(R.string.my_account))
+        settings_my_ads_text.text = LanguagePack.getString(getString(R.string.my_ads))
+        settings_my_fav_text.text = LanguagePack.getString(getString(R.string.my_favorites))
+        settings_my_saved_search_text.text = LanguagePack.getString(getString(R.string.my_saved_search))
+        settings_caption_text_view.text = LanguagePack.getString(getString(R.string.settings))
+        settings_country_text.text = LanguagePack.getString(getString(R.string.country))
+        settings_state_text.text = LanguagePack.getString(getString(R.string.state))
+        settings_city_text.text = LanguagePack.getString(getString(R.string.city))
+        settings_language_text.text = LanguagePack.getString(getString(R.string.language))
+        settings_support_text.text = LanguagePack.getString(getString(R.string.support))
+        settings_terms_condition_text.text = LanguagePack.getString(getString(R.string.terms_condition))
+        settings_language_spinner.hint = LanguagePack.getString(getString(R.string.select_language))
+        settings_country_spinner.hint = LanguagePack.getString(getString(R.string.select_country))
+        settings_state_spinner.hint = LanguagePack.getString(getString(R.string.select_state))
+        settings_city_spinner.hint = LanguagePack.getString(getString(R.string.select_city))
+        appCompatTextView.text = LanguagePack.getString(getString(R.string.my_account))
+        if (SessionState.instance.isLoggedIn) {
+            settings_login_sign_up_text.text = LanguagePack.getString(getString(R.string.log_out))
+        } else {
+            settings_login_sign_up_text.text = LanguagePack.getString(getString(R.string.login_sign_up))
+        }
+    }
+
+    private fun initializeLanguagePack() {
+        settings_language_spinner.setHint(LanguagePack.getString(getString(R.string.select_language)))
         settings_language_spinner.setOnItemClickListener{ position ->
-            SessionState.instance.selectedLanguage = "English"
-            SessionState.instance.saveValuesToPreferences(context!!, AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE.toString(),
-                    "English")
+            if(AppConfigDetail.languageList != null) {
+                SessionState.instance.selectedLanguage = AppConfigDetail.languageList?.get(position)?.name!!
+                SessionState.instance.saveValuesToPreferences(context!!, AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE.toString(),
+                        AppConfigDetail.languageList?.get(position)?.name!!)
+                initializeTextViewsWithLanguagePack()
+            } else  {
+                SessionState.instance.selectedLanguage = "English"
+                SessionState.instance.saveValuesToPreferences(context!!, AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE.toString(),
+                        "English")
+            }
         }
 
         if (!AppConstants.EMPTY.equals(SessionState.instance.selectedLanguage)) {
             settings_language_spinner.setText(SessionState.instance.selectedLanguage)
         }
-        settings_language_spinner.setItems(arrayOf("English")) //this is important, you must set it to set the item list
+
+        var languageList = arrayListOf<String>()
+        if (AppConfigDetail.languageList != null) {
+            for (x in AppConfigDetail.languageList !!) {
+                languageList.add(x.name!!)
+            }
+        } else  {
+            languageList.add("English")
+        }
+        settings_language_spinner.setItems(languageList.toArray(arrayOfNulls<String>(languageList.size))) //this is important, you must set it to set the item list
         settings_language_spinner.setHintTextColor(resources.getColor(R.color.light_gray))
         settings_language_spinner.setExpandTint(R.color.transparent)
         settings_language_spinner.setExpandTint(R.color.transparent)
 
-        fetchCountryList()
+        if (settings_country_spinner.text.isNullOrEmpty()) {
+            fetchCountryList() // To load only first time
+        }
     }
 
     private fun fetchCountryList() {
@@ -175,10 +253,35 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when (view?.id) {
-            R.id.settings_login_sign_up_frame -> if (SessionState.instance.isLoggedIn) {
-                showLogoutAlertDialog()
-            } else  {
-                startActivity(LoginActivity::class.java, false)
+            R.id.settings_login_sign_up_frame ->
+                if (SessionState.instance.isLoggedIn) {
+                    showLogoutAlertDialog()
+                } else  {
+                    startActivity(LoginActivity::class.java, false)
+                }
+            R.id.settings_terms_condition_frame -> {
+                loadTermsAndConditionWebView(R.string.terms_condition, if (SessionState.instance.termsConditionUrl != null) SessionState.instance.termsConditionUrl else "")
+            }
+            R.id.settings_support_frame -> {
+                val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", AppConstants.SUPPORT_EMAIL, null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Regarding ");
+                //emailIntent.putExtra(Intent.EXTRA_TEXT, "Hi, \n \n"+ LanguagePack.getString("I am interested in your property") + " " + product_detail_title_text_view.text + ".\n "+ LanguagePack.getString("We can have discussion on") +" \n\n" + LanguagePack.getString("Regards")+",\n"+ SessionState.instance.displayName);
+                startActivityForResult(Intent.createChooser(emailIntent,  LanguagePack.getString("Send email...")), 0);
+            }
+            R.id.settings_my_fav_frame -> {
+                if (SessionState.instance.isLoggedIn) {
+                    startActivity(MyFavoritesActivity::class.java, false)
+                } else {
+                    startActivity(LoginRequiredActivity::class.java, false)
+                }
+            }
+            R.id.settings_my_ads_frame -> {
+                if (SessionState.instance.isLoggedIn) {
+                    startActivity(MyPostedProductActivity::class.java, false)
+                } else {
+                    startActivity(LoginRequiredActivity::class.java, false)
+                }
             }
         }
     }
@@ -196,6 +299,7 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener {
 
     fun showProgressDialog(message: String) {
         mProgressDialog = Utility.getProgressDialog(context!!, message)
+        mProgressDialog?.show()
     }
 
     fun dismissProgressDialog() {
@@ -208,14 +312,21 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener {
     private fun showLogoutAlertDialog() {
         val builder = AlertDialog.Builder(context!!)
         builder.setTitle("")
-        builder.setMessage("Are you sure you want to log out")
-        builder.setPositiveButton("YES"){dialog, which ->
+        builder.setMessage(LanguagePack.getString("Are you sure you want to log out"))
+        builder.setPositiveButton(LanguagePack.getString("YES")){dialog, which ->
             dialog.dismiss()
             logoutUser()
         }
-        builder.setNegativeButton("No"){dialog, which ->
+        builder.setNegativeButton(LanguagePack.getString("No")){dialog, which ->
             dialog.dismiss()
         }
         builder.create().show()
+    }
+
+    private fun loadTermsAndConditionWebView(titleId: Int, url: String) {
+        var bundle = Bundle()
+        bundle.putString(AppConstants.TERMS_CONDITION_TITLE, LanguagePack.getString(getString(titleId)))
+        bundle.putString(AppConstants.TERMS_CONDITION_URL, url)
+        startActivity(TermsAndConditionWebView ::class.java, false, bundle)
     }
 }

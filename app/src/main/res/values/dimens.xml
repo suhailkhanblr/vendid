@@ -59,16 +59,20 @@
     <dimen name="dashboard_continue_browsing_parent_layout_size">90dp</dimen>
     <dimen name="dashboard_continue_browsing_image_layout_size">80dp</dimen>
     <dimen name="progress_view_dashboard_height">150dp</dimen>
+    <dimen name="category_layout_size">80dp</dimen>
+    <dimen name="category_layout_size_image_size">40dp</dimen>
 
     <!-- Dashboard Detail -->
     <dimen name="product_detail_view_pager_height">240dp</dimen>
     <dimen name="product_detail_dialog_box">300dp</dimen>
+    <dimen name="product_detail_fav_image_dimen">36dp</dimen>
 
     <!--Settings -->
     <dimen name="settings_icon_size">21dp</dimen>
 
     <!-- Chat -->
     <dimen name="chat_user_icon_size">40dp</dimen>
+    <dimen name="group_chat_user_icon_size">90dp</dimen>
     <dimen name="chat_bax_height">48dp</dimen>
     <dimen name="chat_box_image_size">220dp</dimen>
 

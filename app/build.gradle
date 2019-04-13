@@ -1,10 +1,8 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'io.fabric'
+apply plugin: 'kotlin-kapt'
 
 /*repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -28,6 +26,12 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force 'com.android.support:customtabs:28.0.0'
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -43,6 +47,7 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.gmail.samehadar:iosdialog:1.0'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.android.volley:volley:1.1.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -54,8 +59,13 @@ dependencies {
     implementation 'jrizani:jrspinner:0.2.4'
     implementation 'com.facebook.android:facebook-android-sdk:4.17.0'
     implementation 'com.github.mirrajabi:search-dialog:1.2.3'
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    kapt "android.arch.persistence.room:compiler:1.1.1"
+    implementation 'com.google.firebase:firebase-messaging:17.6.0'
 
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true;
     }
 }
+apply plugin: 'com.google.gms.google-services'
