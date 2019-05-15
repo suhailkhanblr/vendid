@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/upload_title_text_parent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_background"
+    tools:context=".uploadproduct.postdetails.UploadSelectATitleActivity">
+
+    <ImageView
+        android:id="@+id/close_upload_title_selection_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_twelve"
+        android:onClick="onClick"
+        android:layout_marginTop="@dimen/margin_twelve"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_back" />
+
+    <LinearLayout
+        android:id="@+id/upload_title_text_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_twenty"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.23000002">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/upload_tile_selection_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:text="@string/enter_short_title"
+            android:textColor="@color/shadow_black"
+            android:textSize="@dimen/text_size_xlarge"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/close_sub_category_selection_image_view" />
+
+        <EditText
+            android:id="@+id/upload_enter_a_title_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_title_selection_edit_text_states"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="@string/enter_upload_title"
+            android:inputType="textCapSentences"
+            android:padding="@dimen/margin_fifteen"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/margin_twenty_five"
+            android:elevation="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:imeOptions="actionDone"
+            android:textColor="@color/black_color_text"
+            android:textColorHint="@color/gray"
+            android:textSize="@dimen/text_size_sixteen" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/upload_title_selection_continue_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/margin_twenty"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:text="@string/continue_title_selection"
+            android:onClick="onClick"
+            android:fontFamily="@font/roboto_bold"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_sixteen"
+            android:enabled="false"
+            android:textColor="@color/login_button_text_color"
+            android:background="@drawable/rounded_upload_title_button_states" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

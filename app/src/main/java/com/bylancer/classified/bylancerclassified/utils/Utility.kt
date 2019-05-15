@@ -8,19 +8,23 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.location.LocationManager
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.provider.Settings
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.widget.CircularProgressDrawable
-import android.support.v7.app.AlertDialog
+import android.support.v4.widget.NestedScrollView
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.telephony.TelephonyManager
 import android.text.Html
 import android.text.TextUtils
 import android.util.Patterns
@@ -33,8 +37,15 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.agrawalsuneet.dotsloader.loaders.SlidingLoader
+import com.asksira.bsimagepicker.BSImagePicker
+import com.asksira.bsimagepicker.Utils
 import com.bylancer.classified.bylancerclassified.R
+import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
+import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.AddTokenStatus
 import com.gmail.samehadar.iosdialog.IOSDialog
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.regex.Pattern
 
 
@@ -54,7 +65,7 @@ class Utility {
                     .setMessageColorRes(R.color.white_color_text)
                     // .setTitle(R.string.standard_title)
                     .setTitleColorRes(R.color.white_color_text)
-                    .setMessageContent(message)
+                    .setMessageContent(LanguagePack.getString(message))
                     .setCancelable(false)
                     .setMessageContentGravity(Gravity.END)
                     .build()
@@ -308,7 +319,7 @@ class Utility {
         }
 
         fun shareProduct(url: String, appName: String, context: Context) {
-            val shareBody = "Have a look of this product on " + appName
+            val shareBody = "Have a look of this product on " + appName +"\n $url"
             val sharingIntent = Intent(Intent.ACTION_SEND)
             sharingIntent.setType("text/plain")
             sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, appName)
@@ -381,4 +392,120 @@ class Utility {
         }
 
     }
+}
+
+fun Context.getDeviceId(): String {
+    return Settings.Secure.getString(getContentResolver(),
+            Settings.Secure.ANDROID_ID)
+}
+
+fun Context.sendTokenToServer() {
+    RetrofitController.addDeviceToken(SessionState.instance.userId, SessionState.instance.displayName,
+            getDeviceId(), SessionState.instance.token, object : Callback<AddTokenStatus> {
+        override fun onFailure(call: Call<AddTokenStatus>?, t: Throwable?) {
+            if (Utility.isNetworkAvailable(this@sendTokenToServer)) {
+                sendTokenToServer()
+            }
+        }
+
+        override fun onResponse(call: Call<AddTokenStatus>?, response: Response<AddTokenStatus>?) {
+            if (response != null && response.isSuccessful) {
+                SessionState.instance.saveValuesToPreferences(this@sendTokenToServer, AppConstants.Companion.PREFERENCES.DEVICE_ID.toString(),
+                        SessionState.instance.token)
+            } else if (Utility.isNetworkAvailable(this@sendTokenToServer)) {
+                sendTokenToServer()
+            }
+        }
+    })
+}
+
+fun RecyclerView.initScrollListener(onProductLoading: LazyProductLoading) {
+    addOnScrollListener( object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx:Int, dy:Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            if (dy > 0) { // dy to check it is scrolling down
+                var gridLayoutManager = recyclerView.getLayoutManager() as GridLayoutManager
+                if (onProductLoading != null && gridLayoutManager != null) {
+                    onProductLoading.onProductLoadRequired(gridLayoutManager.findLastCompletelyVisibleItemPosition())
+                }
+            }
+        }
+    })
+}
+
+fun NestedScrollView.initNestedScrollListener(onProductLoading: LazyProductLoading) {
+    setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+        if (scrollY > oldScrollY) {
+
+        }
+        if (scrollY < oldScrollY) {
+            //Log.i("AA", "Scroll UP");
+        }
+
+        if (scrollY == 0) {
+            //Log.i("Aa", "TOP SCROLL");
+        }
+
+        if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() / 3)  - (v.getMeasuredHeight() / 3)) &&
+                scrollY > oldScrollY) {
+            onProductLoading.onProductLoadRequired(Integer.MAX_VALUE)
+        }
+    })
+}
+
+fun Context.getCurrentCountry(): String {
+    if (AppConstants.YES.equals(SessionState.instance.detectLiveLocation)) {
+        try {
+            var tm = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+            var simCountry = tm.simCountryIso
+            if (simCountry != null && simCountry.length == 2) { // SIM country code is available
+                return simCountry.toLowerCase()
+            }
+            else if (tm.phoneType != TelephonyManager.PHONE_TYPE_CDMA) { // device is not 3G (would be unreliable)
+                var networkCountry = tm.networkCountryIso
+                if (networkCountry != null && networkCountry.length == 2) { // network country code is available
+                    return networkCountry.toLowerCase()
+                }
+            }
+        }
+        catch (e: Exception) { }
+        return "in";
+    } else  {
+        return SessionState.instance.defaultCountry.toLowerCase()
+    }
+}
+
+fun getSingleImagePickerDialog(tag: String) : BSImagePicker {
+    return BSImagePicker.Builder("com.bylancer.classified.bylancerclassified.fileprovider")
+            .setMaximumDisplayingImages(Integer.MAX_VALUE) //Default: Integer.MAX_VALUE. Don't worry about performance :)
+            .setSpanCount(3) //Default: 3. This is the number of columns
+            .setGridSpacing(Utils.dp2px(2)) //Default: 2dp. Remember to pass in a value in pixel.
+            .setPeekHeight(Utils.dp2px(360)) //Default: 360dp. This is the initial height of the dialog.
+            //.hideCameraTile() //Default: show. Set this if you don't want user to take photo.
+            .hideGalleryTile() //Default: show. Set this if you don't want to further let user select from a gallery app. In such case, I suggest you to set maximum displaying images to Integer.MAX_VALUE.
+            .setTag(tag) //Default: null. Set this if you need to identify which picker is calling back your fragment / activity.
+            //.dismissOnSelect(true) //Default: true. Set this if you do not want the picker to dismiss right after selection. But then you will have to dismiss by yourself.
+            .build()
+}
+
+fun Context.isLocationEnabled() : Boolean {
+     var  locationManager: LocationManager? = null;
+     var gps_enabled = false
+     var network_enabled = false
+
+     if(locationManager ==null)
+         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+     try{
+         gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+     }catch(ex: Exception){
+         //do nothing...
+     }
+
+     try{
+        network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+     }catch(ex: Exception){
+         //do nothing...
+     }
+
+     return gps_enabled || network_enabled;
 }

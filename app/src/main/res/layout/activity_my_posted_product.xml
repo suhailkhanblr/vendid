@@ -20,9 +20,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:onClick="onClick"
-            android:layout_marginStart="@dimen/default_margin"
-            android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginBottom="@dimen/default_margin"
+            android:paddingStart="@dimen/margin_fifteen"
+            android:paddingEnd="@dimen/default_margin"
             app:srcCompat="@drawable/ic_backward" />
 
         <android.support.v7.widget.AppCompatTextView

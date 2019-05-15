@@ -19,16 +19,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.view.animation.AnimationUtils
 import android.widget.TextView
-import android.widget.Toast
 import ir.mirrajabi.searchdialog.core.SearchResultListener
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
 import android.graphics.Typeface
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bylancer.classified.bylancerclassified.activities.SplashActivity
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
 import com.bylancer.classified.bylancerclassified.appconfig.SubCategory
 import com.bylancer.classified.bylancerclassified.utils.*
-import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.dashboard_top_item_layout.*
 
 /**
@@ -38,21 +38,33 @@ import kotlinx.android.synthetic.main.dashboard_top_item_layout.*
  *
  */
 class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>>, OnProductItemClickListener {
+
     val SPAN_COUNT = 2
+    var productPageNumber = 1
+    var isProductDataLoading = false
     var animUpDown: Animation? = null
+    val productDataList: ArrayList<ProductsData> = arrayListOf()
 
     override fun setLayoutView() = R.layout.fragment_dashboard
 
     override fun initialize(savedInstanceState: Bundle?) { //
+        productDataList.clear()
+
         dashboard_category_menu_recycler_view.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         dashboard_category_menu_recycler_view.setHasFixedSize(false)
         val parentActivity: DashboardActivity = (activity as DashboardActivity?)!!
+        if (AppConfigDetail.category == null || dashboard_category_menu_recycler_view == null) {
+            SessionState.instance.readValuesFromPreferences(context)
+            startActivity(SplashActivity::class.java, true)
+        }
         dashboard_category_menu_recycler_view.adapter = DashboardCategoryAdapter(AppConfigDetail.category!!, parentActivity)
 
         dashboard_recycler_view.layoutManager = GridLayoutManager(context, SPAN_COUNT);
         dashboard_recycler_view.setHasFixedSize(false)
         dashboard_recycler_view.isNestedScrollingEnabled = false
+        dashboard_recycler_view.itemAnimator = DefaultItemAnimator()
         dashboard_recycler_view.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, 10, false))
+        initializingRecyclerViewScrollListener()
 
         top_picks_in_classified.text = LanguagePack.getString(getString(R.string.top_picks_in_classified))
         dashboard_search_button.text = LanguagePack.getString(getString(R.string.search_text))
@@ -65,8 +77,8 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
 
         continue_browsing_parent_layout.setOnClickListener() {
             val bundle = Bundle()
-            bundle.putString(AppConstants.CATEGORY, SessionState.instance.continueBrowsingCategoryId)
-            bundle.putString(AppConstants.SUB_CATEGORY, SessionState.instance.continueBrowsingSubCategoryId)
+            bundle.putString(AppConstants.SELECTED_CATEGORY_ID, SessionState.instance.continueBrowsingCategoryId)
+            bundle.putString(AppConstants.SELECTED_SUB_CATEGORY_ID, SessionState.instance.continueBrowsingSubCategoryId)
             startActivity(ProductByCategoryActivity::class.java, bundle)
         }
     }
@@ -94,6 +106,14 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
                     dialog.dismiss()
                 })
         simpleSearchDialogCompat.show()
+
+        simpleSearchDialogCompat.setOnDismissListener() {
+            var searchedkeyWord = simpleSearchDialogCompat.searchBox.text
+            if (!searchedkeyWord.isNullOrEmpty()) {
+
+            }
+        }
+
         //simpleSearchDialogCompat.setOnDismissListener { Utility.hideKeyboardFromDialogs(activity!!) }
         val typeface = Typeface.createFromAsset(context?.assets,
                 "fonts/roboto_italic.ttf")
@@ -143,9 +163,9 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
                     SessionState.instance.saveValuesToPreferences(context, AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_IMAGE.toString(), SessionState.instance.continueBrowsingImage)
                     if (!subCategory.isNullOrEmpty()) {
                         val bundle = Bundle()
-                        bundle.putString(AppConstants.CATEGORY, categoryId)
+                        bundle.putString(AppConstants.SELECTED_CATEGORY_ID, categoryId)
                         val subCategoryId: String = if (position == 0) "0" else subCategory.get(position - 1).id!!
-                        bundle.putString(AppConstants.SUB_CATEGORY, subCategoryId)
+                        bundle.putString(AppConstants.SELECTED_SUB_CATEGORY_ID, subCategoryId)
                         startActivity(ProductByCategoryActivity::class.java, bundle)
                     }
 
@@ -205,11 +225,12 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
     }
 
     private fun fetchProductList() {
+        isProductDataLoading = true
         val productInputData = ProductInputData()
-        productInputData.countryCode = "in"
-        productInputData.limit = "30"
-        productInputData.pageNumber = "1"
-        productInputData.status = "active"
+        productInputData.countryCode = SessionState.instance.selectedCountryCode
+        productInputData.limit = AppConstants.PRODUCT_LOADING_LIMIT
+        productInputData.pageNumber = productPageNumber.toString()
+        productInputData.status = AppConstants.PRODUCT_STATUS
 
         RetrofitController.fetchProducts(productInputData, this)
     }
@@ -221,20 +242,27 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
             animUpDown = null
 
             if(response != null && response.isSuccessful) {
-                val productList: List<ProductsData> = response.body()
-                if(productList != null) {
-                    dashboard_recycler_view.adapter = DashboardItemAdapter(productList, this)
+                productDataList.addAll(response.body())
+                if (productDataList != null) {
+                    if (dashboard_recycler_view.adapter != null) {
+                        dashboard_recycler_view.adapter!!.notifyDataSetChanged()
+                    } else  {
+                        dashboard_recycler_view.adapter = DashboardItemAdapter(productDataList, this)
+                    }
                 } else {
                     Utility.showSnackBar(dashboard_fragment_parent_layout, "Work In Progress", context!!)
                 }
             }
         }
+
+        isProductDataLoading = false
     }
 
     override fun onFailure(call: Call<List<ProductsData>>?, t: Throwable?) {
         if (progress_view_dashboard_frame != null) progress_view_dashboard_frame.visibility = View.GONE
         if (progress_view_dashboard != null) progress_view_dashboard.clearAnimation()
         animUpDown = null
+        isProductDataLoading = false
     }
 
     override fun onProductItemClicked(productId: String?, productName: String?, userName: String?) {
@@ -243,5 +271,17 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
         bundle.putString(AppConstants.PRODUCT_NAME, productName)
         bundle.putString(AppConstants.PRODUCT_OWNER_NAME, userName)
         startActivity(DashboardProductDetailActivity::class.java, bundle)
+    }
+
+    private fun initializingRecyclerViewScrollListener() {
+        dashboard_nested_scroll_view.initNestedScrollListener(object : LazyProductLoading {
+            override fun onProductLoadRequired(currentVisibleItem: Int) {
+                val itemSizeForLazyLoading = productDataList.size / 2
+                if (!isProductDataLoading && productDataList != null && currentVisibleItem >= itemSizeForLazyLoading) {
+                    productPageNumber += 1
+                    fetchProductList()
+                }
+            }
+        })
     }
 }

@@ -9,7 +9,7 @@
         android:title=""
         android:icon="@drawable/ic_bell"
         app:showAsAction="always"/>
-    <item android:id="@+id/action_navigation"
+    <item android:id="@+id/action_upload_product"
         android:title=""
         app:showAsAction="always"/>
     <item android:id="@+id/action_chat"

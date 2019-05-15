@@ -21,7 +21,7 @@ class NotificationMessagesFragment : BylancerBuilderFragment(), Callback<List<No
     override fun setLayoutView() = R.layout.activity_notification_alarm
 
     override fun initialize(savedInstanceState: Bundle?) {
-        iOSDialog = Utility.getProgressDialog(context!!, LanguagePack.getString("Loading..."))
+        iOSDialog = Utility.showProgressView(context!!, LanguagePack.getString("Loading..."))
         notification_alarm_title_text_view.text = LanguagePack.getString(getString(R.string.notification))
 
         recycler_view_notification_alarm_message_list.setHasFixedSize(false)
@@ -36,23 +36,27 @@ class NotificationMessagesFragment : BylancerBuilderFragment(), Callback<List<No
 
     override fun onFailure(call: Call<List<NotificationDataModel>>?, t: Throwable?) {
         removeProgressBar()
-        if (!Utility.isNetworkAvailable(context!!)) {
-            Utility.showSnackBar(notification_alarm_parent_layout, getString(R.string.internet_issue), context!!)
-        } else {
-            Utility.showSnackBar(notification_alarm_parent_layout, getString(R.string.chat_issue), context!!)
+        if (context != null) {
+            if (!Utility.isNetworkAvailable(context!!)) {
+                Utility.showSnackBar(notification_alarm_parent_layout, getString(R.string.internet_issue), context!!)
+            } else {
+                Utility.showSnackBar(notification_alarm_parent_layout, getString(R.string.chat_issue), context!!)
+            }
         }
     }
 
     override fun onResponse(call: Call<List<NotificationDataModel>>?, response: Response<List<NotificationDataModel>>?) {
         removeProgressBar()
-        if (response != null && response.isSuccessful && recycler_view_notification_alarm_message_list != null) {
-            if (response.body().isNullOrEmpty()) {
-                Utility.showSnackBar(notification_alarm_parent_layout, getString(R.string.no_notification), context!!)
+        if (context != null) {
+            if (response != null && response.isSuccessful && recycler_view_notification_alarm_message_list != null) {
+                if (response.body().isNullOrEmpty()) {
+                    Utility.showSnackBar(notification_alarm_parent_layout, getString(R.string.no_notification), context!!)
+                } else {
+                    recycler_view_notification_alarm_message_list.adapter = NotificationMessageAdapter(response.body())
+                }
             } else {
-                recycler_view_notification_alarm_message_list.adapter = NotificationMessageAdapter(response.body())
+                Utility.showSnackBar(notification_alarm_parent_layout, getString(R.string.some_wrong), context!!)
             }
-        } else {
-            Utility.showSnackBar(notification_alarm_parent_layout, getString(R.string.some_wrong), context!!)
         }
     }
 

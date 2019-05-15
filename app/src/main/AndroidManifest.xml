@@ -33,10 +33,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".activities.SplashActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/BylancerTheme"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,7 +48,7 @@
         <activity
             android:name=".dashboard.DashboardActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/BylancerTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".login.LoginRequiredActivity"
@@ -57,53 +58,93 @@
         <activity
             android:name=".login.LoginActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/BylancerTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".login.ManualLoginActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/BylancerTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".login.ForgotPasswordActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/BylancerTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".login.RegisterUserActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/BylancerTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.DashboardProductDetailActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/BylancerTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".login.TermsAndConditionWebView"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/BylancerTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".chat.ChatActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/BylancerTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".settings.MyFavoritesActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/BylancerTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".settings.MyPostedProductActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/BylancerTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".dashboard.ProductByCategoryActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.Design.NoActionBar"
+            android:theme="@style/BylancerTheme"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".uploadproduct.categoryselection.UploadCategorySelectionActivity"
+            android:screenOrientation="userPortrait"
+            android:theme="@style/BylancerTheme"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".uploadproduct.subcategoryselection.UploadSubCategorySelectionActivity"
+            android:screenOrientation="userPortrait"
+            android:theme="@style/BylancerTheme"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".uploadproduct.postdetails.UploadSelectATitleActivity"
+            android:screenOrientation="userPortrait"
+            android:theme="@style/BylancerTheme"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".uploadproduct.postdetails.UploadProductDetail"
+            android:screenOrientation="userPortrait"
+            android:theme="@style/BylancerTheme"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".uploadproduct.postdetails.LocationSelectionActivity"
+            android:screenOrientation="userPortrait"
+            android:theme="@style/BylancerTheme"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".uploadproduct.postdetails.ProductAdditionalInfoWebview"
+            android:screenOrientation="userPortrait"
+            android:theme="@style/BylancerTheme"
+            android:windowSoftInputMode="adjustPan" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.bylancer.classified.bylancerclassified.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <service
             android:name=".notification.MyFirebaseMessagingService"
             android:exported="false">
@@ -135,18 +176,17 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages. -->
+            android:value="@string/google_maps_key" /> <!-- Set custom default icon. This is used when no icon is set for incoming notification messages. -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_stat_notifications" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message.  -->
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/white_background" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />

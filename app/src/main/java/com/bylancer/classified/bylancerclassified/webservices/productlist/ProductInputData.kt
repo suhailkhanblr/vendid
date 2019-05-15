@@ -8,4 +8,6 @@ class ProductInputData {
     var userId: String = ""
     var categoryId: String = ""
     var subCategoryId: String = ""
+    var keywords: String = ""
+    var additionalSearchInfo: String = ""
 }

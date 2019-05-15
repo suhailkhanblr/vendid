@@ -2,13 +2,12 @@ package com.bylancer.classified.bylancerclassified.login
 
 import android.os.Bundle
 import android.view.View
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
-import android.webkit.WebViewClient
-import android.webkit.WebView
 import com.bylancer.classified.bylancerclassified.utils.AppConstants
-import android.graphics.Bitmap
-import android.webkit.WebResourceRequest
 import kotlinx.android.synthetic.main.activity_terms_condition.*
 
 class TermsAndConditionWebView: BylancerBuilderActivity(), View.OnClickListener {

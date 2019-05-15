@@ -2,8 +2,8 @@ package com.bylancer.classified.bylancerclassified.database
 
 import android.arch.persistence.room.TypeConverter
 import com.bylancer.classified.bylancerclassified.dashboard.CustomData
-import com.google.gson.reflect.TypeToken
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 
 class DataConverterCustomData {

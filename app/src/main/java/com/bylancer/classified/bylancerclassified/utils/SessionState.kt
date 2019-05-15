@@ -10,7 +10,7 @@ class SessionState private constructor() {
     var phoneNumber: String = ""
     var address: String = ""
     var userId: String = ""
-    var deviceId: String = ""
+    var token: String = ""
     var userName: String = ""
     var profilePicUrl: String = ""
     var appName: String = ""
@@ -19,6 +19,8 @@ class SessionState private constructor() {
     var detectLiveLocation: String = ""
     var defaultCountry: String = ""
     var selectedCountry: String = ""
+    var selectedCountryCode: String = ""
+    var selectedLanguageCode: String = ""
     var selectedState: String = ""
     var selectedCity: String = ""
     var selectedLanguage: String = ""
@@ -26,6 +28,9 @@ class SessionState private constructor() {
     var continueBrowsingCategoryId: String = ""
     var continueBrowsingSubCategoryId: String = ""
     var continueBrowsingImage: String = ""
+    var uploadedProductLatitude: String = ""
+    var uploadedProductLongitude: String = ""
+    var uploadedProductAdditionalInfo: String = ""
 
     val isLoggedIn: Boolean
         get() = isLogin
@@ -39,7 +44,7 @@ class SessionState private constructor() {
             this.displayName = prefs.getString(AppConstants.Companion.PREFERENCES.DISPLAY_NAME.toString(), "")
             this.userId = prefs.getString(AppConstants.Companion.PREFERENCES.USER_ID.toString(), "")
             this.address = prefs.getString(AppConstants.Companion.PREFERENCES.ADDRESS.toString(), "")
-            this.deviceId = prefs.getString(AppConstants.Companion.PREFERENCES.DEVICE_ID.toString(), "")
+            this.token = prefs.getString(AppConstants.Companion.PREFERENCES.DEVICE_ID.toString(), "")
             this.userName = prefs.getString(AppConstants.Companion.PREFERENCES.USERNAME.toString(), "")
             this.profilePicUrl = prefs.getString(AppConstants.Companion.PREFERENCES.PROFILE_PIC.toString(), "")
             this.appName = prefs.getString(AppConstants.Companion.PREFERENCES.APP_NAME.toString(), "")
@@ -48,6 +53,7 @@ class SessionState private constructor() {
             this.detectLiveLocation = prefs.getString(AppConstants.Companion.PREFERENCES.LIVE_LOCATION.toString(), "")
             this.defaultCountry = prefs.getString(AppConstants.Companion.PREFERENCES.DEFAULT_COUNTRY.toString(), "")
             this.selectedCountry = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_COUNTRY.toString(), "")
+            this.selectedCountryCode = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_COUNTRY_CODE.toString(), "")
             this.selectedState = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_STATE.toString(), "")
             this.selectedCity = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_CITY.toString(), "")
             this.selectedLanguage = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE.toString(), "")
@@ -55,6 +61,7 @@ class SessionState private constructor() {
             this.continueBrowsingCategoryId = prefs.getString(AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_CATEGORY_ID.toString(), "")
             this.continueBrowsingSubCategoryId = prefs.getString(AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_SUB_CATEGORY_ID.toString(), "")
             this.continueBrowsingImage = prefs.getString(AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_IMAGE.toString(), "")
+            this.selectedLanguageCode = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE_CODE.toString(), "")
             LanguagePack.instance.setLanguageData(prefs.getString(AppConstants.Companion.PREFERENCES.LANGUAGE_PACK.toString(), ""))
             AppConfigDetail.initialize(prefs.getString(AppConstants.Companion.PREFERENCES.APP_CONFIG.toString(), ""))
         }
@@ -90,11 +97,14 @@ class SessionState private constructor() {
         this.phoneNumber = ""
         this.address = ""
         this.userId = ""
-        this.deviceId = ""
+        this.token = ""
         this.profilePicUrl = ""
         this.continueBrowsingSubCategoryId = ""
         this.continueBrowsingCategoryId = ""
         this.continueBrowsingText = ""
+        this.uploadedProductLatitude = ""
+        this.uploadedProductLongitude = ""
+        this.uploadedProductAdditionalInfo = ""
     }
 
     companion object {

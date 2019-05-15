@@ -1,49 +1,52 @@
 package com.bylancer.classified.bylancerclassified.dashboard
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Bundle
-import android.view.View
-import android.view.animation.Animation
-import com.bylancer.classified.bylancerclassified.R
-import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
-import com.bylancer.classified.bylancerclassified.login.LoginActivity
-import com.bylancer.classified.bylancerclassified.utils.AppConstants
-import com.bylancer.classified.bylancerclassified.utils.SessionState
-import com.bylancer.classified.bylancerclassified.utils.Utility
-import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
-import kotlinx.android.synthetic.main.activity_dashboard_product_detail.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import android.os.Build
-import android.support.v4.content.ContextCompat
-import com.google.android.gms.maps.model.Marker
-import android.widget.Toast
-import android.support.v4.app.ActivityCompat
-import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.LatLng
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
+import android.os.Bundle
 import android.support.constraint.ConstraintSet
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.AppCompatEditText
 import android.support.v7.widget.AppCompatTextView
 import android.view.Gravity
-import android.widget.TextView
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.animation.Animation
+import android.widget.TextView
+import android.widget.Toast
+import com.bylancer.classified.bylancerclassified.R
+import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
 import com.bylancer.classified.bylancerclassified.chat.ChatActivity
 import com.bylancer.classified.bylancerclassified.database.DatabaseTaskAsyc
+import com.bylancer.classified.bylancerclassified.login.LoginActivity
 import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
+import com.bylancer.classified.bylancerclassified.utils.AppConstants
 import com.bylancer.classified.bylancerclassified.utils.LanguagePack
+import com.bylancer.classified.bylancerclassified.utils.SessionState
+import com.bylancer.classified.bylancerclassified.utils.Utility
+import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferData
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferStatus
 import com.bylancer.classified.bylancerclassified.widgets.CustomAlertDialog
 import com.gmail.samehadar.iosdialog.IOSDialog
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_dashboard_product_detail.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<DashboardDetailModel>, View.OnClickListener,
         OnMapReadyCallback {
@@ -114,6 +117,8 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             mDashboardDetailModel =  response.body()
             if (mDashboardDetailModel != null) {
                 initializeUI(mDashboardDetailModel!!)
+            } else {
+                Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString(getString(R.string.some_wrong)), this@DashboardProductDetailActivity)
             }
         }
     }
@@ -137,7 +142,10 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
         }
 
         product_name_in_detail.text = dashboardDetailModel.title
-        var symbol = Utility.decodeUnicode(dashboardDetailModel.currency!!)
+        var symbol = ""
+        if (dashboardDetailModel.currency != null) {
+            symbol = Utility.decodeUnicode(dashboardDetailModel.currency!!)
+        }
         if (AppConstants.CURRENCY_IN_LEFT.equals(dashboardDetailModel.currencyInLeft)) {
             product_detail_price_text_view.text = symbol + dashboardDetailModel.price
         } else {
@@ -169,13 +177,15 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
         }
 
         if(mMap != null) {
-            val latLng = LatLng((dashboardDetailModel.mapLatitude)!!.toDouble(), (dashboardDetailModel.mapLongitude)!!.toDouble())
-            val markerOptions = MarkerOptions()
-            markerOptions.position(latLng)
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-            mCurrLocationMarker = mMap?.addMarker(markerOptions)
-            mMap?.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-            mMap?.animateCamera(CameraUpdateFactory.zoomTo(15.0F))
+            if (dashboardDetailModel.mapLatitude != null && dashboardDetailModel.mapLongitude != null) {
+                val latLng = LatLng((dashboardDetailModel.mapLatitude)!!.toDouble(), (dashboardDetailModel.mapLongitude)!!.toDouble())
+                val markerOptions = MarkerOptions()
+                markerOptions.position(latLng)
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                mCurrLocationMarker = mMap?.addMarker(markerOptions)
+                mMap?.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+                mMap?.animateCamera(CameraUpdateFactory.zoomTo(15.0F))
+            }
         }
     }
 
@@ -221,7 +231,9 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
                 }
             }
             R.id.product_detail_share_image_view -> {
-                Utility.shareProduct("https://appsgeek.in", getString(R.string.app_name), this)
+                if(mDashboardDetailModel != null && mDashboardDetailModel?.productUrl != null) {
+                    Utility.shareProduct(mDashboardDetailModel!!.productUrl!!, getString(R.string.app_name), this)
+                }
             }
             R.id.product_detail_favorite_image_view -> {
                 if (SessionState.instance.isLoggedIn) {
@@ -248,6 +260,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
                             bundle.putString(AppConstants.CHAT_TITLE, mDashboardDetailModel!!.sellerName)
                             bundle.putString(AppConstants.CHAT_USER_NAME, mDashboardDetailModel!!.sellerUsername)
                             bundle.putString(AppConstants.CHAT_USER_IMAGE, mDashboardDetailModel!!.sellerImage)
+                            bundle.putString(AppConstants.CHAT_USER_ID, mDashboardDetailModel!!.sellerId)
                             startActivity(ChatActivity::class.java, false, bundle)
                         } else {
                             Utility.showSnackBar(dashboard_product_detail_parent_layout, getString(R.string.posted_by_you), this@DashboardProductDetailActivity)
@@ -273,7 +286,9 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             R.id.product_detail_screen_sms -> {
                 if (SessionState.instance.isLoggedIn) {
                     if(checkLocationPermission()) {
-                        startActivityForResult(Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNumber, null)), 0);
+                        if (phoneNumber != null) {
+                            startActivityForResult(Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNumber, null)), 0)
+                        }
                     }
                 } else {
                     startActivity(LoginRequiredActivity::class.java, false)
@@ -285,7 +300,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
                         val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                                 "mailto", ownerEmail, null));
                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Interested in "+ product_detail_title_text_view.text);
-                        emailIntent.putExtra(Intent.EXTRA_TEXT, "Hi, \n \n"+ LanguagePack.getString("I am interested in your property") + " " + product_detail_title_text_view.text + ".\n "+ LanguagePack.getString("We can have discussion on") +" \n\n" + LanguagePack.getString("Regards")+",\n"+ SessionState.instance.displayName);
+                        emailIntent.putExtra(Intent.EXTRA_TEXT, "Hi, \n \n"+ LanguagePack.getString("I am interested in your property") + " " + product_detail_title_text_view.text + ".\n "+ LanguagePack.getString("We can have discussion on") +" \n\n" + LanguagePack.getString("Regards")+",\n"+ SessionState.instance.displayName)
                         startActivityForResult(Intent.createChooser(emailIntent,  LanguagePack.getString("Send email...")), 0);
                     } else {
                         Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString("Looks like owner has not shared his email id"), this)
@@ -432,29 +447,39 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
     }
 
     private fun sendMakeAnOfferRequest(offer : String) {
-        val makeAnOfferData = MakeAnOfferData()
-        makeAnOfferData.email = mDashboardDetailModel?.sellerEmail!!
-        makeAnOfferData.message = SessionState.instance.displayName + " " + LanguagePack.getString("is interested to buy") + " ${mDashboardDetailModel?.title!!} " + LanguagePack.getString("at") + " " + Utility.decodeUnicode(mDashboardDetailModel?.currency!!)+ " $offer "
-        makeAnOfferData.ownerName = mDashboardDetailModel?.sellerName!!
-        makeAnOfferData.productId = mDashboardDetailModel?.id!!
-        makeAnOfferData.productName = mDashboardDetailModel?.title!!
-        makeAnOfferData.userId = mDashboardDetailModel?.sellerEmail!!
-        makeAnOfferData.type = "make_offer"
-        makeAnOfferData.senderId = SessionState.instance.userId
-        makeAnOfferData.senderName = SessionState.instance.displayName
-        makeAnOfferData.subject = LanguagePack.getString("Offer from") + " " + getString(R.string.app_name)
-        RetrofitController.makeAnOffer(makeAnOfferData,object: Callback<MakeAnOfferStatus> {
-            override fun onFailure(call: Call<MakeAnOfferStatus>?, t: Throwable?) {
-                removeProgressBar()
-                Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString(getString(R.string.internet_issue)), this@DashboardProductDetailActivity)
-            }
+        if (mDashboardDetailModel != null) {
+            val makeAnOfferData = MakeAnOfferData()
+            makeAnOfferData.email = getFormattedValue(mDashboardDetailModel?.sellerEmail)
+            makeAnOfferData.message = SessionState.instance.displayName + " " + LanguagePack.getString("is interested to buy") + " ${getFormattedValue(mDashboardDetailModel?.title)} " + LanguagePack.getString("at") + " " + Utility.decodeUnicode(getFormattedValue(mDashboardDetailModel?.currency))+ " $offer "
+            makeAnOfferData.ownerName = getFormattedValue(mDashboardDetailModel?.sellerName)
+            makeAnOfferData.productId = getFormattedValue(mDashboardDetailModel?.id)
+            makeAnOfferData.productName = getFormattedValue(mDashboardDetailModel?.title)
+            makeAnOfferData.userId = getFormattedValue(mDashboardDetailModel?.sellerEmail)
+            makeAnOfferData.type = "make_offer"
+            makeAnOfferData.senderId = SessionState.instance.userId
+            makeAnOfferData.senderName = SessionState.instance.displayName
+            makeAnOfferData.subject = LanguagePack.getString("Offer from") + " " + getString(R.string.app_name)
+            RetrofitController.makeAnOffer(makeAnOfferData,object: Callback<MakeAnOfferStatus> {
+                override fun onFailure(call: Call<MakeAnOfferStatus>?, t: Throwable?) {
+                    removeProgressBar()
+                    Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString(getString(R.string.internet_issue)), this@DashboardProductDetailActivity)
+                }
 
-            override fun onResponse(call: Call<MakeAnOfferStatus>?, response: Response<MakeAnOfferStatus>?) {
-                removeProgressBar()
-                Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString(getString(R.string.offer_submitted)), this@DashboardProductDetailActivity)
-            }
+                override fun onResponse(call: Call<MakeAnOfferStatus>?, response: Response<MakeAnOfferStatus>?) {
+                    removeProgressBar()
+                    Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString(getString(R.string.offer_submitted)), this@DashboardProductDetailActivity)
+                }
 
-        })
+            })
+        }
+    }
+
+    private fun getFormattedValue(value : String?) : String {
+        var formattedValue = value
+        if (formattedValue == null) {
+            formattedValue = ""
+        }
+        return formattedValue
     }
 
     private fun removeProgressBar() {

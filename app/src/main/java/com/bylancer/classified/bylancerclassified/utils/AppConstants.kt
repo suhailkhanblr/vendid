@@ -12,12 +12,13 @@ class AppConstants {
         const val LOGIN_URL = "quickad-demo/api/v1/?action=login"
         const val FORGOT_PASSWORD_URL = "/api/v1/?action=forgot_password"
         const val PRODUCT_LIST_URL =  "quickad-demo/api/v1/index.php?action=home_latest_ads"
+        const val SEARCH_LIST_URL =  "quickad-demo/api/v1/index.php?action=search_post"
         const val PRODUCT_DETAIL_URL = "quickad-demo/api/v1/index.php?action=ad_detail"
         const val COUNTRY_DETAIL_URL = "quickad-demo/api/v1/index.php?action=installed_countries"
         const val STATE_DETAIL_URL = "quickad-demo/api/v1/index.php?action=getStateByCountryCode"
         const val CITY_DETAIL_URL = "quickad-demo/api/v1/index.php?action=getCityByStateCode"
-        const val IMAGE_URL = BASE_URL  + "/storage/profile/"
-        const val IMAGE_URL_SMALL = BASE_URL + "/storage/profile/small_"
+        const val IMAGE_URL = BASE_URL  + "quickad-demo/storage/profile/"
+        const val IMAGE_URL_SMALL = BASE_URL + "quickad-demo/storage/profile/small_"
         const val PRODUCT_IMAGE_URL = BASE_URL + "quickad-demo/storage/products/"
         const val APP_CONFIG_URL = "quickad-demo/api/v1/index.php?action=app_config"
         const val FETCH_CHAT_URL = "quickad-demo/api/v1/index.php?action=get_all_msg"
@@ -26,11 +27,19 @@ class AppConstants {
         const val FETCH_LANGUAGE_PACK_URL = "quickad-demo/api/v1/index.php?action=language_file"
         const val SEND_CHAT_URL = "quickad-demo/api/v1/index.php?action=send_message"
         const val GET_NOTIFICATION_MESSAGE_URL = "quickad-demo/api/v1/index.php?action=get_notification"
+        const val ADD_FIREBASE_DEVICE_TOKEN_URL = "quickad-demo/api/v1/index.php?action=add_firebase_device_token"
+        const val UPLOAD_PROFILE_PIC_URL = "quickad-demo/api/v1/index.php?action=upload_profile_picture"
+        const val UPLOAD_PRODUCT_PIC_URL = "quickad-demo/api/v1/index.php?action=upload_product_picture"
+        const val UPLOAD_PRODUCT_SAVE_POST_URL = "quickad-demo/api/v1/index.php?action=save_post"
+        const val UPLOAD_PRODUCT_ADDITIONAL_INFO_URL = BASE_URL + "quickad-demo/api/v1/?action=getCustomFieldByCatID&catid=%s&subcatid=%s&additionalinfo=%s"
         const val IS_ADMIN_APP = false
+        const val IS_APP_CONFIG_RELOAD_REQUIRED = true // UPDATE IT TO FALSE IF YOU DON'T WANT TO RELOAD YOUR CATEGORIES EVERY LAUNCH
         val CURRENT_VERSION = "1.0"
         val CURRENCY_IN_LEFT= "0"
         val PREF_FILE = "bylancer_appsgeek"
         val SUPPORT_EMAIL = ""
+        val PRODUCT_LOADING_LIMIT = "36"
+        val PRODUCT_STATUS = "active"
 
         const val ERROR = "error"
         const val SUCCESS = "success"
@@ -41,14 +50,27 @@ class AppConstants {
         const val TERMS_CONDITION_TITLE = "terms_condition_title"
         const val TERMS_CONDITION_URL = "terms_condition_url"
         const val HIDE_PHONE = "yes"
+        const val YES = "yes"
+        const val NO = "no"
         const val CHAT_USER_NAME = "chat_user_name"
         const val CHAT_TITLE = "chat_title"
         const val CHAT_USER_IMAGE = "chat_user_image"
+        const val CHAT_USER_ID = "chat_user_id"
         const val ASSET_TYPE_TEXT = "text"
         const val EMPTY = ""
+        const val ZERO = "0"
         const val CATEGORY = "category"
         const val SUB_CATEGORY = "sub_category"
         const val DATABASE_NAME = "property_app_db"
+        const val DATABASE_VERSION= 2
+        const val IMAGE_PICKER_FRAGMENT = "picker"
+        const val SELECTED_CATEGORY_POSITION = "selected_category_position"
+        const val SELECTED_SUB_CATEGORY_ID = "selected_sub_category_id"
+        const val SELECTED_CATEGORY_ID = "selected_category_id"
+        const val SELECTED_PRODUCT_LONGITUDE = "selected_product_longitude"
+        const val SELECTED_PRODUCT_LATITUDE = "selected_product_latitude"
+        const val UPLOAD_PRODUCT_SELECTED_TITLE = "UPLOAD_PRODUCT_SELECTED_TITLE"
+        const val ADDITIONAL_INFO_ACTIVITY_TITLE = "ADDITIONAL_INFO_ACTIVITY_TITLE"
 
         enum class PREFERENCES private constructor(private val value: String) {
             USER_ID("user_id"),
@@ -63,6 +85,7 @@ class AppConstants {
             PRIVACY_URL("privacy_url"),
             DEFAULT_COUNTRY("default_country"),
             SELECTED_COUNTRY("selected_country"),
+            SELECTED_COUNTRY_CODE("selected_country_code"),
             SELECTED_STATE("selected_state"),
             SELECTED_CITY("selected_city"),
             SELECTED_LANGUAGE("selected_Language"),
@@ -74,8 +97,10 @@ class AppConstants {
             CONTINUE_BROWSING_TEXT("continue_browsing"),
             CONTINUE_BROWSING_CATEGORY_ID("continue_browsing_category"),
             CONTINUE_BROWSING_IMAGE("continue_browsing_image"),
+            SELECTED_LANGUAGE_CODE("selected_language_code_details"),
             CONTINUE_BROWSING_SUB_CATEGORY_ID("continue_browsing_sub_category"),
-            APP_CONFIG("app_config_details");
+            APP_CONFIG("app_config_details"),
+            DATABASE_DETAIL("database_detail");
 
             override fun toString(): String {
                 return this.value

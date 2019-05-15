@@ -11,5 +11,8 @@ class SubCategory {
     @SerializedName("name")
     @Expose
     var name: String? = null
+    @SerializedName("picture")
+    @Expose
+    var picture: String? = null
 
 }

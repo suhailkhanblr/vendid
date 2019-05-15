@@ -2,9 +2,7 @@ package com.bylancer.classified.bylancerclassified.chat
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View
 import com.bylancer.classified.bylancerclassified.R
-import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardActivity
 import com.bylancer.classified.bylancerclassified.fragments.BylancerBuilderFragment
 import com.bylancer.classified.bylancerclassified.utils.LanguagePack
@@ -24,7 +22,7 @@ class GroupChatFragment : BylancerBuilderFragment(), Callback<List<GroupChatMode
     override fun setLayoutView() = R.layout.activity_group_chat
 
     override fun initialize(savedInstanceState: Bundle?) {
-        iOSDialog = Utility.getProgressDialog(context!!, LanguagePack.getString("Loading..."))
+        iOSDialog = Utility.showProgressView(context!!, LanguagePack.getString("Loading..."))
         group_chat_title_text_view.text = LanguagePack.getString(getString(R.string.my_chats))
 
         recycler_view_group_chat_message_list.setHasFixedSize(false)

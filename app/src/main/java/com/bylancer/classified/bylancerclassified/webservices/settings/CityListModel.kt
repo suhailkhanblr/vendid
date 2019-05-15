@@ -11,5 +11,11 @@ class CityListModel {
     @SerializedName("name")
     @Expose
     var name: String? = null
+    @SerializedName("latitude")
+    @Expose
+    var lat: String? = null
+    @SerializedName("longitude")
+    @Expose
+    var long: String? = null
 
 }

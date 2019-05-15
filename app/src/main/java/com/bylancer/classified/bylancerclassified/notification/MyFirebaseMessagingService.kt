@@ -1,7 +1,7 @@
 package com.bylancer.classified.bylancerclassified.notification
 
-import com.google.firebase.messaging.FirebaseMessagingService
-
+//import androidx.work.OneTimeWorkRequest
+//import androidx.work.WorkManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -11,14 +11,15 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.util.Log
-//import androidx.work.OneTimeWorkRequest
-//import androidx.work.WorkManager
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardActivity
+import com.bylancer.classified.bylancerclassified.utils.AppConstants
+import com.bylancer.classified.bylancerclassified.utils.SessionState
+import com.bylancer.classified.bylancerclassified.utils.sendTokenToServer
+import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-
     /**
      * Called when message is received.
      *
@@ -36,7 +37,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
         // [END_EXCLUDE]
 
-        // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: ${remoteMessage?.from}")
 
@@ -71,7 +71,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * is initially generated so this is where you would retrieve the token.
      */
     override fun onNewToken(token: String?) {
-        Log.d(TAG, "Refreshed token: $token")
+
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
@@ -106,7 +106,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * @param token The new token.
      */
     private fun sendRegistrationToServer(token: String?) {
-        // TODO: Implement this method to send token to your app server.
+        SessionState.instance.token = token!!
+        SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.DEVICE_ID.toString(),
+                SessionState.instance.token)
+        sendTokenToServer()
     }
 
     /**

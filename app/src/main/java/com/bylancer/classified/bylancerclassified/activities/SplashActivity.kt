@@ -3,11 +3,11 @@ package com.bylancer.classified.bylancerclassified.activities
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AlertDialog
-import android.view.View
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigModel
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardActivity
+import com.bylancer.classified.bylancerclassified.utils.AppConstants
 import com.bylancer.classified.bylancerclassified.utils.LanguagePack
 import com.bylancer.classified.bylancerclassified.utils.SessionState
 import com.bylancer.classified.bylancerclassified.utils.Utility
@@ -47,7 +47,7 @@ class SplashActivity : BylancerBuilderActivity() {
     private fun getAppConfig() {
         if (Utility.isNetworkAvailable(this@SplashActivity)) {
             if (AppConfigDetail.category.isNullOrEmpty()) {
-                RetrofitController.fetchAppConfig(object: Callback<AppConfigModel> {
+                RetrofitController.fetchAppConfig(getSelectedCountryCode(), object : Callback<AppConfigModel> {
                     override fun onFailure(call: Call<AppConfigModel>?, t: Throwable?) {
                         if (SessionState.instance.appName.isNullOrEmpty()) {
                             if (Utility.isNetworkAvailable(this@SplashActivity)) {
@@ -65,18 +65,26 @@ class SplashActivity : BylancerBuilderActivity() {
                             val appConfigUrl: AppConfigModel = response.body()
                             AppConfigDetail.saveAppConfigData(this@SplashActivity, Gson().toJson(appConfigUrl))
                             AppConfigDetail.initialize(Gson().toJson(appConfigUrl))
-
                             saveAndLaunchScreen()
                         }
                     }
 
                 })
             } else {
-                saveAndLaunchScreen()
+                if (AppConstants.IS_APP_CONFIG_RELOAD_REQUIRED && Utility.isNetworkAvailable(this@SplashActivity)) {
+                    AppConfigDetail.category = null
+                    getAppConfig()
+                } else {
+                    delayTimeForSplash()
+                }
             }
         } else {
             showLogoutAlertDialog()
         }
+    }
+
+    private fun getSelectedCountryCode(): String {
+        return if (SessionState.instance.selectedLanguageCode.isNullOrEmpty()) "" else SessionState.instance.selectedLanguageCode
     }
 
     private fun showLogoutAlertDialog() {

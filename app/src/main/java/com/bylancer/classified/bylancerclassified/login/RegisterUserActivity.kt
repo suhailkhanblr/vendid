@@ -7,19 +7,17 @@ import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import com.android.volley.Request
-import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardActivity
-import com.bylancer.classified.bylancerclassified.utils.AppConstants
-import com.bylancer.classified.bylancerclassified.utils.LanguagePack
-import com.bylancer.classified.bylancerclassified.utils.SessionState
-import com.bylancer.classified.bylancerclassified.utils.Utility
+import com.bylancer.classified.bylancerclassified.utils.*
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.registration.UserRegistrationData
 import com.bylancer.classified.bylancerclassified.webservices.registration.UserRegistrationStatus
 import kotlinx.android.synthetic.main.activity_register_user.*
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -125,13 +123,13 @@ class RegisterUserActivity : BylancerBuilderActivity(), View.OnFocusChangeListen
                 SessionState.instance.userName = responseBody.username!!
                 SessionState.instance.email = responseBody.email!!
                 SessionState.instance.userId = responseBody.userId!!
-                SessionState.instance.isLogin = true
+                SessionState.instance.profilePicUrl = if (responseBody.profilePicture != null) responseBody.profilePicture!! else ""
 
+                SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.PROFILE_PIC.toString(), SessionState.instance.profilePicUrl)
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.USERNAME.toString(), responseBody.username!!)
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.EMAIL.toString(), responseBody.email!!)
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.DISPLAY_NAME.toString(), responseBody.name!!)
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.USER_ID.toString(), responseBody.userId!!)
-                SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
 
                 fetchLanguagePackDetails()
             } else {
@@ -148,18 +146,29 @@ class RegisterUserActivity : BylancerBuilderActivity(), View.OnFocusChangeListen
         var mRequestQueue = Volley.newRequestQueue(this)
 
         //String Request initialized
-        var mStringRequest = StringRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, com.android.volley.Response.Listener<String> { response ->
-            LanguagePack.instance.saveLanguageData(this@RegisterUserActivity, response)
-            LanguagePack.instance.setLanguageData(response)
-            moveToDashboard()
+        var mStringRequest = JsonArrayRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, null, com.android.volley.Response.Listener<JSONArray> { response ->
+            if (response != null) {
+                LanguagePack.instance.saveLanguageData(this@RegisterUserActivity, response.toString())
+                LanguagePack.instance.setLanguageData(response.toString())
+                SessionState.instance.isLogin = true
+                SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
+                moveToDashboard()
+            } else {
+                Utility.showSnackBar(activity_register_user_parent_layout, getString(R.string.internet_issue), this)
+            }
         }, com.android.volley.Response.ErrorListener {
-            moveToDashboard()
+            if (Utility.isNetworkAvailable(this@RegisterUserActivity)) {
+                fetchLanguagePackDetails()
+            } else {
+                Utility.showSnackBar(activity_register_user_parent_layout, getString(R.string.internet_issue), this)
+            }
         })
 
         mRequestQueue.add(mStringRequest)
     }
 
     private fun moveToDashboard() {
+        sendTokenToServer()
         Utility.removeProgressBar(register_user_sliding_progress_indicator)
         Utility.showSnackBar(activity_register_user_parent_layout, LanguagePack.getString("You have successfully logged in"), this)
         startActivity(DashboardActivity::class.java, true)

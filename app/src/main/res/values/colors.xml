@@ -76,6 +76,10 @@
     <color name="black_overlay">#66000000</color>
     <color name="shadow_black">#313C3F</color>
     <color name="android_def_cursor_color">#0D9582</color>
+
+    <color name="jrspinner_color_line">#E0E0E0</color>
+    <color name="jrspinner_color_default">#99000000</color>
+    <color name="jrspinner_black_transparent">#80000000</color>
     
     
     

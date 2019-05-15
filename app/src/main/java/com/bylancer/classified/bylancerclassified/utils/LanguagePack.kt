@@ -5,7 +5,9 @@ import com.bylancer.classified.bylancerclassified.webservices.languagepack.Langu
 import com.google.gson.Gson
 import org.json.JSONArray
 import com.google.gson.reflect.TypeToken
-
+import com.google.gson.stream.JsonReader
+import java.io.Reader
+import java.io.StringReader
 
 
 class LanguagePack private constructor() {
@@ -68,7 +70,10 @@ class LanguagePack private constructor() {
     }
 
     fun setLanguageData(languagePackDataStr: String) {
-        if (!languagePackDataStr.isNullOrEmpty())
-            languagePackData = Gson().fromJson(languagePackDataStr, object : TypeToken<List<LanguagePackModel>>() {}.type)
+        if (languagePackDataStr != null && languagePackDataStr.trim().isNotEmpty()) {
+            val reader = JsonReader(StringReader(languagePackDataStr) as Reader?)
+            reader.isLenient = true
+            languagePackData = Gson().fromJson(reader, object : TypeToken<List<LanguagePackModel>>() {}.type)
+        }
     }
 }

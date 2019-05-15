@@ -15,7 +15,7 @@ class DatabaseTaskAsyc(val context: Context, val mDashboardDetailModel: Dashboar
 
     override fun doInBackground(vararg p0: Void): Boolean {
         if (DBUtil.getDatabaseInstance(context).daoAccess().
-                        checkPropertyExist(mDashboardDetailModel?.id!!) > 0) {
+                        checkPropertyExist(mDashboardDetailModel.id!!) > 0) {
             if (!isForValidating) {
                 DBUtil.getDatabaseInstance(context).daoAccess().
                         deleteProperty(mDashboardDetailModel!!)

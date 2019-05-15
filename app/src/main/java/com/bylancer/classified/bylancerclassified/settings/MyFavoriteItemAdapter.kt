@@ -32,7 +32,10 @@ class MyFavoriteItemAdapter(private val dashboardItemList : List<DashboardDetail
         dashboardListItemLayout.listItemDescription!!.text = dataModel.title
         dashboardListItemLayout.listItemDistance!!.text = dataModel.location
         dashboardListItemLayout.listItemPrice!!.text = dataModel.price
-        var symbol = Utility.decodeUnicode(dataModel.currency!!)
+        var symbol = ""
+        if (dataModel.currency != null) {
+            symbol = Utility.decodeUnicode(dataModel.currency!!)
+        }
         if (AppConstants.CURRENCY_IN_LEFT.equals(dataModel.currencyInLeft)) {
             dashboardListItemLayout.listItemPrice!!.text  = symbol + dataModel.price
         } else {

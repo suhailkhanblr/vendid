@@ -38,8 +38,8 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/profile_icon_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/settings_profile_pic_size"
+        android:layout_height="@dimen/settings_profile_pic_size"
         android:layout_marginTop="@dimen/margin_forty"
         android:src="@drawable/settings_profile_icon"
         android:elevation="@dimen/margin_ten"
@@ -288,7 +288,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/settings_country_text" >
 
-                    <jrizani.jrspinner.JRSpinner
+                    <com.bylancer.classified.bylancerclassified.jrizani.jrspinner.JRSpinner
                         android:id="@+id/settings_country_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -353,7 +353,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/settings_state_text" >
 
-                    <jrizani.jrspinner.JRSpinner
+                    <com.bylancer.classified.bylancerclassified.jrizani.jrspinner.JRSpinner
                         android:id="@+id/settings_state_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -418,7 +418,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/settings_city_text" >
 
-                    <jrizani.jrspinner.JRSpinner
+                    <com.bylancer.classified.bylancerclassified.jrizani.jrspinner.JRSpinner
                         android:id="@+id/settings_city_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -483,7 +483,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/settings_language_text" >
 
-                    <jrizani.jrspinner.JRSpinner
+                    <com.bylancer.classified.bylancerclassified.jrizani.jrspinner.JRSpinner
                         android:id="@+id/settings_language_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

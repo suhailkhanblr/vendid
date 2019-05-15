@@ -3,6 +3,7 @@ package com.bylancer.classified.bylancerclassified.webservices
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardDetailModel
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigModel
 import com.bylancer.classified.bylancerclassified.utils.AppConstants.Companion.BASE_URL
+import com.bylancer.classified.bylancerclassified.utils.SessionState
 import com.bylancer.classified.bylancerclassified.webservices.chat.ChatMessageModel
 import com.bylancer.classified.bylancerclassified.webservices.chat.ChatSentStatus
 import com.bylancer.classified.bylancerclassified.webservices.chat.GroupChatModel
@@ -11,6 +12,7 @@ import com.bylancer.classified.bylancerclassified.webservices.login.UserLoginDat
 import com.bylancer.classified.bylancerclassified.webservices.login.UserLoginStatus
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferData
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferStatus
+import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.AddTokenStatus
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.NotificationDataModel
 import com.bylancer.classified.bylancerclassified.webservices.productlist.ProductInputData
 import com.bylancer.classified.bylancerclassified.webservices.productlist.ProductsData
@@ -19,8 +21,15 @@ import com.bylancer.classified.bylancerclassified.webservices.registration.UserR
 import com.bylancer.classified.bylancerclassified.webservices.registration.UserRegistrationStatus
 import com.bylancer.classified.bylancerclassified.webservices.settings.CityListModel
 import com.bylancer.classified.bylancerclassified.webservices.settings.CountryListModel
+import com.bylancer.classified.bylancerclassified.webservices.settings.ProductUploadProductModel
 import com.bylancer.classified.bylancerclassified.webservices.settings.StateListModel
+import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.PostedProductResponseModel
+import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.UploadDataDetailModel
+import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.UploadProductModel
 import com.google.gson.GsonBuilder
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 
 import retrofit2.Callback
 import retrofit2.Retrofit
@@ -73,7 +82,7 @@ class RetrofitController {
         }
 
         fun fetchProductsForUser(productInputData: ProductInputData, fetchProductsCallBack: Callback<List<ProductsData>>) {
-            val call = webserviceApi.fetchProductsForUser(productInputData.status, productInputData.countryCode, productInputData.pageNumber,
+            val call = webserviceApi.fetchProductsForUser(productInputData.pageNumber,
                     productInputData.limit, productInputData.userId)
             call.enqueue(fetchProductsCallBack)
         }
@@ -84,7 +93,8 @@ class RetrofitController {
         }
 
         fun fetchProductDetailsByCategory(productInputData: ProductInputData, fetchProductsByCategoryCallBack: Callback<List<ProductsData>>) {
-            val call = webserviceApi.fetchProductsByCategory(productInputData.status, productInputData.countryCode, productInputData.pageNumber, productInputData.limit, productInputData.categoryId, productInputData.subCategoryId)
+            val call = webserviceApi.fetchProductsByCategory(productInputData.status, productInputData.countryCode, productInputData.pageNumber,
+                    productInputData.limit, productInputData.categoryId, productInputData.subCategoryId, productInputData.keywords, productInputData.additionalSearchInfo)
             call.enqueue(fetchProductsByCategoryCallBack)
         }
 
@@ -103,13 +113,13 @@ class RetrofitController {
             call.enqueue(fetchCityDetailCallBack)
         }
 
-        fun fetchAppConfig(appConfigModelCallBack: Callback<AppConfigModel>) {
-            val call = webserviceApi.fetchAppConfiguration()
+        fun fetchAppConfig(langCode: String, appConfigModelCallBack: Callback<AppConfigModel>) {
+            val call = webserviceApi.fetchAppConfiguration(langCode)
             call.enqueue(appConfigModelCallBack)
         }
 
-        fun fetchChatMessages(userName:String, clientUserName: String, pageNo: String, fetchChatMessageCallback: Callback<List<ChatMessageModel>>) {
-            val call = webserviceApi.fetchChatMessage(userName, clientUserName, pageNo)
+        fun fetchChatMessages(userId:String, clientUserId: String, pageNo: String, fetchChatMessageCallback: Callback<List<ChatMessageModel>>) {
+            val call = webserviceApi.fetchChatMessage(userId, clientUserId, pageNo)
             call.enqueue(fetchChatMessageCallback)
         }
 
@@ -138,6 +148,42 @@ class RetrofitController {
         fun getNotificationMessage(user_id:String, notificationMessageCallback: Callback<List<NotificationDataModel>>) {
             val call = webserviceApi.getNotificationMessage(user_id)
             call.enqueue(notificationMessageCallback)
+        }
+
+        fun addDeviceToken(userId:String, userName:String, deviceId:String, token:String, addTokenCallback: Callback<AddTokenStatus>) {
+            val call = webserviceApi.addFirebaseDeviceToken(userId, deviceId, userName, token)
+            call.enqueue(addTokenCallback)
+        }
+
+        fun updateUserProfilePic(image: MultipartBody.Part, updateProfilePicCallback: Callback<ProductUploadProductModel>) {
+            val call = webserviceApi.updateProfilePic(SessionState.instance.userId, image)
+            call.enqueue(updateProfilePicCallback)
+        }
+
+        fun updateUserPostedProductPic(image: MultipartBody.Part, updateProfilePicCallback: Callback<UploadProductModel>) {
+            val call = webserviceApi.updateUserPostedProductPic(image)
+            call.enqueue(updateProfilePicCallback)
+        }
+
+        fun postUserProduct(uploadDataDetailModel: UploadDataDetailModel, postedProductCallback: Callback<PostedProductResponseModel>) {
+            val call = webserviceApi.postUserProduct(uploadDataDetailModel.userId,
+                    uploadDataDetailModel.title,
+                    uploadDataDetailModel.categoryId,
+                    uploadDataDetailModel.subcategoryId,
+                    uploadDataDetailModel.countryCode,
+                    uploadDataDetailModel.state,
+                    uploadDataDetailModel.city,
+                    uploadDataDetailModel.description,
+                    uploadDataDetailModel.location,
+                    uploadDataDetailModel.hidePhone,
+                    uploadDataDetailModel.negotiable,
+                    uploadDataDetailModel.price,
+                    uploadDataDetailModel.phone,
+                    uploadDataDetailModel.latitude,
+                    uploadDataDetailModel.longitude,
+                    uploadDataDetailModel.itemScreen,
+                    uploadDataDetailModel.additionalInfo)
+            call.enqueue(postedProductCallback)
         }
     }
 }

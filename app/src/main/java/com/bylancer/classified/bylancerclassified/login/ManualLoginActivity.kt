@@ -6,29 +6,21 @@ import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.Volley
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardActivity
-import com.bylancer.classified.bylancerclassified.utils.AppConstants
-import com.bylancer.classified.bylancerclassified.utils.LanguagePack
-import com.bylancer.classified.bylancerclassified.utils.SessionState
-import com.bylancer.classified.bylancerclassified.utils.Utility
+import com.bylancer.classified.bylancerclassified.utils.*
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
-import com.bylancer.classified.bylancerclassified.webservices.languagepack.LanguagePackModel
 import com.bylancer.classified.bylancerclassified.webservices.login.UserLoginData
 import com.bylancer.classified.bylancerclassified.webservices.login.UserLoginStatus
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_manual_login.*
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.widget.Toast
-import retrofit2.http.GET
-import com.android.volley.Request
-import com.android.volley.VolleyError
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 
 
 class ManualLoginActivity : BylancerBuilderActivity(), View.OnFocusChangeListener , TextWatcher, View.OnClickListener,
@@ -97,11 +89,11 @@ class ManualLoginActivity : BylancerBuilderActivity(), View.OnFocusChangeListene
         userLoginData.username = login_email_id_edit_text.text.toString()
         userLoginData.password = login_password_edit_text.text.toString()
 
-        if (login_email_id_edit_text.text.contains("@")) {
+        /*if (login_email_id_edit_text.text.contains("@")) {
             RetrofitController.loginUserUsingEmail(userLoginData, this)
-        } else {
+        } else {*/
             RetrofitController.loginUserUsingUsername(userLoginData, this)
-        }
+        //}
     }
 
     override fun onFailure(call: Call<UserLoginStatus>?, t: Throwable?) {
@@ -117,13 +109,13 @@ class ManualLoginActivity : BylancerBuilderActivity(), View.OnFocusChangeListene
                 SessionState.instance.userName = responseBody.username!!
                 SessionState.instance.email = responseBody.email!!
                 SessionState.instance.userId = responseBody.userId!!
-                SessionState.instance.isLogin = true
+                SessionState.instance.profilePicUrl = if (responseBody.profilePicture != null) responseBody.profilePicture!! else ""
 
+                SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.PROFILE_PIC.toString(), SessionState.instance.profilePicUrl)
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.USERNAME.toString(), responseBody.username!!)
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.EMAIL.toString(), responseBody.email!!)
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.DISPLAY_NAME.toString(), responseBody.name!!)
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.USER_ID.toString(), responseBody.userId!!)
-                SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
 
                 fetchLanguagePackDetails()
             } else {
@@ -140,18 +132,29 @@ class ManualLoginActivity : BylancerBuilderActivity(), View.OnFocusChangeListene
         var mRequestQueue = Volley.newRequestQueue(this)
 
         //String Request initialized
-        var mStringRequest = StringRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, com.android.volley.Response.Listener<String> { response ->
-            LanguagePack.instance.saveLanguageData(this@ManualLoginActivity, response)
-            LanguagePack.instance.setLanguageData(response)
-            moveToDashboard()
+        var mStringRequest = JsonArrayRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, null, com.android.volley.Response.Listener<JSONArray> { response ->
+            if (response != null) {
+                LanguagePack.instance.saveLanguageData(this@ManualLoginActivity, response.toString())
+                LanguagePack.instance.setLanguageData(response.toString())
+                SessionState.instance.isLogin = true
+                SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
+                moveToDashboard()
+            } else {
+                Utility.showSnackBar(activity_login_user_parent_layout, getString(R.string.internet_issue), this)
+            }
         }, com.android.volley.Response.ErrorListener {
-            moveToDashboard()
+            if (Utility.isNetworkAvailable(this@ManualLoginActivity)) {
+                fetchLanguagePackDetails()
+            } else {
+                Utility.showSnackBar(activity_login_user_parent_layout, getString(R.string.internet_issue), this)
+            }
         })
 
         mRequestQueue.add(mStringRequest)
     }
 
     private fun moveToDashboard() {
+        sendTokenToServer()
         Utility.removeProgressBar(login_sliding_progress_indicator)
         Utility.showSnackBar(activity_login_user_parent_layout, LanguagePack.getString("You have successfully logged in"), this)
         startActivity(DashboardActivity::class.java, true)

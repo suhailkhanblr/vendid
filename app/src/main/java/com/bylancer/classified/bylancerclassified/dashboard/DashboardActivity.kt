@@ -7,24 +7,26 @@ import android.app.NotificationManager
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import com.bylancer.classified.bylancerclassified.R
-import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
-import kotlinx.android.synthetic.main.activity_dashboard.*
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.widget.Toast
+import com.bylancer.classified.bylancerclassified.R
+import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
 import com.bylancer.classified.bylancerclassified.alarm.NotificationMessagesFragment
 import com.bylancer.classified.bylancerclassified.chat.GroupChatFragment
 import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
 import com.bylancer.classified.bylancerclassified.settings.SettingsFragment
+import com.bylancer.classified.bylancerclassified.uploadproduct.categoryselection.UploadCategorySelectionActivity
 import com.bylancer.classified.bylancerclassified.utils.SessionState
 import com.bylancer.classified.bylancerclassified.utils.Utility
+import com.bylancer.classified.bylancerclassified.utils.getCurrentCountry
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.android.synthetic.main.activity_dashboard.*
 
 
 class DashboardActivity : BylancerBuilderActivity() {
@@ -38,45 +40,66 @@ class DashboardActivity : BylancerBuilderActivity() {
 
     override fun initialize(savedInstanceState: Bundle?) {
         disableShiftMode(bottom_navigation_menu)
+        if (SessionState.instance.selectedCountryCode.isNullOrEmpty()) {
+            SessionState.instance.selectedCountryCode = getCurrentCountry()
+        }
+
         commitFragment(0)
 
         Utility.checkLocationAndPhonePermission(MY_PERMISSIONS_REQUEST_LOCATION, this)
 
         initializeNotification()
 
-        bottom_navigation_menu.setOnNavigationItemSelectedListener { menuItem -> when(menuItem.itemId) {
-            R.id.action_home -> {
-                commitFragment(0)
-                true
-            }
-            R.id.action_alarm -> {
-                if (SessionState.instance.isLoggedIn) {
-                    commitFragment(1)
-                } else  {
-                    startActivity(LoginRequiredActivity::class.java, false)
+        setUpTabListeners()
+    }
+
+    private fun setUpTabListeners() {
+        bottom_navigation_menu.setOnNavigationItemSelectedListener {
+            menuItem ->
+                if (menuItem.itemId != R.id.action_upload_product) {
+                    menuItem.isChecked = true
                 }
-                true
-            }
-            R.id.action_chat -> {
-                if (SessionState.instance.isLoggedIn) {
-                    commitFragment(3)
-                } else  {
-                    startActivity(LoginRequiredActivity::class.java, false)
-                }
-                true
-            }
-            R.id.action_settings -> {
-                commitFragment(4)
-                true
-            }
-            else -> {
-                if (SessionState.instance.isLoggedIn) {
-                    Utility.showSnackBar(dashboard_screen_parent_layout, "Work In Progress", this)
-                } else  {
-                    startActivity(LoginRequiredActivity::class.java, false)
-                }
-                true
-            }
+                when(menuItem.itemId) {
+                    R.id.action_home -> {
+                        commitFragment(0)
+                        true
+                    }
+                    R.id.action_alarm -> {
+                        if (SessionState.instance.isLoggedIn) {
+                            commitFragment(1)
+                        } else  {
+                            startActivity(LoginRequiredActivity::class.java, false)
+                        }
+                        true
+                    }
+                    R.id.action_upload_product -> {
+                        if (SessionState.instance.isLoggedIn) {
+                            startActivity(UploadCategorySelectionActivity::class.java, false)
+                        } else  {
+                            startActivity(LoginRequiredActivity::class.java, false)
+                        }
+                        true
+                    }
+                    R.id.action_chat -> {
+                        if (SessionState.instance.isLoggedIn) {
+                            commitFragment(3)
+                        } else  {
+                            startActivity(LoginRequiredActivity::class.java, false)
+                        }
+                        true
+                    }
+                    R.id.action_settings -> {
+                        commitFragment(4)
+                        true
+                    }
+                    else -> {
+                        if (SessionState.instance.isLoggedIn) {
+                            Utility.showSnackBar(dashboard_screen_parent_layout, "Work In Progress", this)
+                        } else  {
+                            startActivity(LoginRequiredActivity::class.java, false)
+                        }
+                        true
+                    }
         }}
     }
 

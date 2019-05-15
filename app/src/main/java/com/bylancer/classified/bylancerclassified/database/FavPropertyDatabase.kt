@@ -3,9 +3,10 @@ package com.bylancer.classified.bylancerclassified.database
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.Database
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardDetailModel
+import com.bylancer.classified.bylancerclassified.utils.AppConstants
 
 
-@Database(entities = [DashboardDetailModel::class], version = 1, exportSchema = false)
+@Database(entities = [DashboardDetailModel::class], version = AppConstants.DATABASE_VERSION, exportSchema = false)
 abstract class FavPropertyDatabase : RoomDatabase() {
     abstract fun daoAccess(): DaoAccess
 }

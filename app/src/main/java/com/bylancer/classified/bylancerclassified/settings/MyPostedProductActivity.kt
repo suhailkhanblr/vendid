@@ -5,11 +5,9 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
-import com.bylancer.classified.bylancerclassified.dashboard.DashboardDetailModel
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardItemAdapter
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardProductDetailActivity
 import com.bylancer.classified.bylancerclassified.dashboard.OnProductItemClickListener
-import com.bylancer.classified.bylancerclassified.database.MyFavouriteProductsGetterAsycTask
 import com.bylancer.classified.bylancerclassified.utils.*
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.productlist.ProductInputData
@@ -47,10 +45,8 @@ class MyPostedProductActivity : BylancerBuilderActivity(), OnProductItemClickLis
     private fun fetchProductList() {
         iosDialog?.show()
         val productInputData = ProductInputData()
-        productInputData.countryCode = "in"
-        productInputData.limit = "30"
+        productInputData.limit = "300"
         productInputData.pageNumber = "1"
-        productInputData.status = "active"
         productInputData.userId = SessionState.instance.userId
 
         RetrofitController.fetchProductsForUser(productInputData, this)

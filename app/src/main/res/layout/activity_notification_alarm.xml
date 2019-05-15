@@ -7,60 +7,40 @@
     android:layout_height="match_parent"
     tools:context=".chat.GroupChatFragment">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/notification_alarm_top_action_bar"
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/notification_alarm_title_text_view"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:background="@color/white_background"
-        android:clipToPadding="false"
-        android:elevation="@dimen/margin_ten"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_twenty"
+        android:fontFamily="@font/roboto_condensed_bold"
+        android:text="@string/my_account"
+        android:textColor="@color/gray_color_text"
+        android:textSize="@dimen/text_size_twenty"
+        android:gravity="center"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/notification_alarm_back_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_margin"
-            android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginBottom="@dimen/default_margin"
-            android:onClick="onClick"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_backward" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/notification_alarm_title_text_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_margin"
-            android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginEnd="@dimen/margin_thirty"
-            android:layout_marginBottom="@dimen/default_margin"
-            android:fontFamily="@font/roboto_bold"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/shadow_black"
-            android:textSize="@dimen/text_size_sixteen"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </android.support.constraint.ConstraintLayout>
+    <View
+        android:id="@+id/notification_alarm_title_separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_navigation_bar_divider_height"
+        android:layout_marginStart="@dimen/margin_twenty_five"
+        android:layout_marginTop="@dimen/margin_ten"
+        android:layout_marginEnd="@dimen/margin_thirty"
+        android:background="@color/light_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notification_alarm_title_text_view" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_notification_alarm_message_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/jrspinner_color_line"
-        app:layout_constraintTop_toBottomOf="@id/notification_alarm_top_action_bar"
+        app:layout_constraintTop_toBottomOf="@id/notification_alarm_title_separator"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:paddingTop="@dimen/margin_small"
+        android:paddingTop="@dimen/margin_twelve"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

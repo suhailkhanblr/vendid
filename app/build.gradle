@@ -56,13 +56,18 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
     implementation 'com.agrawalsuneet.androidlibs:dotsloader:1.2'
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
-    implementation 'jrizani:jrspinner:0.2.4'
+    implementation "com.google.android.gms:play-services-location:16.0.0"
+    implementation "com.google.android.gms:play-services-places:16.0.0"
+    //implementation 'jrizani:jrspinner:0.2.4'
+    //implementation 'com.github.jrizani:JRSpinner:androidx-SNAPSHOT'
+    //implementation project(":jrspinner")
     implementation 'com.facebook.android:facebook-android-sdk:4.17.0'
     implementation 'com.github.mirrajabi:search-dialog:1.2.3'
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
     kapt "android.arch.persistence.room:compiler:1.1.1"
     implementation 'com.google.firebase:firebase-messaging:17.6.0'
+    implementation 'com.asksira.android:bsimagepicker:1.1.0'
 
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true;

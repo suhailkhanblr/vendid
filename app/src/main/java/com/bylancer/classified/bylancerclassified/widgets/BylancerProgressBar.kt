@@ -1,12 +1,9 @@
 package com.bylancer.classified.bylancerclassified.widgets
 
-import android.graphics.drawable.ColorDrawable
-import android.R
 import android.app.Dialog
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.view.Window
-import android.view.Window.FEATURE_NO_TITLE
-
 
 
 class BylancerProgressBar {

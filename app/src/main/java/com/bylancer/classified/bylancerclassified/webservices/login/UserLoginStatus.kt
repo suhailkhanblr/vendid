@@ -22,4 +22,7 @@ class UserLoginStatus {
     @SerializedName("email")
     @Expose
     var email: String? = null
+    @SerializedName("picture")
+    @Expose
+    var profilePicture: String? = null
 }

@@ -1,6 +1,5 @@
 package com.bylancer.classified.bylancerclassified.dashboard
 
-import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
@@ -11,7 +10,6 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
-import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
 import com.bylancer.classified.bylancerclassified.appconfig.Category
 import com.bylancer.classified.bylancerclassified.appconfig.SubCategory
 import com.bylancer.classified.bylancerclassified.utils.AppConstants
@@ -65,9 +63,9 @@ class DashboardCategoryAdapter(val items : List<Category>, val parentActivity: D
                     SessionState.instance.saveValuesToPreferences(parentActivity, AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_IMAGE.toString(), SessionState.instance.continueBrowsingImage)
                     if (!subCategory.isNullOrEmpty()) {
                         val bundle = Bundle()
-                        bundle.putString(AppConstants.CATEGORY, categoryId)
+                        bundle.putString(AppConstants.SELECTED_CATEGORY_ID, categoryId)
                         val subCategoryId: String = if (position == 0) "0" else subCategory.get(position - 1).id!!
-                        bundle.putString(AppConstants.SUB_CATEGORY, subCategoryId)
+                        bundle.putString(AppConstants.SELECTED_SUB_CATEGORY_ID, subCategoryId)
                         parentActivity.startActivity(ProductByCategoryActivity::class.java, false, bundle)
                     }
 

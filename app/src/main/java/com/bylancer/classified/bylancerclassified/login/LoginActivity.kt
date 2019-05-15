@@ -2,37 +2,31 @@ package com.bylancer.classified.bylancerclassified.login
 
 import android.content.Intent
 import android.os.Bundle
-import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
-import kotlinx.android.synthetic.main.activity_login.*
+import android.text.Spannable
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.view.View
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.Volley
 import com.bylancer.classified.bylancerclassified.R
+import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardActivity
-import com.bylancer.classified.bylancerclassified.utils.AppConstants
-import com.bylancer.classified.bylancerclassified.utils.SessionState
-import com.bylancer.classified.bylancerclassified.utils.Utility
+import com.bylancer.classified.bylancerclassified.utils.*
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.registration.UserRegistrationData
 import com.bylancer.classified.bylancerclassified.webservices.registration.UserRegistrationStatus
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import kotlinx.android.synthetic.main.activity_login.*
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-import com.facebook.GraphRequest
-import android.text.method.LinkMovementMethod
-import android.text.Spanned
-import android.text.style.ClickableSpan
-import android.text.Spannable
-import android.text.style.ForegroundColorSpan
-import com.android.volley.Request
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
-import com.bylancer.classified.bylancerclassified.appconfig.AppConfigModel
-import com.bylancer.classified.bylancerclassified.utils.LanguagePack
-import com.google.gson.Gson
 
 class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<UserRegistrationStatus> {
     private var callbackManager: CallbackManager? = null
@@ -137,13 +131,13 @@ class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<
                 SessionState.instance.userName = responseBody.username!!
                 SessionState.instance.email = responseBody.email!!
                 SessionState.instance.userId = responseBody.userId!!
-                SessionState.instance.isLogin = true
+                SessionState.instance.profilePicUrl = if (responseBody.profilePicture != null) responseBody.profilePicture!! else ""
 
+                SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.PROFILE_PIC.toString(), SessionState.instance.profilePicUrl)
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.USERNAME.toString(), responseBody.username!!)
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.EMAIL.toString(), responseBody.email!!)
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.DISPLAY_NAME.toString(), responseBody.name!!)
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.USER_ID.toString(), responseBody.userId!!)
-                SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
 
                 fetchLanguagePackDetails()
             } else {
@@ -158,18 +152,29 @@ class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<
         var mRequestQueue = Volley.newRequestQueue(this)
 
         //String Request initialized
-        var mStringRequest = StringRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, com.android.volley.Response.Listener<String> { response ->
-            LanguagePack.instance.saveLanguageData(this@LoginActivity, response)
-            LanguagePack.instance.setLanguageData(response)
-            moveToDashboard()
+        var mStringRequest = JsonArrayRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, null, com.android.volley.Response.Listener<JSONArray> { response ->
+            if (response != null) {
+                LanguagePack.instance.saveLanguageData(this@LoginActivity, response.toString())
+                LanguagePack.instance.setLanguageData(response.toString())
+                SessionState.instance.isLogin = true
+                SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
+                moveToDashboard()
+            } else {
+                Utility.showSnackBar(login_screen_parent_layout, getString(R.string.internet_issue), this)
+            }
         }, com.android.volley.Response.ErrorListener {
-            moveToDashboard()
+            if (Utility.isNetworkAvailable(this@LoginActivity)) {
+                fetchLanguagePackDetails()
+            } else {
+                Utility.showSnackBar(login_screen_parent_layout, getString(R.string.internet_issue), this)
+            }
         })
 
         mRequestQueue.add(mStringRequest)
     }
 
     private fun moveToDashboard() {
+        sendTokenToServer()
         Utility.removeProgressBar(register_user_sliding_progress_indicator)
         Utility.showSnackBar(login_screen_parent_layout, LanguagePack.getString("You have successfully logged in"), this)
         startActivity(DashboardActivity::class.java, true)

@@ -64,9 +64,15 @@ class DashboardDetailModel {
     @SerializedName("seller_email")
     @Expose
     var sellerEmail: String? = null
+    @SerializedName("seller_id")
+    @Expose
+    var sellerId: String? = null
     @SerializedName("seller_image")
     @Expose
     var sellerImage: String? = null
+    @SerializedName("product_url")
+    @Expose
+    var productUrl: String? = null
     @SerializedName("price")
     @Expose
     var price: String? = null
