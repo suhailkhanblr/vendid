@@ -11,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.utils.AppConstants
 import com.bylancer.classified.bylancerclassified.utils.Utility
+import com.bylancer.classified.bylancerclassified.utils.checkIfNumber
 import com.bylancer.classified.bylancerclassified.webservices.productlist.ProductsData
 
 
@@ -43,7 +44,13 @@ class DashboardItemAdapter(private val dashboardItemList : List<ProductsData>, p
                 val dashboardListItemLayout : DashboardListItemLayoutItem = holder as DashboardListItemLayoutItem
                 dashboardListItemLayout.listItemDescription!!.text = dataModel.productName
                 dashboardListItemLayout.listItemDistance!!.text = dataModel.location
-                dashboardListItemLayout.listItemPrice!!.text = dataModel.price
+                if (!dataModel.price.isNullOrEmpty() && checkIfNumber(dataModel.price!!)) {
+                    dashboardListItemLayout.listItemPrice!!.text = dataModel.price
+                    dashboardListItemLayout.listItemPrice!!.visibility = View.VISIBLE
+                } else {
+                    dashboardListItemLayout.listItemPrice!!.visibility = View.GONE
+                }
+
                 var symbol = ""
                 if (dataModel.currency != null) {
                     symbol = Utility.decodeUnicode(dataModel.currency!!)

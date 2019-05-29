@@ -509,3 +509,8 @@ fun Context.isLocationEnabled() : Boolean {
 
      return gps_enabled || network_enabled;
 }
+
+fun checkIfNumber(price : String) : Boolean {
+    val pattern : Pattern = Pattern.compile("\\d+(?:\\.\\d+)?")
+    return price.matches(pattern.toRegex())
+}

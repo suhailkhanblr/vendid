@@ -35,6 +35,7 @@
         android:gravity="left"
         android:textColor="@color/denied_red"
         android:textSize="@dimen/text_size_normal"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/dashboard_item_image_view_layout"
         app:layout_constraintHorizontal_bias="0.04"
         app:layout_constraintStart_toStartOf="@+id/dashboard_item_image_view_layout"

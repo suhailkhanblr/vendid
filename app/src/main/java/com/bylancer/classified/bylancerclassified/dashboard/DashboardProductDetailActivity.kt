@@ -26,10 +26,7 @@ import com.bylancer.classified.bylancerclassified.chat.ChatActivity
 import com.bylancer.classified.bylancerclassified.database.DatabaseTaskAsyc
 import com.bylancer.classified.bylancerclassified.login.LoginActivity
 import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
-import com.bylancer.classified.bylancerclassified.utils.AppConstants
-import com.bylancer.classified.bylancerclassified.utils.LanguagePack
-import com.bylancer.classified.bylancerclassified.utils.SessionState
-import com.bylancer.classified.bylancerclassified.utils.Utility
+import com.bylancer.classified.bylancerclassified.utils.*
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferData
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferStatus
@@ -150,6 +147,12 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             product_detail_price_text_view.text = symbol + dashboardDetailModel.price
         } else {
             product_detail_price_text_view.text = dashboardDetailModel.price + symbol
+        }
+
+        if (!dashboardDetailModel.price.isNullOrEmpty() && checkIfNumber(dashboardDetailModel.price!!)) {
+            product_detail_price_text_view.visibility = View.VISIBLE
+        } else {
+            product_detail_price_text_view.visibility = View.GONE
         }
 
         product_detail_timeline_text_view.text = dashboardDetailModel.createdAt

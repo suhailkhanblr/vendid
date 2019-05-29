@@ -28,12 +28,20 @@ import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.Uplo
 import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.UploadProductModel
 import com.google.gson.GsonBuilder
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import okhttp3.logging.HttpLoggingInterceptor
 
 import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.security.KeyStore
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.*
+import javax.security.cert.CertificateException
 
 class RetrofitController {
     companion object {
@@ -49,6 +57,7 @@ class RetrofitController {
                 return Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .addConverterFactory(GsonConverterFactory.create(gson))
+                        .client(getOkHttpClientBuilder().build())
                         .build()
             }
 
@@ -186,4 +195,44 @@ class RetrofitController {
             call.enqueue(postedProductCallback)
         }
     }
+}
+
+fun getOkHttpClientBuilder() : OkHttpClient.Builder {
+    val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+        override fun getAcceptedIssuers(): Array<X509Certificate> {
+            return arrayOf()
+        }
+
+        @Throws(CertificateException::class)
+        override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
+        }
+
+        @Throws(CertificateException::class)
+        override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
+
+        }
+    })
+
+    // Install the all-trusting trust manager
+
+    val httpLoggingInterceptor = HttpLoggingInterceptor()
+    httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+    val client = OkHttpClient.Builder()
+    client.interceptors().add(httpLoggingInterceptor)
+    client.readTimeout(180, TimeUnit.SECONDS)
+    client.connectTimeout(180, TimeUnit.SECONDS)
+
+    val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
+    keyStore.load(null, null)
+
+    val sslContext = SSLContext.getInstance("TLS")
+
+    val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+    trustManagerFactory.init(keyStore)
+    val keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+    keyManagerFactory.init(keyStore, "keystore_pass".toCharArray())
+    sslContext.init(null, trustAllCerts, SecureRandom())
+    client.sslSocketFactory(sslContext.socketFactory)
+            .hostnameVerifier { _, _ -> true }
+    return client
 }
