@@ -37,7 +37,7 @@ class AppConstants {
         val CURRENT_VERSION = "1.0"
         val CURRENCY_IN_LEFT= "0"
         val PREF_FILE = "bylancer_appsgeek"
-        val SUPPORT_EMAIL = ""
+        val SUPPORT_EMAIL = "appsgeekonline@gmail.com"
         val PRODUCT_LOADING_LIMIT = "36"
         val PRODUCT_STATUS = "active"
 
