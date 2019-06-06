@@ -116,6 +116,7 @@
     <string name="no_notification">You have not received any notification</string>
     <string name="offer_submitted">Your offer submitted to the owner</string>
     <string name="some_wrong">Some thing went wrong, we are working on it.</string>
+    <string name="phone_number_undefined">Phone number is not defined or hidden by user.</string>
     <string name="some_wrong_retry">Some thing went wrong, please restart the upload process.</string>
     <string name="map_initializing">Please wait, map is getting initialized</string>
     <string name="posted_by_you">This product belong to you.</string>

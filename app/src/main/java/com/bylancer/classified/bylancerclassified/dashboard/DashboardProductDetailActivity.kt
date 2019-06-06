@@ -277,10 +277,12 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             }
             R.id.product_detail_screen_call -> {
                 if (SessionState.instance.isLoggedIn) {
-                    if(phoneNumber != null && checkLocationPermission()) {
+                    if(!phoneNumber.isNullOrEmpty() && checkLocationPermission()) {
                         val intent = Intent(Intent.ACTION_CALL)
                         intent.data = Uri.parse("tel:" + phoneNumber)
                         startActivity(intent)
+                    }  else if (phoneNumber.isNullOrEmpty()){
+                        Utility.showSnackBar(dashboard_product_detail_parent_layout, getString(R.string.phone_number_undefined), this@DashboardProductDetailActivity)
                     }
                 } else {
                     startActivity(LoginRequiredActivity::class.java, false)
@@ -288,10 +290,10 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             }
             R.id.product_detail_screen_sms -> {
                 if (SessionState.instance.isLoggedIn) {
-                    if(checkLocationPermission()) {
-                        if (phoneNumber != null) {
-                            startActivityForResult(Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNumber, null)), 0)
-                        }
+                    if (!phoneNumber.isNullOrEmpty()) {
+                        startActivityForResult(Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNumber, null)), 0)
+                    } else {
+                        Utility.showSnackBar(dashboard_product_detail_parent_layout, getString(R.string.phone_number_undefined), this@DashboardProductDetailActivity)
                     }
                 } else {
                     startActivity(LoginRequiredActivity::class.java, false)
@@ -343,11 +345,11 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                             Manifest.permission.ACCESS_FINE_LOCATION)) {
                 ActivityCompat.requestPermissions(this,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.SEND_SMS),
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
                         MY_PERMISSIONS_REQUEST_LOCATION)
             } else {
                 ActivityCompat.requestPermissions(this,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.SEND_SMS),
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
                         MY_PERMISSIONS_REQUEST_LOCATION)
             }
             return false
