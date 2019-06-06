@@ -14,8 +14,8 @@ android {
         applicationId "com.bylancer.classified.bylancerclassified"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -23,6 +23,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -52,8 +56,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation ("com.squareup.retrofit2:retrofit:2.1.0") {
+        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
+        exclude module: 'okhttp'
+    }
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
     implementation 'com.agrawalsuneet.androidlibs:dotsloader:1.2'
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation "com.google.android.gms:play-services-location:16.0.0"

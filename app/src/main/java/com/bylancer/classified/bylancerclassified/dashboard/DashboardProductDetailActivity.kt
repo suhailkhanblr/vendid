@@ -26,10 +26,7 @@ import com.bylancer.classified.bylancerclassified.chat.ChatActivity
 import com.bylancer.classified.bylancerclassified.database.DatabaseTaskAsyc
 import com.bylancer.classified.bylancerclassified.login.LoginActivity
 import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
-import com.bylancer.classified.bylancerclassified.utils.AppConstants
-import com.bylancer.classified.bylancerclassified.utils.LanguagePack
-import com.bylancer.classified.bylancerclassified.utils.SessionState
-import com.bylancer.classified.bylancerclassified.utils.Utility
+import com.bylancer.classified.bylancerclassified.utils.*
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferData
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferStatus
@@ -150,6 +147,12 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             product_detail_price_text_view.text = symbol + dashboardDetailModel.price
         } else {
             product_detail_price_text_view.text = dashboardDetailModel.price + symbol
+        }
+
+        if (!dashboardDetailModel.price.isNullOrEmpty() && checkIfNumber(dashboardDetailModel.price!!)) {
+            product_detail_price_text_view.visibility = View.VISIBLE
+        } else {
+            product_detail_price_text_view.visibility = View.GONE
         }
 
         product_detail_timeline_text_view.text = dashboardDetailModel.createdAt
@@ -274,10 +277,12 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             }
             R.id.product_detail_screen_call -> {
                 if (SessionState.instance.isLoggedIn) {
-                    if(phoneNumber != null && checkLocationPermission()) {
+                    if(!phoneNumber.isNullOrEmpty() && checkLocationPermission()) {
                         val intent = Intent(Intent.ACTION_CALL)
                         intent.data = Uri.parse("tel:" + phoneNumber)
                         startActivity(intent)
+                    }  else if (phoneNumber.isNullOrEmpty()){
+                        Utility.showSnackBar(dashboard_product_detail_parent_layout, getString(R.string.phone_number_undefined), this@DashboardProductDetailActivity)
                     }
                 } else {
                     startActivity(LoginRequiredActivity::class.java, false)
@@ -285,10 +290,10 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             }
             R.id.product_detail_screen_sms -> {
                 if (SessionState.instance.isLoggedIn) {
-                    if(checkLocationPermission()) {
-                        if (phoneNumber != null) {
-                            startActivityForResult(Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNumber, null)), 0)
-                        }
+                    if (!phoneNumber.isNullOrEmpty()) {
+                        startActivityForResult(Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNumber, null)), 0)
+                    } else {
+                        Utility.showSnackBar(dashboard_product_detail_parent_layout, getString(R.string.phone_number_undefined), this@DashboardProductDetailActivity)
                     }
                 } else {
                     startActivity(LoginRequiredActivity::class.java, false)
@@ -335,18 +340,16 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
         if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                             Manifest.permission.ACCESS_FINE_LOCATION)) {
                 ActivityCompat.requestPermissions(this,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.SEND_SMS),
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
                         MY_PERMISSIONS_REQUEST_LOCATION)
             } else {
                 ActivityCompat.requestPermissions(this,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.SEND_SMS),
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
                         MY_PERMISSIONS_REQUEST_LOCATION)
             }
             return false

@@ -348,19 +348,17 @@ class Utility {
             if (ContextCompat.checkSelfPermission(activity,
                             Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(activity,
-                            Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(activity,
-                            Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                            Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 
                 if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                                 Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(activity,
                                 Manifest.permission.CALL_PHONE) ) {
                     ActivityCompat.requestPermissions(activity,
-                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CALL_PHONE, Manifest.permission.SEND_SMS),
+                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CALL_PHONE),
                             MY_PERMISSIONS_REQUEST_LOCATION)
                 } else {
                     ActivityCompat.requestPermissions(activity,
-                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CALL_PHONE, Manifest.permission.SEND_SMS),
+                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CALL_PHONE),
                             MY_PERMISSIONS_REQUEST_LOCATION)
                 }
                 return false
@@ -508,4 +506,9 @@ fun Context.isLocationEnabled() : Boolean {
      }
 
      return gps_enabled || network_enabled;
+}
+
+fun checkIfNumber(price : String) : Boolean {
+    val pattern : Pattern = Pattern.compile("\\d+(?:\\.\\d+)?")
+    return price.matches(pattern.toRegex())
 }

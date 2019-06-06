@@ -250,7 +250,7 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
                         dashboard_recycler_view.adapter = DashboardItemAdapter(productDataList, this)
                     }
                 } else {
-                    Utility.showSnackBar(dashboard_fragment_parent_layout, "Work In Progress", context!!)
+                    Utility.showSnackBar(dashboard_fragment_parent_layout, getString(R.string.internet_issue), context!!)
                 }
             }
         }
