@@ -60,7 +60,7 @@ class DashboardItemAdapter(private val dashboardItemList : List<ProductsData>, p
                 } else {
                     dashboardListItemLayout.listItemPrice!!.text  = dataModel.price + symbol
                 }
-                Glide.with(dashboardListItemLayout.listItemImageView!!.context).load(dataModel.picture).apply(RequestOptions().fitCenter()).into(dashboardListItemLayout.listItemImageView!!)
+                Glide.with(dashboardListItemLayout.listItemImageView!!.context).load("https://www.advertwide.com/storage/products/1563537457_pom7.jpg").apply(RequestOptions().fitCenter()).into(dashboardListItemLayout.listItemImageView!!)
                 dashboardListItemLayout.itemView.setOnClickListener {
                     if(onProductItemClickListener != null) {
                         onProductItemClickListener.onProductItemClicked(dataModel.id, dataModel.productName, dataModel.username)

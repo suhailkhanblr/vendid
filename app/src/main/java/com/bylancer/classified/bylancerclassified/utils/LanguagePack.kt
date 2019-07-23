@@ -29,7 +29,7 @@ class LanguagePack private constructor() {
             if (LanguagePack.instance.languagePackData != null && key != null) {
                 if (LanguagePack.instance.currentLanguagePackData == null) {
                     for (languagePack in LanguagePack.instance.languagePackData!!) {
-                        if (SessionState.instance.selectedLanguage.equals(languagePack.language)) {
+                        if (SessionState.instance.selectedLanguage.equals(languagePack.language, true)) {
                             LanguagePack.instance.currentLanguagePackData = languagePack
                             break
                         }
@@ -47,7 +47,7 @@ class LanguagePack private constructor() {
                 }
             }
 
-            return ""
+            return if (key.isNullOrEmpty()) "" else key
         }
 
         private fun updateLanguagePack(key: String, languagePack: LanguagePack?): String {

@@ -21,6 +21,13 @@ class AppConfigDetail {
                 SessionState.instance.privacyPolicyUrl = appConfig.policyPageLink!!
                 SessionState.instance.detectLiveLocation = appConfig.detectLiveLocation!!
                 SessionState.instance.defaultCountry = appConfig.defaultCountry!!
+                if (SessionState.instance.selectedLanguage.isNullOrEmpty() && !appConfig.defaultLang.isNullOrEmpty()) {
+                    SessionState.instance.selectedLanguage = appConfig.defaultLang!!
+                }
+
+                if (SessionState.instance.selectedLanguageCode.isNullOrEmpty() && !appConfig.defaultLangCode.isNullOrEmpty()) {
+                    SessionState.instance.selectedLanguageCode = appConfig.defaultLangCode!!
+                }
             }
         }
 

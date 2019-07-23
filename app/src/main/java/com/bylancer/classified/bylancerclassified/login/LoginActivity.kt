@@ -182,22 +182,26 @@ class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<
     }
     private fun setTermsAndCondition() {
         val span = Spannable.Factory.getInstance().newSpannable(LanguagePack.getString(getString(R.string.privacy_policy)))
-        span.setSpan(object : ClickableSpan() {
-            override fun onClick(v: View) {
-                loadTermsAndConditionWebView(R.string.terms_condition, if (SessionState.instance.termsConditionUrl != null) SessionState.instance.termsConditionUrl else "")
+        var minLength = 31
+        var maxLength = 49
+        if (!span.isNullOrEmpty() && span.length >= 54) {
+            span.setSpan(object : ClickableSpan() {
+                override fun onClick(v: View) {
+                    loadTermsAndConditionWebView(R.string.terms_condition, if (SessionState.instance.termsConditionUrl != null) SessionState.instance.termsConditionUrl else "")
+                }
+            }, minLength, maxLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            val cs = object : ClickableSpan() {
+                override fun onClick(v: View) {
+                    loadTermsAndConditionWebView(R.string.privacy_text, if (SessionState.instance.privacyPolicyUrl != null) SessionState.instance.privacyPolicyUrl else "")
+                }
             }
-        }, 31, 49, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        val cs = object : ClickableSpan() {
-            override fun onClick(v: View) {
-                loadTermsAndConditionWebView(R.string.privacy_text, if (SessionState.instance.privacyPolicyUrl != null) SessionState.instance.privacyPolicyUrl else "")
-            }
+            span.setSpan(cs, 54, span.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            span.setSpan(ForegroundColorSpan(resources.getColor(R.color.denied_red)), minLength, maxLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            span.setSpan(ForegroundColorSpan(resources.getColor(R.color.denied_red)), 54, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            login_terms_condition.setText(span)
+            login_terms_condition.setMovementMethod(LinkMovementMethod.getInstance())
         }
-        span.setSpan(cs, 54, span.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        span.setSpan(ForegroundColorSpan(resources.getColor(R.color.denied_red)), 31, 49, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        span.setSpan(ForegroundColorSpan(resources.getColor(R.color.denied_red)), 54, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        login_terms_condition.setText(span)
-        login_terms_condition.setMovementMethod(LinkMovementMethod.getInstance())
     }
 
     private fun loadTermsAndConditionWebView(titleId: Int, url: String) {
