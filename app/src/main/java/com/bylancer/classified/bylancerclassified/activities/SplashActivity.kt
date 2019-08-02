@@ -3,6 +3,9 @@ package com.bylancer.classified.bylancerclassified.activities
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AlertDialog
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.Volley
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigModel
@@ -13,6 +16,8 @@ import com.bylancer.classified.bylancerclassified.utils.SessionState
 import com.bylancer.classified.bylancerclassified.utils.Utility
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_manual_login.*
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,9 +41,11 @@ class SplashActivity : BylancerBuilderActivity() {
     }
 
     private fun saveAndLaunchScreen() {
-        SessionState.instance.readValuesFromPreferences(this)
-        startActivity(DashboardActivity :: class.java, true)
-        finish()
+        if (LanguagePack.instance.languagePackData.isNullOrEmpty()) {
+            fetchLanguagePackDetails()
+        } else {
+            navigateToNextScreen()
+        }
     }
 
     /**
@@ -100,5 +107,34 @@ class SplashActivity : BylancerBuilderActivity() {
 
         }
         builder.create().show()
+    }
+
+    private fun fetchLanguagePackDetails() {
+        var mRequestQueue = Volley.newRequestQueue(this)
+
+        //String Request initialized
+        var mStringRequest = JsonArrayRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, null, com.android.volley.Response.Listener<JSONArray> { response ->
+            if (response != null) {
+                LanguagePack.instance.saveLanguageData(this@SplashActivity, response.toString())
+                LanguagePack.instance.setLanguageData(response.toString())
+                navigateToNextScreen()
+            }
+        }, com.android.volley.Response.ErrorListener {
+            navigateToNextScreen()
+            /*if (Utility.isNetworkAvailable(this@SplashActivity)) {
+                fetchLanguagePackDetails()
+            } else {
+                Utility.showSnackBar(activity_login_user_parent_layout, getString(R.string.internet_issue), this)
+            }*/
+
+        })
+
+        mRequestQueue.add(mStringRequest)
+    }
+
+    private fun navigateToNextScreen() {
+        SessionState.instance.readValuesFromPreferences(this)
+        startActivity(DashboardActivity :: class.java, true)
+        finish()
     }
 }

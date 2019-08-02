@@ -32,7 +32,7 @@ class ManualLoginActivity : BylancerBuilderActivity(), View.OnFocusChangeListene
     override fun initialize(savedInstanceState: Bundle?) {
         log_in_with_email_title_text_view.text = LanguagePack.getString(getString(R.string.login_with_email))
         login_email_id_edit_text.hint = LanguagePack.getString(getString(R.string.email_username))
-        login_password_edit_text.hint = LanguagePack.getString(getString(R.string.email_username))
+        login_password_edit_text.hint = LanguagePack.getString(getString(R.string.password))
         show_hide_password_text_view.text = LanguagePack.getString(getString(R.string.show))
         login_forget_password_text_view.text = LanguagePack.getString(getString(R.string.forget_password))
         login_button.text = LanguagePack.getString(getString(R.string.log_in))

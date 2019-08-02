@@ -17,6 +17,12 @@ class AppConfigModel {
     @SerializedName("detect_live_location")
     @Expose
     var detectLiveLocation: String? = null
+    @SerializedName("default_lang_code")
+    @Expose
+    val defaultLangCode: String? = null
+    @SerializedName("default_lang")
+    @Expose
+    val defaultLang: String? = null
     @SerializedName("terms_page_link")
     @Expose
     var termsPageLink: String? = null

@@ -33,9 +33,8 @@ import retrofit2.http.Multipart
 interface WebServiceApiInterface {
 
     @POST(AppConstants.REGISTER_URL)
-    @FormUrlEncoded
-    fun registerUser(@Field("name") name: String, @Field("email") email: String,
-                     @Field("username") username: String, @Field("password") password: String, @Field("fb_login") fbLogin: String): Call<UserRegistrationStatus>
+    fun registerUser(@Query("name") name: String, @Query("email") email: String,
+                     @Query("username") username: String, @Query("password") password: String, @Query("fb_login") fbLogin: String): Call<UserRegistrationStatus>
 
     @GET(AppConstants.LOGIN_URL)
     fun loginUserUsingUsername(@Query("username") name: String, @Query("password") email: String): Call<UserLoginStatus>
