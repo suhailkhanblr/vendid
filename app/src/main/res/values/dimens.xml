@@ -59,7 +59,9 @@
     <dimen name="bottom_navigation_bar_height">56dp</dimen>
     <dimen name="bottom_navigation_bar_divider_height">1dp</dimen>
     <dimen name="dashboard_item_image_view_width">160dp</dimen>
+    <dimen name="dashboard_item_view_width">170dp</dimen>
     <dimen name="dashboard_item_image_view_height">130dp</dimen>
+    <dimen name="dashboard_item_card_view_height">240dp</dimen>
     <dimen name="dashboard_continue_browsing_parent_layout_size">90dp</dimen>
     <dimen name="dashboard_continue_browsing_image_layout_size">80dp</dimen>
     <dimen name="progress_view_dashboard_height">150dp</dimen>

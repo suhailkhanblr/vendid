@@ -42,13 +42,13 @@ class MyFavoriteItemAdapter(private val dashboardItemList : List<DashboardDetail
             dashboardListItemLayout.listItemPrice!!.text  = dataModel.price + symbol
         }
 
-        if (!dataModel.images.isNullOrEmpty()) {
-            Glide.with(dashboardListItemLayout.listItemImageView!!.context).load(AppConstants.PRODUCT_IMAGE_URL + dataModel.images?.get(0)).apply(RequestOptions().fitCenter()).into(dashboardListItemLayout.listItemImageView!!)
+        if (!dataModel.productImages.isNullOrEmpty()) {
+            Glide.with(dashboardListItemLayout.listItemImageView!!.context).load(AppConstants.PRODUCT_IMAGE_URL + dataModel.productImages?.get(0)).apply(RequestOptions().fitCenter()).into(dashboardListItemLayout.listItemImageView!!)
         }
 
         dashboardListItemLayout.itemView.setOnClickListener {
             if(onProductItemClickListener != null) {
-                onProductItemClickListener.onProductItemClicked(dataModel.id, dataModel.title, dataModel.sellerUsername)
+                onProductItemClickListener.onProductItemClicked(dataModel.productId, dataModel.title, dataModel.sellerUsername)
             }
         }
     }

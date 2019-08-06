@@ -15,7 +15,7 @@ class DashboardDetailModel {
     @PrimaryKey
     @SerializedName("id")
     @Expose
-    var id: String? = null
+    var productId: String? = null
     @SerializedName("title")
     @Expose
     var title: String? = null
@@ -115,7 +115,7 @@ class DashboardDetailModel {
     @TypeConverters(DataConverterListImages::class)
     @SerializedName("images")
     @Expose
-    var images: List<String>? = null
+    var productImages: List<String>? = null
     @SerializedName("tag")
     @Expose
     var tag: String? = null

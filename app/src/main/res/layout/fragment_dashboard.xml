@@ -59,11 +59,45 @@
 
                 </FrameLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/dashboard_recycler_view"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/dashboard_featured_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                    <FrameLayout
+                        android:id="@+id/top_picks_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:padding="@dimen/margin_twelve">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/top_picks_in_classified"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            android:text="@string/top_picks_in_classified"
+                            android:textColor="@color/black_color_text"
+                            android:textSize="@dimen/text_size_sixteen" />
+
+                    </FrameLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/dashboard_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                </LinearLayout>
 
             </FrameLayout>
 

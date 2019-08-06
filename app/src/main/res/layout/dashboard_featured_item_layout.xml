@@ -2,17 +2,17 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/dashboard_item_card_view_layout"
-        android:layout_width="@dimen/dashboard_item_view_width"
+        android:id="@+id/dashboard_featured_card_view_layout"
+        android:layout_width="@dimen/dashboard_item_image_view_width"
         android:layout_height="@dimen/dashboard_item_card_view_height"
         android:layout_marginStart="@dimen/margin_twelve"
         android:layout_marginTop="@dimen/default_margin"
-        app:cardBackgroundColor="@color/light_gray_background"
         app:cardUseCompatPadding="true"
+        android:background="@color/light_gray"
         app:cardCornerRadius="@dimen/margin_small"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -64,7 +64,7 @@
                         android:textSize="@dimen/small_text_size"
                         android:fontFamily="@font/roboto_bold"
                         android:background="@color/denied_red"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:padding="@dimen/margin_small"/>
 
                 </LinearLayout>

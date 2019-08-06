@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey
 @Entity
 class MyFavoriteProperty {
     @PrimaryKey
-    var id: String? = null
+    var productId: String? = null
     var productName: String? = null
     var catId: String? = null
     var subCatId: String? = null

@@ -130,8 +130,8 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
 
     private fun initializeUI(dashboardDetailModel: DashboardDetailModel) {
         parent_scroll_view.visibility = View.VISIBLE
-        if(dashboardDetailModel.images != null && dashboardDetailModel.images!!.size > 0 && dashboardDetailModel.originalImagesPath != null) {
-            product_detail_image_view_pager.adapter = ProductDetailViewPagerAdapter(this, dashboardDetailModel.images!!, dashboardDetailModel.originalImagesPath!!)
+        if(dashboardDetailModel.productImages != null && dashboardDetailModel.productImages!!.size > 0 && dashboardDetailModel.originalImagesPath != null) {
+            product_detail_image_view_pager.adapter = ProductDetailViewPagerAdapter(this, dashboardDetailModel.productImages!!, dashboardDetailModel.originalImagesPath!!)
         }
 
         if(SessionState.instance.isLoggedIn) {
@@ -308,7 +308,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
                         emailIntent.putExtra(Intent.EXTRA_TEXT, "Hi, \n \n"+ LanguagePack.getString("I am interested in your property") + " " + product_detail_title_text_view.text + ".\n "+ LanguagePack.getString("We can have discussion on") +" \n\n" + LanguagePack.getString("Regards")+",\n"+ SessionState.instance.displayName)
                         startActivityForResult(Intent.createChooser(emailIntent,  LanguagePack.getString("Send email...")), 0);
                     } else {
-                        Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString("Looks like owner has not shared his email id"), this)
+                        Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString("Looks like owner has not shared his email productId"), this)
                     }
                 } else {
                     startActivity(LoginRequiredActivity::class.java, false)
@@ -455,7 +455,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             makeAnOfferData.email = getFormattedValue(mDashboardDetailModel?.sellerEmail)
             makeAnOfferData.message = SessionState.instance.displayName + " " + LanguagePack.getString("is interested to buy") + " ${getFormattedValue(mDashboardDetailModel?.title)} " + LanguagePack.getString("at") + " " + Utility.decodeUnicode(getFormattedValue(mDashboardDetailModel?.currency))+ " $offer "
             makeAnOfferData.ownerName = getFormattedValue(mDashboardDetailModel?.sellerName)
-            makeAnOfferData.productId = getFormattedValue(mDashboardDetailModel?.id)
+            makeAnOfferData.productId = getFormattedValue(mDashboardDetailModel?.productId)
             makeAnOfferData.productName = getFormattedValue(mDashboardDetailModel?.title)
             makeAnOfferData.userId = getFormattedValue(mDashboardDetailModel?.sellerEmail)
             makeAnOfferData.type = "make_offer"
