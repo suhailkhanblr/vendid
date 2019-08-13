@@ -129,6 +129,11 @@
     <string name="default_notification_channel_id">"1009876676335"</string>
     <string name="default_notification_channel_name">"9883345445653"</string>
     <string name="default_notification_topic">"QuickAdClassified"</string>
-    <string name="ad_mob_banner">"ca-app-pub-6370111532336036/4512005249"</string>
+
+
+    <!-- AD CONFIG -->
+    <string name="ad_mob_banner">"ca-app-pub-6370111532336036~5661435384"</string>
+    <string name="ad_mob_banner_ad_unit">"ca-app-pub-6370111532336036/4512005249"</string>
+    <string name="ad_mob_interstitial_ad_unit">"ca-app-pub-6370111532336036/7079943350"</string>
 
 </resources>

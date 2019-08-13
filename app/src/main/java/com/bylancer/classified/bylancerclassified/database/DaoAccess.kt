@@ -1,6 +1,6 @@
 package com.bylancer.classified.bylancerclassified.database
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardDetailModel
 
 @Dao

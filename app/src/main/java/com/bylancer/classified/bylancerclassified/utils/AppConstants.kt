@@ -64,7 +64,7 @@ class AppConstants {
         const val CATEGORY = "category"
         const val SUB_CATEGORY = "sub_category"
         const val DATABASE_NAME = "property_app_db"
-        const val DATABASE_VERSION= 2
+        const val DATABASE_VERSION= 4
         const val IMAGE_PICKER_FRAGMENT = "picker"
         const val SELECTED_CATEGORY_POSITION = "selected_category_position"
         const val SELECTED_SUB_CATEGORY_ID = "selected_sub_category_id"
@@ -73,6 +73,10 @@ class AppConstants {
         const val SELECTED_PRODUCT_LATITUDE = "selected_product_latitude"
         const val UPLOAD_PRODUCT_SELECTED_TITLE = "UPLOAD_PRODUCT_SELECTED_TITLE"
         const val ADDITIONAL_INFO_ACTIVITY_TITLE = "ADDITIONAL_INFO_ACTIVITY_TITLE"
+
+        const val BANNER_DELAY = 2.0
+        const val INTERSTITIAL_DELAY = 3.0
+        const val FACEBOOK_INTERSTITIAL_PLACEMENT = "2244587745860156_2351931271792469"
 
         enum class PREFERENCES private constructor(private val value: String) {
             USER_ID("user_id"),
@@ -96,12 +100,19 @@ class AppConstants {
             PROFILE_PIC("profile_pic"),
             LANGUAGE_PACK("language_pack"),
             COUNTRY_LIST("country_list"),
+            STATE_LIST("state_list"),
+            CITY_LIST("city_list"),
             CONTINUE_BROWSING_TEXT("continue_browsing"),
             CONTINUE_BROWSING_CATEGORY_ID("continue_browsing_category"),
             CONTINUE_BROWSING_IMAGE("continue_browsing_image"),
             SELECTED_LANGUAGE_CODE("selected_language_code_details"),
             CONTINUE_BROWSING_SUB_CATEGORY_ID("continue_browsing_sub_category"),
             APP_CONFIG("app_config_details"),
+            APP_VERSION_FROM_SERVER("app_version_server"),
+            PREMIUM_APP("premium_app"),
+            GOOGLE_BANNER("google_banner"),
+            GOOGLE_INTERSTITIAL("google_interstitial"),
+            FACEBOOK_INTERSTITIAL("facebook_interstitial"),
             DATABASE_DETAIL("database_detail");
 
             override fun toString(): String {

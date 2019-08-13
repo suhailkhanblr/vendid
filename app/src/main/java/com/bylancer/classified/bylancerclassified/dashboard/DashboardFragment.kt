@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.app.Fragment
 import android.content.Context
 import android.os.Handler
-import android.support.v7.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import android.view.View
 import android.view.animation.Animation
 import com.bylancer.classified.bylancerclassified.R
@@ -22,8 +22,8 @@ import android.widget.TextView
 import ir.mirrajabi.searchdialog.core.SearchResultListener
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
 import android.graphics.Typeface
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bylancer.classified.bylancerclassified.activities.SplashActivity
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
@@ -257,7 +257,7 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
                 if(this@DashboardFragment.isAdded && this@DashboardFragment.isVisible) {
                     if(response != null && response.isSuccessful) {
                         featuredDataList.addAll(response.body())
-                        if (featuredDataList != null) {
+                        if (!featuredDataList.isNullOrEmpty()) {
                             featured_text_layout.visibility = View.VISIBLE
                             if (dashboard_featured_recycler_view.adapter != null) {
                                 dashboard_featured_recycler_view.adapter?.notifyDataSetChanged()
@@ -293,13 +293,15 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
 
             if(response != null && response.isSuccessful) {
                 productDataList.addAll(response.body())
-                if (productDataList != null) {
+                if (!productDataList.isNullOrEmpty()) {
                     top_picks_layout.visibility = View.VISIBLE
                     if (dashboard_recycler_view.adapter != null) {
                         dashboard_recycler_view.adapter?.notifyDataSetChanged()
                     } else  {
                         dashboard_recycler_view.adapter = DashboardItemAdapter(productDataList, this)
                     }
+                } else if (response != null && response.isSuccessful) {
+                    Utility.showSnackBar(dashboard_fragment_parent_layout, getString(R.string.no_search_match), context!!)
                 } else {
                     Utility.showSnackBar(dashboard_fragment_parent_layout, getString(R.string.internet_issue), context!!)
                 }

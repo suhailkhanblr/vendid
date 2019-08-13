@@ -2,7 +2,7 @@ package com.bylancer.classified.bylancerclassified.activities
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
@@ -41,7 +41,12 @@ class SplashActivity : BylancerBuilderActivity() {
     }
 
     private fun saveAndLaunchScreen() {
-        if (LanguagePack.instance.languagePackData.isNullOrEmpty()) {
+        if (LanguagePack.instance.languagePackData.isNullOrEmpty()
+                || !SessionState.instance.appVersionFromServer.equals(AppConfigDetail.appVersionFromServer)) {
+            if (!AppConfigDetail.appVersionFromServer.isNullOrEmpty()) {
+                SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.APP_VERSION_FROM_SERVER.toString(), AppConfigDetail.appVersionFromServer)
+            }
+
             fetchLanguagePackDetails()
         } else {
             navigateToNextScreen()

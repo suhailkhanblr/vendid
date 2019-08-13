@@ -4,11 +4,13 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.widget.*
 import android.text.InputType
 import android.view.View
 import android.view.WindowManager
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
 import com.bylancer.classified.bylancerclassified.uploadproduct.postdetails.ProductAdditionalInfoWebview

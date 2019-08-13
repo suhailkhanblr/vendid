@@ -1,6 +1,6 @@
 package com.bylancer.classified.bylancerclassified.database
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import android.content.Context
 import com.bylancer.classified.bylancerclassified.utils.AppConstants
 import com.bylancer.classified.bylancerclassified.utils.SessionState

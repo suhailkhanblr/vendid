@@ -2,7 +2,7 @@ package com.bylancer.classified.bylancerclassified.database
 
 import android.content.Context
 import android.os.AsyncTask
-import android.support.v7.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatImageView
 import android.view.View
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardDetailModel

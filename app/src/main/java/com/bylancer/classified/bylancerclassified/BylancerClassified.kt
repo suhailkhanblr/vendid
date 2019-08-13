@@ -5,7 +5,9 @@ import android.os.StrictMode
 import com.bylancer.classified.bylancerclassified.utils.SessionState
 import com.crashlytics.android.Crashlytics
 import com.facebook.FacebookSdk
+import com.facebook.ads.AudienceNetworkAds
 import com.google.android.gms.ads.MobileAds
+//import com.google.android.gms.ads.MobileAds
 import io.fabric.sdk.android.Fabric
 
 /**
@@ -25,6 +27,9 @@ class BylancerClassified : Application() {
         // for exposed beyond app through ClipData.Item.getUri() issues
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
+
+        // Initialize the Audience Network SDK
+        AudienceNetworkAds.initialize(this);
     }
 
     companion object {

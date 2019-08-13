@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context=".dashboard.DashboardFragment">
 
-    <android.support.v7.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/dashboard_search_button"
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_bar_height"
@@ -27,7 +27,7 @@
         android:paddingRight="@dimen/margin_fifteen"
         android:fontFamily="@font/roboto_condensed_italic" />
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/dashboard_nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/dashboard_featured_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
                         android:visibility="gone"
                         android:padding="@dimen/margin_twelve">
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/top_picks_in_classified"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
 
                     </FrameLayout>
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/dashboard_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -103,6 +103,6 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

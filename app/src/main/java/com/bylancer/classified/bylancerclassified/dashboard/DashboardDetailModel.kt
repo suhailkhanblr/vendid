@@ -1,9 +1,9 @@
 package com.bylancer.classified.bylancerclassified.dashboard
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
-import android.arch.persistence.room.TypeConverters
-import android.support.annotation.NonNull
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import androidx.annotation.NonNull
 import com.bylancer.classified.bylancerclassified.database.DataConverterCustomData
 import com.bylancer.classified.bylancerclassified.database.DataConverterListImages
 import com.google.gson.annotations.Expose
