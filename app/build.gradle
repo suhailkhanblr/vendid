@@ -4,10 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-kapt'
 
-/*repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}*/
-
 android {
     compileSdkVersion 29
     defaultConfig {

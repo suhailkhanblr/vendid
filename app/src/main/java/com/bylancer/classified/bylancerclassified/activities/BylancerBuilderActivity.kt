@@ -10,6 +10,7 @@ import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
 import com.bylancer.classified.bylancerclassified.login.LoginActivity
 import com.bylancer.classified.bylancerclassified.login.ManualLoginActivity
 import com.bylancer.classified.bylancerclassified.login.RegisterUserActivity
+import com.bylancer.classified.bylancerclassified.splash.SplashActivity
 import com.bylancer.classified.bylancerclassified.uploadproduct.categoryselection.UploadCategorySelectionActivity
 import com.bylancer.classified.bylancerclassified.utils.AppConstants
 import com.bylancer.classified.bylancerclassified.utils.SessionState

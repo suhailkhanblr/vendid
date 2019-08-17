@@ -33,6 +33,7 @@ class AppConstants {
         const val UPLOAD_PRODUCT_PIC_URL = "api/v1/index.php?action=upload_product_picture"
         const val UPLOAD_PRODUCT_SAVE_POST_URL = "api/v1/index.php?action=save_post"
         const val UPLOAD_PRODUCT_ADDITIONAL_INFO_URL = BASE_URL + "api/v1/?action=getCustomFieldByCatID&catid=%s&subcatid=%s&additionalinfo=%s"
+        const val FLAG_IMAGE_URL = "https://www.countryflags.io/%s/flat/64.png"
         const val IS_ADMIN_APP = false
         const val IS_APP_CONFIG_RELOAD_REQUIRED = true // UPDATE IT TO FALSE IF YOU DON'T WANT TO RELOAD YOUR CATEGORIES EVERY LAUNCH
         val CURRENT_VERSION = "1.0"

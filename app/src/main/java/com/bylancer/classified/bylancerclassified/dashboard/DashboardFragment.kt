@@ -25,7 +25,7 @@ import android.graphics.Typeface
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bylancer.classified.bylancerclassified.activities.SplashActivity
+import com.bylancer.classified.bylancerclassified.splash.SplashActivity
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
 import com.bylancer.classified.bylancerclassified.appconfig.SubCategory
 import com.bylancer.classified.bylancerclassified.utils.*
