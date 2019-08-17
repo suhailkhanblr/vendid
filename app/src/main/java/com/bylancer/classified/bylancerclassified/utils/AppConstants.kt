@@ -64,7 +64,7 @@ class AppConstants {
         const val CATEGORY = "category"
         const val SUB_CATEGORY = "sub_category"
         const val DATABASE_NAME = "property_app_db"
-        const val DATABASE_VERSION= 4
+        const val DATABASE_VERSION = 5
         const val IMAGE_PICKER_FRAGMENT = "picker"
         const val SELECTED_CATEGORY_POSITION = "selected_category_position"
         const val SELECTED_SUB_CATEGORY_ID = "selected_sub_category_id"

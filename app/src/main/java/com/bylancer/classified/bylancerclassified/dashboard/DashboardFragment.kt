@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.dashboard_top_item_layout.*
  */
 class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>>, OnProductItemClickListener {
 
-    val SPAN_COUNT = 2
+    var SPAN_COUNT = 2
     var productPageNumber = 1
     var featuredProductPageNumber = 1
     var isProductDataLoading = false
@@ -59,6 +59,10 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
         featuredDataList.clear()
         productPageNumber = 1
         featuredProductPageNumber = 1
+
+        if (resources.getBoolean(R.bool.isTablet)) {
+            SPAN_COUNT = 3
+        }
 
         val parentActivity: DashboardActivity = (activity as DashboardActivity?)!!
         if (AppConfigDetail.category == null || dashboard_category_menu_recycler_view == null) {

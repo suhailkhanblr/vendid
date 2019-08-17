@@ -58,6 +58,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation_menu"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/gray_color_transparent"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -66,14 +67,14 @@
             android:id="@+id/bylancer_ad_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            ads:adSize="BANNER"
+            ads:adSize="SMART_BANNER"
             ads:adUnitId="@string/ad_mob_banner_ad_unit">
         </com.google.android.gms.ads.AdView>
 
         <ImageView
             android:id="@+id/google_banner_ad_close"
-            android:layout_width="@dimen/margin_fifteen"
-            android:layout_height="@dimen/margin_fifteen"
+            android:layout_width="@dimen/margin_twenty"
+            android:layout_height="@dimen/margin_twenty"
             android:layout_gravity="top|end"
             android:tint="@color/denied_red"
             android:src="@drawable/ic_close_24dp"/>
@@ -81,6 +82,4 @@
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 

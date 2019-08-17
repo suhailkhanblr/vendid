@@ -13,6 +13,7 @@ class DBUtil {
             if (mPropertyDatabase == null) {
                 mPropertyDatabase = Room.databaseBuilder(context,
                         FavPropertyDatabase::class.java, getDataBaseName(context))
+                        .fallbackToDestructiveMigration()
                         .build()
             }
 

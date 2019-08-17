@@ -15,8 +15,11 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/category_layout_size"
             android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginEnd="8dp"
             android:paddingTop="@dimen/margin_small"
             android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_small"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
