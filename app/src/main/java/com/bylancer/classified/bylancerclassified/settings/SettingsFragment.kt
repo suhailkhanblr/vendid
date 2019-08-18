@@ -177,7 +177,7 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
     }
 
     private fun initializeLanguagePack() {
-        settings_language_spinner.setHint(LanguagePack.getString(getString(R.string.select_language)))
+        settings_language_spinner.hint = LanguagePack.getString(getString(R.string.select_language))
         settings_language_spinner.setOnItemClickListener{ position ->
             if(AppConfigDetail.languageList != null) {
                 SessionState.instance.selectedLanguage = if (AppConfigDetail.languageList?.get(position)?.name != null) AppConfigDetail.languageList?.get(position)?.name!! else ""
@@ -357,11 +357,11 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
         val builder = AlertDialog.Builder(context!!)
         builder.setTitle("")
         builder.setMessage(LanguagePack.getString("Are you sure you want to log out"))
-        builder.setPositiveButton(LanguagePack.getString("YES")){dialog, which ->
+        builder.setPositiveButton(LanguagePack.getString("YES")){dialog, _ ->
             dialog.dismiss()
             logoutUser()
         }
-        builder.setNegativeButton(LanguagePack.getString("No")){dialog, which ->
+        builder.setNegativeButton(LanguagePack.getString("NO")){dialog, _ ->
             dialog.dismiss()
         }
         builder.create().show()

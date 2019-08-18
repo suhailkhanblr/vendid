@@ -16,15 +16,15 @@
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
-        android:drawableStart="@drawable/ic_search_small"
+        android:drawableEnd="@drawable/ic_search_small"
         android:text="@string/search_text"
         android:gravity="start|center_vertical"
         android:background="@drawable/rounded_background_gray"
         android:textColor="@color/black_color_text"
         android:textAllCaps="false"
         android:drawablePadding="@dimen/margin_fifteen"
-        android:paddingLeft="@dimen/margin_fifteen"
-        android:paddingRight="@dimen/margin_fifteen"
+        android:paddingStart="@dimen/margin_fifteen"
+        android:paddingEnd="@dimen/margin_fifteen"
         android:fontFamily="@font/roboto_condensed_italic" />
 
     <com.bylancer.classified.bylancerclassified.widgets.pulltorefresh.WaveSwipeRefreshLayout

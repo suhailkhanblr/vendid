@@ -139,7 +139,10 @@ class SplashActivity : BylancerBuilderActivity() {
 
     private fun navigateToNextScreen() {
         SessionState.instance.readValuesFromPreferences(this)
-        if (SessionState.instance.selectedLanguage.isNullOrEmpty()) {
+        if (SessionState.instance.isLoginFirstTime) {
+            SessionState.instance.isLoginFirstTime = false
+            SessionState.instance.saveBooleanToPreferences(this@SplashActivity,
+                    AppConstants.Companion.PREFERENCES.IS_FIRST_TIME_LOGIN.toString() ,false)
             startActivity(LanguageSelectionActivity :: class.java, false)
         } else {
             startActivity(DashboardActivity :: class.java, false)

@@ -117,6 +117,7 @@ class AppConstants {
             APP_CONFIG("app_config_details"),
             APP_VERSION_FROM_SERVER("app_version_server"),
             PREMIUM_APP("premium_app"),
+            IS_FIRST_TIME_LOGIN("is_first_time_login"),
             GOOGLE_BANNER("google_banner"),
             GOOGLE_INTERSTITIAL("google_interstitial"),
             FACEBOOK_INTERSTITIAL("facebook_interstitial"),

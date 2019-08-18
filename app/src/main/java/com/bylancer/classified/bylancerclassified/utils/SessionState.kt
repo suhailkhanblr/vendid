@@ -9,6 +9,7 @@ class SessionState private constructor() {
     var isGoogleInterstitialSupported: Boolean = false
     var isFacebookInterstitialSupported: Boolean = false
     var isPremiumAppSupported: Boolean = false
+    var isLoginFirstTime: Boolean = false
     var displayName: String = ""
     var email: String = ""
     var phoneNumber: String = ""
@@ -48,6 +49,7 @@ class SessionState private constructor() {
             this.isGoogleBannerSupported = prefs.getBoolean(AppConstants.Companion.PREFERENCES.GOOGLE_BANNER.toString(), false)
             this.isGoogleInterstitialSupported = prefs.getBoolean(AppConstants.Companion.PREFERENCES.GOOGLE_INTERSTITIAL.toString(), false)
             this.isPremiumAppSupported = prefs.getBoolean(AppConstants.Companion.PREFERENCES.PREMIUM_APP.toString(), false)
+            this.isLoginFirstTime = prefs.getBoolean(AppConstants.Companion.PREFERENCES.IS_FIRST_TIME_LOGIN.toString(), true)
             this.email = prefs.getString(AppConstants.Companion.PREFERENCES.EMAIL.toString(), "")!!
             this.phoneNumber = prefs.getString(AppConstants.Companion.PREFERENCES.PHONE.toString(), "")!!
             this.displayName = prefs.getString(AppConstants.Companion.PREFERENCES.DISPLAY_NAME.toString(), "")!!

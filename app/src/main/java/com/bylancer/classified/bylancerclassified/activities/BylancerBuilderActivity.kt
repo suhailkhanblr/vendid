@@ -28,6 +28,7 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
     lateinit var mInterstitialAd: InterstitialAd
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        isRTLSupportRequired()
         super.onCreate(savedInstanceState)
         if(this::class.simpleName != LoginRequiredActivity::class.simpleName &&
                 this::class.simpleName != LoginActivity::class.simpleName &&
@@ -170,6 +171,6 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
     }
 
     private fun isRTLSupportRequired() {
-        window.decorView.layoutDirection = View.LAYOUT_DIRECTION_RTL
+        //window.decorView.layoutDirection = View.LAYOUT_DIRECTION_RTL
     }
 }

@@ -38,6 +38,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     android:maxLines="1"
                     android:ellipsize="end"
+                    android:layout_gravity="start"
+                    android:textAlignment="viewStart"
                     android:fontFamily="@font/roboto_bold"
                     android:textSize="@dimen/text_size_eighteen"
                     android:textColor="@color/shadow_black"
