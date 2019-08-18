@@ -1,5 +1,7 @@
 package com.bylancer.classified.bylancerclassified.utils
 
+import android.graphics.Color
+
 /**
  * Created by Ani on 3/24/18.
  */
@@ -78,6 +80,10 @@ class AppConstants {
         const val BANNER_DELAY = 2.0
         const val INTERSTITIAL_DELAY = 3.0
         const val FACEBOOK_INTERSTITIAL_PLACEMENT = "2244587745860156_2351931271792469"
+
+        const val DASHBOARD_PULL_TO_REFRESH_COLOR = 0xFFCA0009
+        const val SEARCH_PULL_TO_REFRESH_COLOR = 0xFF313C3F
+        const val PULL_TO_REFRESH_COLOR_SCHEME = Color.WHITE
 
         enum class PREFERENCES private constructor(private val value: String) {
             USER_ID("user_id"),
