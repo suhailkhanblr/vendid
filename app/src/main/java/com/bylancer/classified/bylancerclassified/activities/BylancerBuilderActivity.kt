@@ -3,6 +3,7 @@ package com.bylancer.classified.bylancerclassified.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.chat.ChatActivity
@@ -166,5 +167,9 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         }
         val delay = (1000 * 60 * AppConstants.INTERSTITIAL_DELAY)
         timer.schedule(interstitialTask, 0L, delay.toLong())
+    }
+
+    private fun isRTLSupportRequired() {
+        window.decorView.layoutDirection = View.LAYOUT_DIRECTION_RTL
     }
 }
