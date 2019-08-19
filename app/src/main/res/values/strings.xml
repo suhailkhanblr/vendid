@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bylancer Classified</string>
+    <string name="app_name">QuickAd Classified</string>
     <string name="divider_for_splash">--------------------------X--------------------------</string>
     <string name="search_text">What are you looking for?</string>
     <string name="motors">Motors</string>
