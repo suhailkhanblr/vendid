@@ -76,6 +76,7 @@ class AppConstants {
         const val SELECTED_PRODUCT_LATITUDE = "selected_product_latitude"
         const val UPLOAD_PRODUCT_SELECTED_TITLE = "UPLOAD_PRODUCT_SELECTED_TITLE"
         const val ADDITIONAL_INFO_ACTIVITY_TITLE = "ADDITIONAL_INFO_ACTIVITY_TITLE"
+        const val DIRECTION_RTL = "rtl"
 
         const val BANNER_DELAY = 2.0
         const val INTERSTITIAL_DELAY = 3.0
@@ -102,6 +103,7 @@ class AppConstants {
             SELECTED_STATE("selected_state"),
             SELECTED_CITY("selected_city"),
             SELECTED_LANGUAGE("selected_Language"),
+            SELECTED_LANGUAGE_DIRECTION("selected_Language_direction"),
             LIVE_LOCATION("live_location"),
             TNC_URL("tnc_url"),
             PROFILE_PIC("profile_pic"),

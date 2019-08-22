@@ -26,6 +26,7 @@ class SessionState private constructor() {
     var selectedCountry: String = ""
     var selectedCountryCode: String = ""
     var selectedLanguageCode: String = ""
+    var selectedLanguageDirection: String = ""
     var selectedState: String = ""
     var selectedCity: String = ""
     var selectedLanguage: String = ""
@@ -68,6 +69,7 @@ class SessionState private constructor() {
             this.selectedState = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_STATE.toString(), "")!!
             this.selectedCity = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_CITY.toString(), "")!!
             this.selectedLanguage = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE.toString(), "")!!
+            this.selectedLanguageDirection = prefs.getString(AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE_DIRECTION.toString(), "")!!
             this.continueBrowsingText = prefs.getString(AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_TEXT.toString(), "")!!
             this.continueBrowsingCategoryId = prefs.getString(AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_CATEGORY_ID.toString(), "")!!
             this.continueBrowsingSubCategoryId = prefs.getString(AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_SUB_CATEGORY_ID.toString(), "")!!

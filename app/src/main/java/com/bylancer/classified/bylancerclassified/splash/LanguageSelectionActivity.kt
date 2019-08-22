@@ -32,18 +32,21 @@ class LanguageSelectionActivity : BylancerBuilderActivity(), LanguageSelection {
         language_list_recycler_view.layoutManager = LinearLayoutManager(this)
         language_list_recycler_view.setHasFixedSize(false)
         language_list_recycler_view.layoutAnimation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation)
-        if (!AppConfigDetail.languageList.isNullOrEmpty()) {
-            language_list_recycler_view.adapter = LanguageSelectionAdapter(AppConfigDetail.languageList!!, this@LanguageSelectionActivity)
+        if (!LanguagePack.instance.languagePackData.isNullOrEmpty()) {
+            language_list_recycler_view.adapter = LanguageSelectionAdapter(LanguagePack.instance.languagePackData!!, this@LanguageSelectionActivity)
         }
     }
 
-    override fun onLanguageSelected(languageString: String?, languageCode : String?) {
+    override fun onLanguageSelected(languageString: String?, languageCode : String?, languageDirection : String?) {
         SessionState.instance.selectedLanguage = languageString ?: ""
         SessionState.instance.selectedLanguageCode = languageCode ?: ""
+        SessionState.instance.selectedLanguageDirection = languageDirection ?: ""
         SessionState.instance.saveValuesToPreferences(this@LanguageSelectionActivity, AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE.toString(),
                 SessionState.instance.selectedLanguage)
         SessionState.instance.saveValuesToPreferences(this@LanguageSelectionActivity, AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE_CODE.toString(),
                 SessionState.instance.selectedLanguageCode)
+        SessionState.instance.saveValuesToPreferences(this@LanguageSelectionActivity, AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE_DIRECTION.toString(),
+                SessionState.instance.selectedLanguageDirection)
         refreshCategoriesWithLanguageCode(SessionState.instance.selectedLanguageCode)
     }
 
@@ -81,5 +84,7 @@ class LanguageSelectionActivity : BylancerBuilderActivity(), LanguageSelection {
             finish()
         }
     }
-
 }
+
+
+

@@ -171,6 +171,11 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
     }
 
     private fun isRTLSupportRequired() {
-        //window.decorView.layoutDirection = View.LAYOUT_DIRECTION_RTL
+        if (AppConstants.DIRECTION_RTL.equals(SessionState.instance.selectedLanguageDirection)) {
+            window.decorView.layoutDirection = View.LAYOUT_DIRECTION_RTL
+        } else {
+            window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
+        }
     }
 }
+
