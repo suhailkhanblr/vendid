@@ -42,11 +42,13 @@ class MyPostedProductActivity : BylancerBuilderActivity(), OnProductItemClickLis
     }
 
     private fun setUpPullToRefresh() {
-        my_posted_property_pull_to_refresh.setWaveColor(AppConstants.SEARCH_PULL_TO_REFRESH_COLOR.toInt())
-        my_posted_property_pull_to_refresh.setColorSchemeColors(AppConstants.PULL_TO_REFRESH_COLOR_SCHEME, AppConstants.PULL_TO_REFRESH_COLOR_SCHEME)
-        my_posted_property_pull_to_refresh.setOnRefreshListener {
-            my_posted_property_pull_to_refresh?.isRefreshing = true
-            fetchProductList(false)
+        my_posted_property_pull_to_refresh?.apply {
+            setWaveColor(AppConstants.SEARCH_PULL_TO_REFRESH_COLOR.toInt())
+            setColorSchemeColors(AppConstants.PULL_TO_REFRESH_COLOR_SCHEME, AppConstants.PULL_TO_REFRESH_COLOR_SCHEME)
+            setOnRefreshListener {
+                isRefreshing = true
+                fetchProductList(false)
+            }
         }
     }
 

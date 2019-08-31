@@ -118,26 +118,30 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
     }
 
     override fun onResponse(call: Call<DashboardDetailModel>?, response: Response<DashboardDetailModel>?) {
-        progress_view_dashboard_detail_frame.visibility = View.GONE
-        progress_view_dashboard_detail.clearAnimation()
-        animUpDown = null
+        if (!this.isFinishing) {
+            progress_view_dashboard_detail_frame.visibility = View.GONE
+            progress_view_dashboard_detail.clearAnimation()
+            animUpDown = null
 
-        if(response != null && response.isSuccessful) {
-            mDashboardDetailModel =  response.body()
-            if (mDashboardDetailModel != null) {
-                initializeUI(mDashboardDetailModel!!)
-            } else {
-                Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString(getString(R.string.some_wrong)), this@DashboardProductDetailActivity)
+            if(response != null && response.isSuccessful) {
+                mDashboardDetailModel =  response.body()
+                if (mDashboardDetailModel != null) {
+                    initializeUI(mDashboardDetailModel!!)
+                } else {
+                    Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString(getString(R.string.some_wrong)), this@DashboardProductDetailActivity)
+                }
             }
         }
     }
 
     override fun onFailure(call: Call<DashboardDetailModel>?, t: Throwable?) {
-        progress_view_dashboard_detail_frame.visibility = View.GONE
-        progress_view_dashboard_detail.visibility = View.GONE
-        progress_view_dashboard_detail.clearAnimation()
-        animUpDown = null
-        Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString(getString(R.string.internet_issue)), this@DashboardProductDetailActivity)
+        if (!this.isFinishing) {
+            progress_view_dashboard_detail_frame.visibility = View.GONE
+            progress_view_dashboard_detail.visibility = View.GONE
+            progress_view_dashboard_detail.clearAnimation()
+            animUpDown = null
+            Utility.showSnackBar(dashboard_product_detail_parent_layout, LanguagePack.getString(getString(R.string.internet_issue)), this@DashboardProductDetailActivity)
+        }
     }
 
     private fun initializeUI(dashboardDetailModel: DashboardDetailModel) {
@@ -164,11 +168,11 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
         if (!dashboardDetailModel.price.isNullOrEmpty() && checkIfNumber(dashboardDetailModel.price!!)) {
             product_detail_price_text_view.visibility = View.VISIBLE
         } else {
-            product_detail_price_text_view.visibility = View.GONE
+            product_detail_price_text_view.visibility = View.INVISIBLE
         }
 
         product_detail_timeline_text_view.text = dashboardDetailModel.createdAt
-        product_details_category_text_view.text = dashboardDetailModel.tag
+        product_details_category_text_view.text = dashboardDetailModel.categoryName
         product_detail_age_desc.text = dashboardDetailModel.updatedAt
         product_detail_description_detail.text = dashboardDetailModel.description
         product_detail_product_status_desc.text = dashboardDetailModel.status

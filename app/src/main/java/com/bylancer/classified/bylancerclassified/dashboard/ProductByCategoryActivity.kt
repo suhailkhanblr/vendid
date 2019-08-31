@@ -67,11 +67,13 @@ class ProductByCategoryActivity : BylancerBuilderActivity(), OnProductItemClickL
     }
 
     private fun setUpPullToRefresh() {
-        search_pull_to_refresh.setWaveColor(AppConstants.SEARCH_PULL_TO_REFRESH_COLOR.toInt())
-        search_pull_to_refresh.setColorSchemeColors(AppConstants.PULL_TO_REFRESH_COLOR_SCHEME, AppConstants.PULL_TO_REFRESH_COLOR_SCHEME)
-        search_pull_to_refresh.setOnRefreshListener {
-            search_pull_to_refresh?.isRefreshing = true
-            fetchProductList(false)
+        search_pull_to_refresh?.apply {
+            setWaveColor(AppConstants.SEARCH_PULL_TO_REFRESH_COLOR.toInt())
+            setColorSchemeColors(AppConstants.PULL_TO_REFRESH_COLOR_SCHEME, AppConstants.PULL_TO_REFRESH_COLOR_SCHEME)
+            setOnRefreshListener {
+                isRefreshing = true
+                fetchProductList(false)
+            }
         }
     }
 
@@ -101,7 +103,7 @@ class ProductByCategoryActivity : BylancerBuilderActivity(), OnProductItemClickL
         productInputData.countryCode = SessionState.instance.selectedCountryCode
         productInputData.limit = AppConstants.PRODUCT_LOADING_LIMIT
 
-        if (search_pull_to_refresh.isRefreshing) {
+        if (search_pull_to_refresh != null && search_pull_to_refresh.isRefreshing) {
             lastProductPageNumber = productPageNumber
             productPageNumber = 1
         }
@@ -121,7 +123,7 @@ class ProductByCategoryActivity : BylancerBuilderActivity(), OnProductItemClickL
     }
 
     override fun onResponse(call: Call<List<ProductsData>>?, response: Response<List<ProductsData>>?) {
-        if(!this.isFinishing) {
+        if (!this.isFinishing) {
             iosDialog?.dismiss()
             if(response != null && response.isSuccessful) {
                 if (search_pull_to_refresh != null && search_pull_to_refresh.isRefreshing) {
@@ -149,15 +151,17 @@ class ProductByCategoryActivity : BylancerBuilderActivity(), OnProductItemClickL
     }
 
     override fun onFailure(call: Call<List<ProductsData>>?, t: Throwable?) {
-        iosDialog?.dismiss()
-        no_product_by_category_frame.visibility = View.VISIBLE
-        product_by_category_recycler_view.visibility = View.GONE
-        if (search_pull_to_refresh != null && search_pull_to_refresh.isRefreshing) {
-            search_pull_to_refresh.isRefreshing = false
-            productPageNumber = lastProductPageNumber
+        if (!this.isFinishing) {
+            iosDialog?.dismiss()
+            no_product_by_category_frame.visibility = View.VISIBLE
+            product_by_category_recycler_view.visibility = View.GONE
+            if (search_pull_to_refresh != null && search_pull_to_refresh.isRefreshing) {
+                search_pull_to_refresh.isRefreshing = false
+                productPageNumber = lastProductPageNumber
+            }
+            isProductDataLoading = false
+            Utility.showSnackBar(product_by_category_parent_layout, LanguagePack.getString(getString(R.string.internet_issue)), this)
         }
-        isProductDataLoading = false
-        Utility.showSnackBar(product_by_category_parent_layout, LanguagePack.getString(getString(R.string.internet_issue)), this)
     }
 
     override fun onProductItemClicked(productId: String?, productName: String?, userName: String?) {

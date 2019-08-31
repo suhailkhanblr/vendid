@@ -32,10 +32,7 @@ import com.bylancer.classified.bylancerclassified.utils.*
 import kotlinx.android.synthetic.main.dashboard_top_item_layout.*
 
 /**
- * A simple [Fragment] subclass.
- * Use the [DashboardFragment.newInstance] factory method to
- * create an instance of this fragment.
- *
+ * Contains Dashboard data
  */
 class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>>, OnProductItemClickListener {
 
@@ -91,11 +88,13 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
     }
 
     private fun setUpPullToRefresh() {
-        dashboard_pull_to_refresh.setWaveColor(AppConstants.DASHBOARD_PULL_TO_REFRESH_COLOR.toInt())
-        dashboard_pull_to_refresh.setColorSchemeColors(AppConstants.PULL_TO_REFRESH_COLOR_SCHEME, AppConstants.PULL_TO_REFRESH_COLOR_SCHEME)
-        dashboard_pull_to_refresh.setOnRefreshListener {
-            dashboard_pull_to_refresh?.isRefreshing = true
-            fetchFeaturedAndUrgentProductList()
+        dashboard_pull_to_refresh?.apply {
+            setWaveColor(AppConstants.DASHBOARD_PULL_TO_REFRESH_COLOR.toInt())
+            setColorSchemeColors(AppConstants.PULL_TO_REFRESH_COLOR_SCHEME, AppConstants.PULL_TO_REFRESH_COLOR_SCHEME)
+            setOnRefreshListener {
+                isRefreshing = true
+                fetchFeaturedAndUrgentProductList()
+            }
         }
     }
 
@@ -259,62 +258,68 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
     }
 
     private fun fetchFeaturedAndUrgentProductList() {
-        isProductDataLoading = true
-        val productInputData = ProductInputData()
-        productInputData.countryCode = SessionState.instance.selectedCountryCode
-        productInputData.limit = AppConstants.PRODUCT_LOADING_LIMIT
-        if (dashboard_pull_to_refresh.isRefreshing) {
-            lastFeaturedProductPageNumber = featuredProductPageNumber
-            featuredProductPageNumber = 1
-        }
-        productInputData.pageNumber = featuredProductPageNumber.toString()
-        productInputData.status = AppConstants.PRODUCT_STATUS
-
-        RetrofitController.fetchFeaturedAndUrgentProducts(productInputData, object : Callback<List<ProductsData>> {
-            override fun onFailure(call: Call<List<ProductsData>>?, t: Throwable?) {
-                if (dashboard_pull_to_refresh != null && dashboard_pull_to_refresh.isRefreshing) {
-                    featuredProductPageNumber = lastFeaturedProductPageNumber
-                }
-                fetchProductList()
+        if (isAdded && isVisible) {
+            isProductDataLoading = true
+            val productInputData = ProductInputData()
+            productInputData.countryCode = SessionState.instance.selectedCountryCode
+            productInputData.limit = AppConstants.PRODUCT_LOADING_LIMIT
+            if (dashboard_pull_to_refresh != null && dashboard_pull_to_refresh.isRefreshing) {
+                lastFeaturedProductPageNumber = featuredProductPageNumber
+                featuredProductPageNumber = 1
             }
+            productInputData.pageNumber = featuredProductPageNumber.toString()
+            productInputData.status = AppConstants.PRODUCT_STATUS
 
-            override fun onResponse(call: Call<List<ProductsData>>?, response: Response<List<ProductsData>>?) {
-                if(this@DashboardFragment.isAdded && this@DashboardFragment.isVisible) {
-                    if(response != null && response.isSuccessful) {
+            RetrofitController.fetchFeaturedAndUrgentProducts(productInputData, object : Callback<List<ProductsData>> {
+                override fun onFailure(call: Call<List<ProductsData>>?, t: Throwable?) {
+                    if (this@DashboardFragment.isAdded && this@DashboardFragment.isVisible) {
                         if (dashboard_pull_to_refresh != null && dashboard_pull_to_refresh.isRefreshing) {
-                            featuredDataList.clear()
+                            featuredProductPageNumber = lastFeaturedProductPageNumber
                         }
-                        featuredDataList.addAll(response.body())
-                        if (!featuredDataList.isNullOrEmpty()) {
-                            featured_text_layout.visibility = View.VISIBLE
-                            if (dashboard_featured_recycler_view.adapter != null) {
-                                dashboard_featured_recycler_view.adapter?.notifyDataSetChanged()
-                            } else  {
-                                dashboard_featured_recycler_view.adapter = DashboardFeaturedItemAdapter(featuredDataList, this@DashboardFragment)
-                            }
-                        }
+                        fetchProductList()
                     }
                 }
 
-                fetchProductList()
-            }
+                override fun onResponse(call: Call<List<ProductsData>>?, response: Response<List<ProductsData>>?) {
+                    if (this@DashboardFragment.isAdded && this@DashboardFragment.isVisible) {
+                        if(response != null && response.isSuccessful) {
+                            if (dashboard_pull_to_refresh != null && dashboard_pull_to_refresh.isRefreshing) {
+                                featuredDataList.clear()
+                            }
+                            featuredDataList.addAll(response.body())
+                            if (!featuredDataList.isNullOrEmpty()) {
+                                featured_text_layout.visibility = View.VISIBLE
+                                if (dashboard_featured_recycler_view.adapter != null) {
+                                    dashboard_featured_recycler_view.adapter?.notifyDataSetChanged()
+                                } else  {
+                                    dashboard_featured_recycler_view.adapter = DashboardFeaturedItemAdapter(featuredDataList, this@DashboardFragment)
+                                }
+                            }
+                        }
+                    }
 
-        })
+                    fetchProductList()
+                }
+
+            })
+        }
     }
 
     private fun fetchProductList() {
-        isProductDataLoading = true
-        val productInputData = ProductInputData()
-        productInputData.countryCode = SessionState.instance.selectedCountryCode
-        productInputData.limit = AppConstants.PRODUCT_LOADING_LIMIT
-        if (dashboard_pull_to_refresh.isRefreshing) {
-            lastProductPageNumber = productPageNumber
-            productPageNumber = 1
-        }
-        productInputData.pageNumber = productPageNumber.toString()
-        productInputData.status = AppConstants.PRODUCT_STATUS
+        if (isAdded && isVisible) {
+            isProductDataLoading = true
+            val productInputData = ProductInputData()
+            productInputData.countryCode = SessionState.instance.selectedCountryCode
+            productInputData.limit = AppConstants.PRODUCT_LOADING_LIMIT
+            if (dashboard_pull_to_refresh != null && dashboard_pull_to_refresh.isRefreshing) {
+                lastProductPageNumber = productPageNumber
+                productPageNumber = 1
+            }
+            productInputData.pageNumber = productPageNumber.toString()
+            productInputData.status = AppConstants.PRODUCT_STATUS
 
-        RetrofitController.fetchProducts(productInputData, this@DashboardFragment)
+            RetrofitController.fetchProducts(productInputData, this@DashboardFragment)
+        }
     }
 
     override fun onResponse(call: Call<List<ProductsData>>?, response: Response<List<ProductsData>>?) {
@@ -348,15 +353,17 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
     }
 
     override fun onFailure(call: Call<List<ProductsData>>?, t: Throwable?) {
-        if (progress_view_dashboard_frame != null) progress_view_dashboard_frame.visibility = View.GONE
-        if (progress_view_dashboard != null) progress_view_dashboard.clearAnimation()
-        animUpDown = null
-        if (dashboard_pull_to_refresh != null && dashboard_pull_to_refresh.isRefreshing) {
-            productPageNumber = lastProductPageNumber
-            dashboard_pull_to_refresh.isRefreshing = false
-        }
+        if (this@DashboardFragment.isAdded && this@DashboardFragment.isVisible) {
+            if (progress_view_dashboard_frame != null) progress_view_dashboard_frame.visibility = View.GONE
+            if (progress_view_dashboard != null) progress_view_dashboard.clearAnimation()
+            animUpDown = null
+            if (dashboard_pull_to_refresh != null && dashboard_pull_to_refresh.isRefreshing) {
+                productPageNumber = lastProductPageNumber
+                dashboard_pull_to_refresh.isRefreshing = false
+            }
 
-        isProductDataLoading = false
+            isProductDataLoading = false
+        }
     }
 
     override fun onProductItemClicked(productId: String?, productName: String?, userName: String?) {
