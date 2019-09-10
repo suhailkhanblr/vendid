@@ -54,7 +54,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-    implementation ("com.squareup.retrofit2:retrofit:2.1.0") {
+    implementation("com.squareup.retrofit2:retrofit:2.1.0") {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
         exclude module: 'okhttp'
     }
@@ -65,10 +65,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation "com.google.android.gms:play-services-location:16.0.0"
     implementation "com.google.android.gms:play-services-places:16.0.0"
-    //implementation 'jrizani:jrspinner:0.2.4'
-    //implementation 'com.github.jrizani:JRSpinner:androidx-SNAPSHOT'
-    //implementation project(":jrspinner")
-    implementation 'com.facebook.android:facebook-android-sdk:4.17.0'
+    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
     implementation 'com.github.mirrajabi:search-dialog:1.2.3'
     implementation 'androidx.room:room-runtime:2.0.0'
     annotationProcessor 'androidx.room:room-compiler:2.0.0'

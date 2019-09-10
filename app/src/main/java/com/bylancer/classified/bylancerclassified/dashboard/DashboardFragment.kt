@@ -1,50 +1,51 @@
 package com.bylancer.classified.bylancerclassified.dashboard
 
 
-import android.os.Bundle
-import android.app.Fragment
 import android.content.Context
+import android.graphics.Typeface
+import android.os.Bundle
 import android.os.Handler
-import androidx.recyclerview.widget.GridLayoutManager
 import android.view.View
 import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.TextView
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.bylancer.classified.bylancerclassified.R
+import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
+import com.bylancer.classified.bylancerclassified.appconfig.SubCategory
+import com.bylancer.classified.bylancerclassified.dashboard.locationselector.LocationSelectorActivity
 import com.bylancer.classified.bylancerclassified.fragments.BylancerBuilderFragment
+import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
+import com.bylancer.classified.bylancerclassified.settings.MyPostedProductActivity
+import com.bylancer.classified.bylancerclassified.splash.SplashActivity
+import com.bylancer.classified.bylancerclassified.utils.*
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.productlist.ProductInputData
 import com.bylancer.classified.bylancerclassified.webservices.productlist.ProductsData
+import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
+import ir.mirrajabi.searchdialog.core.SearchResultListener
+import kotlinx.android.synthetic.main.dashboard_top_item_layout.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.view.animation.AnimationUtils
-import android.widget.TextView
-import ir.mirrajabi.searchdialog.core.SearchResultListener
-import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
-import android.graphics.Typeface
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.bylancer.classified.bylancerclassified.splash.SplashActivity
-import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
-import com.bylancer.classified.bylancerclassified.appconfig.SubCategory
-import com.bylancer.classified.bylancerclassified.utils.*
-import kotlinx.android.synthetic.main.dashboard_top_item_layout.*
 
 /**
  * Contains Dashboard data
  */
 class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>>, OnProductItemClickListener {
-
-    var SPAN_COUNT = 2
-    var productPageNumber = 1
-    var lastProductPageNumber = 1
-    var featuredProductPageNumber = 1
-    var lastFeaturedProductPageNumber = 1
-    var isProductDataLoading = false
-    var animUpDown: Animation? = null
-    val productDataList: ArrayList<ProductsData> = arrayListOf()
-    val featuredDataList: ArrayList<ProductsData> = arrayListOf()
+    private var SPAN_COUNT = 2
+    private var productPageNumber = 1
+    private var lastProductPageNumber = 1
+    private var featuredProductPageNumber = 1
+    private var lastFeaturedProductPageNumber = 1
+    private var isProductDataLoading = false
+    private var animUpDown: Animation? = null
+    private val productDataList: ArrayList<ProductsData> = arrayListOf()
+    private val featuredDataList: ArrayList<ProductsData> = arrayListOf()
 
     override fun setLayoutView() = R.layout.fragment_dashboard
 
@@ -54,6 +55,7 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
         resetAdsData()
         setUpFeaturedLatestAdRecyclerView()
         initializingRecyclerViewScrollListener()
+        setUpMyAds()
 
         featured_in_classified.text = LanguagePack.getString(getString(R.string.featured_ads))
         dashboard_search_button.text = LanguagePack.getString(getString(R.string.search_text))
@@ -70,6 +72,48 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
             bundle.putString(AppConstants.SELECTED_CATEGORY_ID, SessionState.instance.continueBrowsingCategoryId)
             bundle.putString(AppConstants.SELECTED_SUB_CATEGORY_ID, SessionState.instance.continueBrowsingSubCategoryId)
             startActivity(ProductByCategoryActivity::class.java, bundle)
+        }
+    }
+
+    private fun setUpLocationMarker() {
+        val newLocation = when {
+            !SessionState.instance.selectedCity.isNullOrEmpty() -> {
+                SessionState.instance.selectedCity
+            }
+            !SessionState.instance.selectedState.isNullOrEmpty() -> {
+                SessionState.instance.selectedState
+            }
+            !SessionState.instance.selectedCountry.isNullOrEmpty() -> {
+                SessionState.instance.selectedCountry
+            } else -> {
+                if (SessionState.instance.defaultCountry.isNullOrEmpty()) {
+                    SessionState.instance.defaultCountry
+                } else {
+                    getString(R.string.default_country)
+                }
+            }
+        }
+        if (null != location_selector_text_view) {
+            if (!location_selector_text_view.text.isNullOrEmpty() && !newLocation.equals(location_selector_text_view.text)
+                    && dashboard_pull_to_refresh != null) {
+                dashboard_pull_to_refresh?.isRefreshing = true
+                fetchFeaturedAndUrgentProductList()
+            }
+            location_selector_text_view.text = newLocation
+        }
+
+        location_selector_text_view.setOnClickListener() {
+            startActivity(LocationSelectorActivity::class.java, false)
+        }
+    }
+
+    private fun setUpMyAds() {
+        my_notifications_image_button?.setOnClickListener {
+            if (SessionState.instance.isLoggedIn) {
+                startActivity(MyPostedProductActivity::class.java, false)
+            } else {
+                startActivity(LoginRequiredActivity::class.java, false)
+            }
         }
     }
 
@@ -111,7 +155,7 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
         dashboard_recycler_view.isNestedScrollingEnabled = false
         dashboard_recycler_view.itemAnimator = DefaultItemAnimator()
         dashboard_recycler_view.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation)
-        dashboard_recycler_view.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, 10, false))
+        dashboard_recycler_view.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, 10, true))
     }
 
     private fun showItemSearchBar() {
@@ -138,10 +182,14 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
                 })
         simpleSearchDialogCompat.show()
 
-        simpleSearchDialogCompat.setOnDismissListener() {
-            var searchedkeyWord = simpleSearchDialogCompat.searchBox.text
-            if (!searchedkeyWord.isNullOrEmpty()) {
-
+        simpleSearchDialogCompat.setOnDismissListener {
+            var searchedKeyWord = simpleSearchDialogCompat.searchBox.text
+            if (!searchedKeyWord.isNullOrEmpty()) {
+                val bundle = Bundle()
+                bundle.putString(AppConstants.SELECTED_CATEGORY_ID, "")
+                bundle.putString(AppConstants.SELECTED_SUB_CATEGORY_ID, "")
+                bundle.putString(AppConstants.SELECTED_KEYWORD, searchedKeyWord.toString())
+                startActivity(ProductByCategoryActivity::class.java, bundle)
             }
         }
 
@@ -188,7 +236,7 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
                         SessionState.instance.continueBrowsingText = categoryName + " | " + item.title!!
                         SessionState.instance.continueBrowsingCategoryId = categoryId
                         SessionState.instance.continueBrowsingImage = iconUrl
-                        SessionState.instance.continueBrowsingSubCategoryId = if (position == 0) "0" else subCategory.get(position - 1).id!!
+                        SessionState.instance.continueBrowsingSubCategoryId = if (position == 0) "0" else subCategory[position - 1].id!!
                         SessionState.instance.saveValuesToPreferences(context, AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_TEXT.toString(), SessionState.instance.continueBrowsingText)
                         SessionState.instance.saveValuesToPreferences(context, AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_CATEGORY_ID.toString(), SessionState.instance.continueBrowsingCategoryId)
                         SessionState.instance.saveValuesToPreferences(context, AppConstants.Companion.PREFERENCES.CONTINUE_BROWSING_SUB_CATEGORY_ID.toString(), SessionState.instance.continueBrowsingSubCategoryId)
@@ -196,15 +244,27 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
                         if (!subCategory.isNullOrEmpty()) {
                             val bundle = Bundle()
                             bundle.putString(AppConstants.SELECTED_CATEGORY_ID, categoryId)
-                            val subCategoryId: String = if (position == 0) "0" else subCategory.get(position - 1).id!!
+                            val subCategoryId: String = if (position == 0) "0" else subCategory[position - 1].id!!
                             bundle.putString(AppConstants.SELECTED_SUB_CATEGORY_ID, subCategoryId)
+                            bundle.putString(AppConstants.SELECTED_KEYWORD, "")
                             startActivity(ProductByCategoryActivity::class.java, bundle)
                         }
 
                         dialog.dismiss()
                     })
             simpleSearchDialogCompat.show()
-            //simpleSearchDialogCompat.setOnDismissListener { Utility.hideKeyboardFromDialogs(activity!!) }
+
+            simpleSearchDialogCompat.setOnDismissListener {
+                var searchedKeyWord = simpleSearchDialogCompat.searchBox.text
+                if (!searchedKeyWord.isNullOrEmpty()) {
+                    val bundle = Bundle()
+                    bundle.putString(AppConstants.SELECTED_CATEGORY_ID, categoryId)
+                    bundle.putString(AppConstants.SELECTED_SUB_CATEGORY_ID, "")
+                    bundle.putString(AppConstants.SELECTED_KEYWORD, searchedKeyWord.toString())
+                    startActivity(ProductByCategoryActivity::class.java, bundle)
+                }
+            }
+
             val typeface = Typeface.createFromAsset(context?.assets,
                     "fonts/roboto_italic.ttf")
             if (simpleSearchDialogCompat.titleTextView != null) {
@@ -229,9 +289,11 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
 
     override fun onResume() {
         super.onResume()
+        setUpLocationMarker()
         if (SessionState.instance.continueBrowsingSubCategoryId.isNullOrEmpty()) {
             continue_browsing_parent_layout.visibility = View.GONE
         } else {
+            continue_browsing_parent_layout.visibility = View.VISIBLE
             continue_browsing_text_view.text = LanguagePack.getString(getString(R.string.continue_browsing))
             browsing_path_text_view.text = SessionState.instance.continueBrowsingText
             Glide.with(context!!).load(SessionState.instance.continueBrowsingImage).into(continue_browsing_item_image_view)
@@ -285,14 +347,17 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
                         if(response != null && response.isSuccessful) {
                             if (dashboard_pull_to_refresh != null && dashboard_pull_to_refresh.isRefreshing) {
                                 featuredDataList.clear()
+                                dashboard_featured_recycler_view?.recycledViewPool?.clear()
+                                dashboard_featured_recycler_view?.adapter?.notifyDataSetChanged()
                             }
                             featuredDataList.addAll(response.body())
                             if (!featuredDataList.isNullOrEmpty()) {
                                 featured_text_layout.visibility = View.VISIBLE
                                 if (dashboard_featured_recycler_view.adapter != null) {
-                                    dashboard_featured_recycler_view.adapter?.notifyDataSetChanged()
+                                    dashboard_featured_recycler_view?.recycledViewPool?.clear()
+                                    dashboard_featured_recycler_view?.adapter?.notifyDataSetChanged()
                                 } else  {
-                                    dashboard_featured_recycler_view.adapter = DashboardFeaturedItemAdapter(featuredDataList, this@DashboardFragment)
+                                    dashboard_featured_recycler_view?.adapter = DashboardFeaturedItemAdapter(featuredDataList, this@DashboardFragment)
                                 }
                             }
                         }
@@ -331,14 +396,17 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
             if(response != null && response.isSuccessful) {
                 if (dashboard_pull_to_refresh != null && dashboard_pull_to_refresh.isRefreshing) {
                     productDataList.clear()
+                    dashboard_recycler_view?.recycledViewPool?.clear()
+                    dashboard_recycler_view?.adapter?.notifyDataSetChanged()
                 }
                 productDataList.addAll(response.body())
                 if (!productDataList.isNullOrEmpty()) {
                     top_picks_layout.visibility = View.VISIBLE
                     if (dashboard_recycler_view.adapter != null) {
-                        dashboard_recycler_view.adapter?.notifyDataSetChanged()
+                        dashboard_recycler_view?.recycledViewPool?.clear()
+                        dashboard_recycler_view?.adapter?.notifyDataSetChanged()
                     } else  {
-                        dashboard_recycler_view.adapter = DashboardItemAdapter(productDataList, this)
+                        dashboard_recycler_view?.adapter = DashboardItemAdapter(productDataList, this)
                     }
                 } else if (response != null && response.isSuccessful) {
                     Utility.showSnackBar(dashboard_fragment_parent_layout, getString(R.string.no_search_match), context!!)
@@ -359,7 +427,7 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
             animUpDown = null
             if (dashboard_pull_to_refresh != null && dashboard_pull_to_refresh.isRefreshing) {
                 productPageNumber = lastProductPageNumber
-                dashboard_pull_to_refresh.isRefreshing = false
+                dashboard_pull_to_refresh?.isRefreshing = false
             }
 
             isProductDataLoading = false
@@ -377,7 +445,7 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
     private fun initializingRecyclerViewScrollListener() {
         dashboard_nested_scroll_view.initNestedScrollListener(object : LazyProductLoading {
             override fun onProductLoadRequired(currentVisibleItem: Int) {
-                val itemSizeForLazyLoading = productDataList.size / 2
+                val itemSizeForLazyLoading = productDataList.size - AppConstants.PRODUCT_LOADING_OFFSET
                 if (!isProductDataLoading && productDataList != null && currentVisibleItem >= itemSizeForLazyLoading) {
                     productPageNumber += 1
                     fetchProductList()
@@ -387,7 +455,7 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
 
         dashboard_featured_recycler_view.initScrollListener(object : LazyProductLoading {
             override fun onProductLoadRequired(currentVisibleItem: Int) {
-                val itemSizeForLazyLoading = featuredDataList.size / 2
+                val itemSizeForLazyLoading = featuredDataList.size - AppConstants.PRODUCT_LOADING_OFFSET
                 if (!isProductDataLoading && featuredDataList != null && currentVisibleItem >= itemSizeForLazyLoading) {
                     featuredProductPageNumber += 1
                     fetchFeaturedAndUrgentProductList()

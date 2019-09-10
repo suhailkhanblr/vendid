@@ -59,8 +59,9 @@ class ProductByCategoryActivity : BylancerBuilderActivity(), OnProductItemClickL
 
         if (intent != null && intent.getBundleExtra(AppConstants.BUNDLE) != null) {
             var receivedBundle = intent.getBundleExtra(AppConstants.BUNDLE)
-            productCategoryId = receivedBundle.getString(AppConstants.SELECTED_CATEGORY_ID, "1")
-            productSubCategoryId = receivedBundle.getString(AppConstants.SELECTED_SUB_CATEGORY_ID, "0")
+            productCategoryId = receivedBundle.getString(AppConstants.SELECTED_CATEGORY_ID, "")
+            productSubCategoryId = receivedBundle.getString(AppConstants.SELECTED_SUB_CATEGORY_ID, "")
+            keywords = receivedBundle.getString(AppConstants.SELECTED_KEYWORD, "")
         }
 
         fetchProductList(true)
@@ -82,7 +83,7 @@ class ProductByCategoryActivity : BylancerBuilderActivity(), OnProductItemClickL
         product_by_category_recycler_view.setHasFixedSize(false)
         product_by_category_recycler_view.itemAnimator = DefaultItemAnimator()
         product_by_category_recycler_view.isNestedScrollingEnabled = false
-        product_by_category_recycler_view.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, 10, false))
+        product_by_category_recycler_view.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, 10, true))
         initializingRecyclerViewScrollListener()
     }
 
@@ -175,7 +176,7 @@ class ProductByCategoryActivity : BylancerBuilderActivity(), OnProductItemClickL
     private fun initializingRecyclerViewScrollListener() {
         product_by_category_recycler_view.initScrollListener(object : LazyProductLoading {
             override fun onProductLoadRequired(currentVisibleItem: Int) {
-                val itemSizeForLazyLoading = productDataList.size / 2
+                val itemSizeForLazyLoading = productDataList.size - AppConstants.PRODUCT_LOADING_OFFSET
                 if (!isProductDataLoading && productDataList != null && currentVisibleItem >= itemSizeForLazyLoading) {
                     productPageNumber += 1
                     fetchProductList(false)
