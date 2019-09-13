@@ -25,13 +25,11 @@ import com.bylancer.classified.bylancerclassified.webservices.registration.UserR
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.gmail.samehadar.iosdialog.IOSDialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONArray
@@ -41,6 +39,7 @@ import retrofit2.Response
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.*
+import kotlin.random.Random.Default.nextInt
 
 class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<UserRegistrationStatus> {
     private var callbackManager: CallbackManager? = null
@@ -100,7 +99,7 @@ class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<
                                 val email = if (jsonObject.has("email")) jsonObject.getString("email") else ""
                                 val userData = UserRegistrationData()
                                  userData.email = email
-                                 userData.username = if (email.length > 0) email.split("@")[0] else ""
+                                 userData.username = if (!email.isNullOrEmpty()) email.split("@")[0] + nextInt(10000, 1000000).toString() else UUID.randomUUID().toString()
                                  userData.name = if (jsonObject.has("name")) jsonObject.getString("name") else ""
                                  userData.password = UUID.randomUUID().toString()
                                  userData.fbLogin = "1"
@@ -272,7 +271,7 @@ class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<
                 val email = account?.email
                 val userData = UserRegistrationData()
                 userData.email = email ?: ""
-                userData.username = if (email != null && email.isNotEmpty()) email.split("@")[0] else ""
+                userData.username = if (email != null && email.isNotEmpty()) email.split("@")[0] + nextInt(10000, 1000000).toString() else UUID.randomUUID().toString()
                 userData.name = account?.displayName
                 userData.password = UUID.randomUUID().toString()
                 userData.fbLogin = "1"
