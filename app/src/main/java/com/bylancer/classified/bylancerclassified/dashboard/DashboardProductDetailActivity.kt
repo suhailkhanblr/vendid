@@ -152,7 +152,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
     private fun initializeUI(dashboardDetailModel: DashboardDetailModel) {
         parent_scroll_view.visibility = View.VISIBLE
         if(dashboardDetailModel.productImages != null && dashboardDetailModel.productImages!!.size > 0 && dashboardDetailModel.originalImagesPath != null) {
-            product_detail_image_view_pager.adapter = ProductDetailViewPagerAdapter(this, dashboardDetailModel.productImages!!, dashboardDetailModel.originalImagesPath!!)
+            product_detail_image_view_pager.adapter = ProductDetailViewPagerAdapter(this, dashboardDetailModel.productImages!!, dashboardDetailModel.originalImagesPath!!, dashboardDetailModel.view)
         }
 
         if(SessionState.instance.isLoggedIn) {
@@ -177,7 +177,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
         }
 
         product_detail_timeline_text_view.text = dashboardDetailModel.createdAt
-        product_details_category_text_view.text = dashboardDetailModel.categoryName
+        product_details_category_text_view.text = LanguagePack.getString("Ad Views") + " - " + dashboardDetailModel.view
         product_detail_age_desc.text = dashboardDetailModel.updatedAt
 
         product_detail_description_detail.linksClickable = true
