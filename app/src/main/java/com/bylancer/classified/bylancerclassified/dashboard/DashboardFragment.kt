@@ -457,7 +457,8 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
         bundle.putString(AppConstants.PRODUCT_ID, productId)
         bundle.putString(AppConstants.PRODUCT_NAME, productName)
         bundle.putString(AppConstants.PRODUCT_OWNER_NAME, userName)
-        startActivity(DashboardProductDetailActivity::class.java, bundle)
+        //startActivity(DashboardProductDetailActivity::class.java, bundle)
+        mActivity?.launchPaymentFlow("testing", "10.00")
     }
 
     private fun initializingRecyclerViewScrollListener() {

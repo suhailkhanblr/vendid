@@ -21,6 +21,7 @@ class AppConstants {
         const val COUNTRY_DETAIL_URL = "api/v1/index.php?action=installed_countries"
         const val STATE_DETAIL_URL = "api/v1/index.php?action=getStateByCountryCode"
         const val CITY_DETAIL_URL = "api/v1/index.php?action=getCityByStateCode"
+        const val PAY_U_HASH_URL = "api/v1/moneyhash.php"
         const val IMAGE_URL = BASE_URL  + "storage/profile/"
         const val IMAGE_URL_SMALL = BASE_URL + "storage/profile/small_"
         const val PRODUCT_IMAGE_URL = BASE_URL + "storage/products/"
@@ -91,6 +92,16 @@ class AppConstants {
         const val DASHBOARD_PULL_TO_REFRESH_COLOR = 0xFFCA0009
         const val SEARCH_PULL_TO_REFRESH_COLOR = 0xFF313C3F
         const val PULL_TO_REFRESH_COLOR_SCHEME = Color.WHITE
+
+        /*PayUMoney Constants */
+        const val SURL = "https://www.payumoney.com/mobileapp/payumoney/success.php"
+        const val FURL = "https://www.payumoney.com/mobileapp/payumoney/failure.php"
+        /*const val MERCHANT_KEY = "rjQUPktU"
+        const val MERCHANT_ID = "4934580"*/
+        const val MERCHANT_KEY = "gukapaRa"
+        const val MERCHANT_ID = "6808616"
+        const val DEBUG = true
+        /* PayUMoney Constants Ends */
 
         enum class PREFERENCES private constructor(private val value: String) {
             USER_ID("user_id"),
