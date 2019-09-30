@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.fragment_dashboard.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.roundToInt
 
 /**
  * Contains Dashboard data
@@ -159,7 +160,7 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
         dashboard_recycler_view.isNestedScrollingEnabled = false
         dashboard_recycler_view.itemAnimator = DefaultItemAnimator()
         dashboard_recycler_view.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation)
-        dashboard_recycler_view.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, 10, true))
+        dashboard_recycler_view.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, (0 * resources.displayMetrics.density).roundToInt(), true))
     }
 
     private fun showItemSearchBar() {
@@ -457,8 +458,7 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
         bundle.putString(AppConstants.PRODUCT_ID, productId)
         bundle.putString(AppConstants.PRODUCT_NAME, productName)
         bundle.putString(AppConstants.PRODUCT_OWNER_NAME, userName)
-        //startActivity(DashboardProductDetailActivity::class.java, bundle)
-        mActivity?.launchPaymentFlow("testing", "10.00")
+        startActivity(DashboardProductDetailActivity::class.java, bundle)
     }
 
     private fun initializingRecyclerViewScrollListener() {

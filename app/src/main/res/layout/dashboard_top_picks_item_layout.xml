@@ -9,7 +9,7 @@
         android:id="@+id/dashboard_item_card_view_layout"
         android:layout_width="@dimen/dashboard_item_view_width"
         android:layout_height="@dimen/dashboard_item_card_view_height"
-        android:layout_marginStart="@dimen/margin_twelve"
+        android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         app:cardBackgroundColor="@color/light_gray_background"
         app:cardUseCompatPadding="true"

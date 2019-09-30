@@ -115,6 +115,8 @@
     <string name="choose_language">Choose your language</string>
     <string name="english">English</string>
     <string name="rupees">₹</string>
+    <string name="premium">Upgrade To Premium</string>
+    <string name="premium_dialog_title">Awesome!! You are just one step away from Premium</string>
     <string name="fetch_country">Loading countries..</string>
     <string name="fetch_state">Loading states..</string>
     <string name="fetch_city">Loading cities..</string>
@@ -141,7 +143,19 @@
     <string name="ad_mob_banner_ad_unit">"ca-app-pub-6370111532336036/4512005249"</string>
     <string name="ad_mob_interstitial_ad_unit">"ca-app-pub-6370111532336036/7079943350"</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- PREMIUM APP STRINGS-->
+    <string name="no_advertisement_add">Ads Free</string>
+    <string name="no_advertisement_add_description">No third party ads. Ex Google Ads</string>
+    <string name="priority_support">Priority Support</string>
+    <string name="priority_support_description">Your issues will be solved at the earliest</string>
+    <string name="all_ads_premium">All Ads Premium</string>
+    <string name="all_ads_premium_description">Your all posted ads will become premium for 30 days</string>
+    <string name="featured_ad_premium">Featured</string>
+    <string name="featured_ad_premium_description">Featured ads attract higher-quality viewer and are displayed prominently in the Featured ads section home page</string>
+    <string name="urgent_ad_premium_">Urgent</string>
+    <string name="urgent_ad_premium_description">Make your ad stand out and let viewer know that your advertise is time sensitive</string>
+    <string name="highlighted_ad_premium">Highlighted</string>
+    <string name="highlighted_ad_premium_description">Make your ad highlighted with border in listing search result page. Easy to focus</string>
+    <string name="select_one_feature">Please select at least one premium feature to continue, click + button to add</string>
 
 </resources>

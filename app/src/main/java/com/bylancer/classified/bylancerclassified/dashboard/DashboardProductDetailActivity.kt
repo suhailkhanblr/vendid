@@ -31,6 +31,8 @@ import com.bylancer.classified.bylancerclassified.chat.ChatActivity
 import com.bylancer.classified.bylancerclassified.database.DatabaseTaskAsyc
 import com.bylancer.classified.bylancerclassified.login.LoginActivity
 import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
+import com.bylancer.classified.bylancerclassified.premium.OnPremiumDoneButtonClicked
+import com.bylancer.classified.bylancerclassified.premium.PremiumAlertDialog
 import com.bylancer.classified.bylancerclassified.utils.*
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferData
@@ -48,6 +50,7 @@ import com.google.android.gms.maps.model.Marker
 import com.facebook.ads.*;
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_dashboard_product_detail.*
+import kotlinx.android.synthetic.main.fragment_settings.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -106,6 +109,23 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
         if (bundle != null) {
             product_detail_title_text_view.text = bundle.getString(AppConstants.PRODUCT_NAME, "")
             getProductDetails(bundle.getString(AppConstants.PRODUCT_ID, ""))
+        }
+    }
+
+    private fun togglePremiumAndMakeOfferButton() {
+        if (SessionState.instance.email.equals(mDashboardDetailModel?.sellerEmail)) {
+            go_premium_ad_button?.text = LanguagePack.getString(getString(R.string.premium))
+            if (!SessionState.instance.isUserHasPremiumApp) {
+                go_premium_ad_button.visibility = View.VISIBLE
+                make_an_offer_text_view?.visibility = View.GONE
+                go_premium_ad_button.text = LanguagePack.getString(getString(R.string.premium))
+            } else {
+                go_premium_ad_button?.visibility = View.GONE
+                make_an_offer_text_view?.visibility = View.VISIBLE
+            }
+        } else {
+            go_premium_ad_button?.visibility = View.GONE
+            make_an_offer_text_view?.visibility = View.VISIBLE
         }
     }
 
@@ -217,6 +237,8 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
                 mMap?.animateCamera(CameraUpdateFactory.zoomTo(15.0F))
             }
         }
+
+        togglePremiumAndMakeOfferButton()
     }
 
     private fun getDescription(description: String?, urlImageParser: URLImageParser): Spanned {
@@ -229,19 +251,19 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap?.setMapType(GoogleMap.MAP_TYPE_NORMAL)
-        mMap?.getUiSettings()?.setZoomControlsEnabled(true)
-        mMap?.getUiSettings()?.setZoomGesturesEnabled(true)
-        mMap?.getUiSettings()?.setCompassEnabled(true)
+        mMap?.mapType = GoogleMap.MAP_TYPE_NORMAL
+        mMap?.uiSettings?.isZoomControlsEnabled = true
+        mMap?.uiSettings?.isZoomGesturesEnabled = true
+        mMap?.uiSettings?.isCompassEnabled = true
         //Initialize Google Play Services
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
-                mMap?.setMyLocationEnabled(true)
+                mMap?.isMyLocationEnabled = true
             }
         } else {
-            mMap?.setMyLocationEnabled(true)
+            mMap?.isMyLocationEnabled = true
         }
     }
 
@@ -349,6 +371,21 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
                     startActivity(LoginRequiredActivity::class.java, false)
                 }
             }
+            R.id.go_premium_ad_button_layout -> {
+                startPremiumFlow()
+            }
+            else -> {}
+        }
+    }
+
+    private fun startPremiumFlow() {
+        if (!this.isFinishing) {
+            val premiumDialog = PremiumAlertDialog(this, getPremiumAdItemsList(), R.style.premium_dialog)
+            premiumDialog.showDialog(AppConstants.GO_FOR_PREMIUM_AD, object : OnPremiumDoneButtonClicked {
+                override fun onPremiumDoneButtonClicked(totalCost: String) {
+                    launchPaymentFlow(mDashboardDetailModel?.title ?: getString(R.string.app_name), ("$totalCost.00"), AppConstants.GO_FOR_PREMIUM_AD)
+                }
+            })
         }
     }
 

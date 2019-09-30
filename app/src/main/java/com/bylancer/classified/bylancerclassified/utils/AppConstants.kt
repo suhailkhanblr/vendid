@@ -15,6 +15,7 @@ class AppConstants {
         const val LOGIN_URL = "api/v1/?action=login"
         const val FORGOT_PASSWORD_URL = "api/v1/?action=forgot_password"
         const val PRODUCT_LIST_URL =  "api/v1/index.php?action=home_latest_ads"
+        const val MY_PRODUCT_LIST_URL =  "api/v1/index.php?action=home_latest_ads"
         const val FEATURED_URGENT_LIST_URL =  "api/v1/index.php?action=featured_urgent_ads"
         const val SEARCH_LIST_URL =  "api/v1/index.php?action=search_post"
         const val PRODUCT_DETAIL_URL = "api/v1/index.php?action=ad_detail"
@@ -74,6 +75,13 @@ class AppConstants {
         const val COUNTRY_PAGER_POSITION = 0
         const val STATE_PAGER_POSITION = 1
         const val CITY_PAGER_POSITION = 2
+
+        const val GO_FOR_PREMIUM_APP = 1
+        const val GO_FOR_PREMIUM_AD = 2
+        const val PREMIUM_ADS_FREE_COST = 1
+        const val PREMIUM_PRIORITY_SUPPORT_COST = 2
+        const val PREMIUM_ALL_ADS_PREMIUM_COST = 2
+
         const val IMAGE_PICKER_FRAGMENT = "picker"
         const val SELECTED_CATEGORY_POSITION = "selected_category_position"
         const val SELECTED_SUB_CATEGORY_ID = "selected_sub_category_id"
@@ -96,11 +104,9 @@ class AppConstants {
         /*PayUMoney Constants */
         const val SURL = "https://www.payumoney.com/mobileapp/payumoney/success.php"
         const val FURL = "https://www.payumoney.com/mobileapp/payumoney/failure.php"
-        /*const val MERCHANT_KEY = "rjQUPktU"
-        const val MERCHANT_ID = "4934580"*/
-        const val MERCHANT_KEY = "gukapaRa"
-        const val MERCHANT_ID = "6808616"
-        const val DEBUG = true
+        const val MERCHANT_KEY = "DW3joUcu"
+        const val MERCHANT_ID = "6415539"
+        const val DEBUG = false
         /* PayUMoney Constants Ends */
 
         enum class PREFERENCES private constructor(private val value: String) {

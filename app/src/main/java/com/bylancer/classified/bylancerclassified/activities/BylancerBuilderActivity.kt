@@ -43,6 +43,7 @@ import java.util.*
  */
 abstract class BylancerBuilderActivity : AppCompatActivity() {
     lateinit var mInterstitialAd: InterstitialAd
+    private var mPremiumUpgradeType: Int = AppConstants.GO_FOR_PREMIUM_APP
 
     override fun onCreate(savedInstanceState: Bundle?) {
         isRTLSupportRequired()
@@ -198,9 +199,10 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
     /**
      * Pay U Money Payment
      */
-    fun launchPaymentFlow(title:String, amount:String) {
+    fun launchPaymentFlow(title: String, amount: String, upgradeType: Int) {
+        this.mPremiumUpgradeType = upgradeType
         val payUmoneyConfig = PayUmoneyConfig.getInstance()
-        payUmoneyConfig.payUmoneyActivityTitle = getString(R.string.app_name)
+        payUmoneyConfig.payUmoneyActivityTitle = if (SessionState.instance.appName.isNullOrEmpty()) getString(R.string.app_name) else SessionState.instance.appName
         payUmoneyConfig.doneButtonText = "Pay " + getString(R.string.rupees) + amount
         if (SessionState.instance.phoneNumber.isNullOrEmpty()) {
             SessionState.instance.phoneNumber = "9999999999"
@@ -220,7 +222,7 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
                 .setUdf3("cc")
                 .setUdf4("dd")
                 .setUdf5("ee")
-                //.setIsDebug(AppConstants.DEBUG)
+                .setIsDebug(AppConstants.DEBUG)
                 .setKey(AppConstants.MERCHANT_KEY)
                 .setMerchantId(AppConstants.MERCHANT_ID)
 
@@ -228,7 +230,7 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
             var mPaymentParams = builder.build()
             calculateHashInServer(mPaymentParams)
         } catch (e: Exception) {
-            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+            showToast(e.message)
         }
     }
 
@@ -257,7 +259,7 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
                         if (PayUAppPreferences.selectedTheme != -1) {
                             PayUmoneyFlowManager.startPayUMoneyFlow(mPaymentParams, this, PayUAppPreferences.selectedTheme, PayUAppPreferences.isOverrideResultScreen)
                         } else {
-                            PayUmoneyFlowManager.startPayUMoneyFlow(mPaymentParams, this, R.style.AppTheme_default, PayUAppPreferences.isOverrideResultScreen)
+                            PayUmoneyFlowManager.startPayUMoneyFlow(mPaymentParams, this, R.style.PayUMoney, PayUAppPreferences.isOverrideResultScreen)
                         }
                     }
                 },
