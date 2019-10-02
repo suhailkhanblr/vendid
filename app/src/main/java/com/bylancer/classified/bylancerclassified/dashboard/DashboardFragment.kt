@@ -123,17 +123,20 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
     }
 
     private fun setUpCategoryRecyclerView() {
-        dashboard_category_menu_recycler_view.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        dashboard_category_menu_recycler_view.setHasFixedSize(false)
+        dashboard_category_menu_recycler_view?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        dashboard_category_menu_recycler_view?.setHasFixedSize(false)
         if (productDataList.isEmpty()) {
-            dashboard_category_menu_recycler_view.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation)
+            dashboard_category_menu_recycler_view?.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation)
         }
         val parentActivity: DashboardActivity = (activity as DashboardActivity?)!!
         if (AppConfigDetail.category == null || dashboard_category_menu_recycler_view == null) {
             SessionState.instance.readValuesFromPreferences(context)
             startActivity(SplashActivity::class.java, true)
         }
-        dashboard_category_menu_recycler_view.adapter = DashboardCategoryAdapter(AppConfigDetail.category!!, parentActivity)
+
+        if (parentActivity != null && AppConfigDetail.category != null) {
+            dashboard_category_menu_recycler_view?.adapter = DashboardCategoryAdapter(AppConfigDetail.category!!, parentActivity)
+        }
     }
 
     private fun setUpPullToRefresh() {

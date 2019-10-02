@@ -70,16 +70,22 @@ class DashboardItemAdapter(private val dashboardItemList : List<ProductsData>, p
                     dashboardListItemLayout.listItemPrice!!.text  = dataModel.price + symbol
                 }
 
+                dashboardListItemLayout.dashboardItemUrgentTagTextView?.visibility = View.GONE
+
                 if (AppConstants.IS_ACTIVE.equals(dataModel.featured)) {
+                    dashboardListItemLayout.dashboardItemFeaturedTagTextView?.visibility = View.VISIBLE
                     dashboardListItemLayout.dashboardItemFeaturedTagTextView?.text = LanguagePack.getString("Featured")
                     dashboardListItemLayout.dashboardItemFeaturedTagTextView?.setBackgroundColor(getColor(dashboardListItemLayout.dashboardItemFeaturedTagTextView?.resources, R.color.new_ui_red_background)!!)
+                } else {
+                    dashboardListItemLayout.dashboardItemFeaturedTagTextView?.visibility = View.GONE
                 }
 
                 if (AppConstants.IS_ACTIVE.equals(dataModel.urgent)) {
-                    dashboardListItemLayout.dashboardItemFeaturedTagTextView?.visibility = View.VISIBLE
                     if (dashboardListItemLayout.dashboardItemFeaturedTagTextView?.text!!.isEmpty()) {
+                        dashboardListItemLayout.dashboardItemFeaturedTagTextView?.visibility = View.VISIBLE
                         dashboardListItemLayout.dashboardItemFeaturedTagTextView?.setBackgroundColor(getColor(dashboardListItemLayout.dashboardItemFeaturedTagTextView?.resources, R.color.denied_red)!!)
                         dashboardListItemLayout.dashboardItemFeaturedTagTextView?.text = LanguagePack.getString("Urgent")
+                        dashboardListItemLayout.dashboardItemUrgentTagTextView?.visibility = View.GONE
                     } else {
                         dashboardListItemLayout.dashboardItemFeaturedTagTextView?.setBackgroundColor(getColor(dashboardListItemLayout.dashboardItemFeaturedTagTextView?.resources, R.color.new_ui_red_background)!!)
                         dashboardListItemLayout.dashboardItemUrgentTagTextView?.setBackgroundColor(getColor(dashboardListItemLayout.dashboardItemFeaturedTagTextView?.resources, R.color.denied_red)!!)
