@@ -83,6 +83,12 @@ class AppConstants {
         const val PREMIUM_PRIORITY_SUPPORT_COST = 2
         const val PREMIUM_ALL_ADS_PREMIUM_COST = 2
 
+        //COSTING
+        const val PREMIUM_ADS_FEATURED_COST = 1
+        const val PREMIUM_ADS_URGENT_COST = 1
+        const val PREMIUM_ADS_HIGHLIGHTED_COST = 1
+        //COSTING ENDS
+
         const val IMAGE_PICKER_FRAGMENT = "picker"
         const val SELECTED_CATEGORY_POSITION = "selected_category_position"
         const val SELECTED_SUB_CATEGORY_ID = "selected_sub_category_id"

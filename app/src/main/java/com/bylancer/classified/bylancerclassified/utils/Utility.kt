@@ -550,9 +550,9 @@ fun Context.getDefaultFont() = ResourcesCompat.getFont(this, R.font.roboto_regul
 
 fun Context.getPremiumAdItemsList() : ArrayList<PremiumObjectDetails> {
     val list = arrayListOf<PremiumObjectDetails>()
-    list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.featured_ad_premium)), LanguagePack.getString(getString(R.string.featured_ad_premium_description)), AppConstants.PREMIUM_ADS_FREE_COST, canCancelSelection = true, isSelected = false))
-    list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.urgent_ad_premium_)), LanguagePack.getString(getString(R.string.urgent_ad_premium_description)), AppConstants.PREMIUM_PRIORITY_SUPPORT_COST, canCancelSelection = true, isSelected = false))
-    list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.highlighted_ad_premium)), LanguagePack.getString(getString(R.string.highlighted_ad_premium_description)), AppConstants.PREMIUM_ALL_ADS_PREMIUM_COST, canCancelSelection = true, isSelected = false))
+    list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.featured_ad_premium)), LanguagePack.getString(getString(R.string.featured_ad_premium_description)), AppConstants.PREMIUM_ADS_FEATURED_COST, canCancelSelection = true, isSelected = false))
+    list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.urgent_ad_premium_)), LanguagePack.getString(getString(R.string.urgent_ad_premium_description)), AppConstants.PREMIUM_ADS_URGENT_COST, canCancelSelection = true, isSelected = false))
+    list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.highlighted_ad_premium)), LanguagePack.getString(getString(R.string.highlighted_ad_premium_description)), AppConstants.PREMIUM_ADS_HIGHLIGHTED_COST, canCancelSelection = true, isSelected = false))
     return list
 }
 
