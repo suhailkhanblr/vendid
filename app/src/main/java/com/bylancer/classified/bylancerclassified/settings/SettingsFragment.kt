@@ -69,10 +69,10 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
             if (!SessionState.instance.profilePicUrl.isNullOrEmpty()) {
                 Glide.with(profile_icon_image_view.context).load(SessionState.instance.profilePicUrl).apply(RequestOptions().circleCrop()).into(profile_icon_image_view);
             }
-            if (!SessionState.instance.isUserHasPremiumApp) {
+            /*if (!SessionState.instance.isUserHasPremiumApp) {
                 go_premium_button.visibility = View.VISIBLE
                 go_premium_button.text = LanguagePack.getString(getString(R.string.premium))
-            }
+            }*/
         } else {
             settings_login_sign_up_text.text = LanguagePack.getString(getString(R.string.login_sign_up))
         }
@@ -381,9 +381,9 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
         if (mContext != null) {
             val premiumDialog = PremiumAlertDialog(mContext!!, getPremiumItemsList(), R.style.premium_dialog)
             premiumDialog.showDialog(AppConstants.GO_FOR_PREMIUM_APP, object : OnPremiumDoneButtonClicked {
-                override fun onPremiumDoneButtonClicked(totalCost: String) {
+                override fun onPremiumDoneButtonClicked(totalCost: String, premiumFeatures: Array<String>) {
                     val title = SessionState.instance.displayName + "_" + SessionState.instance.email
-                    mActivity?.launchPaymentFlow(title, ("$totalCost.00"), AppConstants.GO_FOR_PREMIUM_APP)
+                    mActivity?.showPaymentGatewayOptions(title, ("$totalCost.00"), AppConstants.GO_FOR_PREMIUM_APP, null, premiumFeatures)
                 }
             })
         }

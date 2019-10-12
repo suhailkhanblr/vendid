@@ -35,6 +35,8 @@ class AppConfigDetail {
                 SessionState.instance.isUserHasPremiumApp = if (appConfig.premiumApp != null) appConfig.premiumApp!! else true
                 SessionState.instance.isGoogleBannerSupported = if (appConfig.googleBanner != null) appConfig.googleBanner!! else true
                 SessionState.instance.isFacebookInterstitialSupported = if (appConfig.facebookInterstitial != null) appConfig.facebookInterstitial!! else true
+                SessionState.instance.paymentCurrencyCode = if (appConfig.currencyCode != null) appConfig.currencyCode!! else "INR"
+                SessionState.instance.paymentCurrencySign = if (appConfig.currencySign != null) appConfig.currencySign!! else "₹"
                 appVersionFromServer = if (appConfig.appVersion != null) appConfig.appVersion!! else ""
                 if (SessionState.instance.selectedLanguage.isNullOrEmpty() && !appConfig.defaultLang.isNullOrEmpty()) {
                     SessionState.instance.selectedLanguage = appConfig.defaultLang!!

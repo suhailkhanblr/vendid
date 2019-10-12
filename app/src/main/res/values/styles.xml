@@ -37,6 +37,11 @@
         <item name="android:windowAnimationStyle">@style/animation_dialog</item>
     </style>
 
+    <style name="payment_chooser_dialog" parent="android:Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/pay_using_gateway_dialog_animation</item>
+    </style>
+
     <style name="premium_dialog" parent="android:Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@style/premium_animation_dialog</item>
@@ -55,6 +60,11 @@
     <style name="premium_animation_dialog">
         <item name="android:windowEnterAnimation">@anim/bounce_in</item>
         <item name="android:windowExitAnimation">@anim/search_out</item>
+    </style>
+
+    <style name="pay_using_gateway_dialog_animation">
+        <item name="android:windowEnterAnimation">@anim/popup_show</item>
+        <item name="android:windowExitAnimation">@anim/popup_hide</item>
     </style>
 
     <style name="BylancerTheme" parent="Theme.Design.NoActionBar">
@@ -105,7 +115,12 @@
 
     <style name="AlertDialogStylePayUMoney" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/denied_red</item>
-        <item name="android:textColorPrimary">@color/payumoney_text_color</item>
+        <item name="android:textColorPrimary">@color/shadow_black</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="android:textColorPrimary">@color/white_color_text</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

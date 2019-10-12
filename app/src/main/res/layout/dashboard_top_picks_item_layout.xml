@@ -70,6 +70,18 @@
 
                 </LinearLayout>
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/dashboard_item_status_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:textColor="@color/white_background"
+                    android:textSize="@dimen/small_text_size"
+                    android:fontFamily="@font/roboto_bold"
+                    android:background="@color/denied_red"
+                    android:visibility="visible"
+                    android:padding="@dimen/margin_small"/>
+
             </FrameLayout>
 
             <androidx.appcompat.widget.AppCompatTextView

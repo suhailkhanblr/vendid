@@ -32,7 +32,7 @@ class PremiumItemAdapter(private val items : List<PremiumObjectDetails>, private
                     holder?.mSelectionIcon?.setImageResource(R.drawable.ic_selected)
                 }
                 item?.isSelected = !item?.isSelected
-                mPremiumItemSelection?.onItemSelection(item?.isSelected, item?.cost)
+                mPremiumItemSelection?.onItemSelection(item?.isSelected, item?.cost, item?.name)
             }
         }
     }

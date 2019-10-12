@@ -27,6 +27,9 @@ android {
     lintOptions {
         abortOnError false
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 configurations.all {
@@ -80,6 +83,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:18.1.1'
     implementation 'com.facebook.android:audience-network-sdk:5.+'
     implementation 'com.payumoney.sdkui:plug-n-play:1.5.0'
+    implementation 'co.paystack.android.design.widget:pinpad:1.0.1'
+    implementation 'co.paystack.android:paystack:3.0.12'
 
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true;

@@ -42,7 +42,7 @@ class MyPostedProductActivity : BylancerBuilderActivity(), OnProductItemClickLis
         my_products_recycler_view.layoutManager = GridLayoutManager(this, SPAN_COUNT)
         my_products_recycler_view.setHasFixedSize(false)
         my_products_recycler_view.isNestedScrollingEnabled = false
-        my_products_recycler_view.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, 0, true))
+        my_products_recycler_view.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, 20, true))
         initializingRecyclerViewScrollListener()
     }
 
@@ -94,7 +94,7 @@ class MyPostedProductActivity : BylancerBuilderActivity(), OnProductItemClickLis
                     if (my_products_recycler_view.adapter != null) {
                         my_products_recycler_view.adapter?.notifyDataSetChanged()
                     } else  {
-                        my_products_recycler_view.adapter = DashboardItemAdapter(productDataList, this)
+                        my_products_recycler_view.adapter = DashboardItemAdapter(productDataList, this, true)
                     }
                 } else {
                     no_my_products_frame.visibility = View.VISIBLE

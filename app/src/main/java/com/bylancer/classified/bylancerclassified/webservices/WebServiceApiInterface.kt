@@ -18,6 +18,7 @@ import com.bylancer.classified.bylancerclassified.webservices.settings.CityListM
 import com.bylancer.classified.bylancerclassified.webservices.settings.CountryListModel
 import com.bylancer.classified.bylancerclassified.webservices.settings.ProductUploadProductModel
 import com.bylancer.classified.bylancerclassified.webservices.settings.StateListModel
+import com.bylancer.classified.bylancerclassified.webservices.transaction.TransactionResponseModel
 import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.PostedProductResponseModel
 import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.UploadProductModel
 import retrofit2.Call
@@ -124,5 +125,17 @@ interface WebServiceApiInterface {
                         @Query("longitude") longitude:String,
                         @Query("item_screen") itemScreen:String,
                         @Query("additionalinfo") additionalinfo:String): Call<PostedProductResponseModel>
+
+    @POST(AppConstants.UPLOAD_PRODUCT_PREMIUM_TRANSACTION_URL)
+    fun postPremiumTransactionDetail(@Query("name") userId:String,
+                        @Query("amount") title:String,
+                        @Query("user_id") categoryId:String,
+                        @Query("product_id") subcategoryId:String,
+                        @Query("featured") countryCode:String,
+                        @Query("urgent") state:String,
+                        @Query("highlight") city:String,
+                        @Query("folder") description:String,
+                        @Query("payment_type") location:String,
+                        @Query("trans_desc") hidePhone:String): Call<TransactionResponseModel>
 
 }

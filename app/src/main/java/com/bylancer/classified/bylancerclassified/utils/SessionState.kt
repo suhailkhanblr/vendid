@@ -40,6 +40,8 @@ class SessionState private constructor() {
     var uploadedProductLongitude: String = ""
     var uploadedProductAdditionalInfo: String = ""
     var appVersionFromServer : String = ""
+    var paymentCurrencyCode : String = ""
+    var paymentCurrencySign : String = ""
 
     val isLoggedIn: Boolean
         get() = isLogin

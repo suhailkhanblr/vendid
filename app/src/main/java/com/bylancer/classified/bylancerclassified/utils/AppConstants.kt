@@ -37,6 +37,7 @@ class AppConstants {
         const val UPLOAD_PROFILE_PIC_URL = "api/v1/index.php?action=upload_profile_picture"
         const val UPLOAD_PRODUCT_PIC_URL = "api/v1/index.php?action=upload_product_picture"
         const val UPLOAD_PRODUCT_SAVE_POST_URL = "api/v1/index.php?action=save_post"
+        const val UPLOAD_PRODUCT_PREMIUM_TRANSACTION_URL = "api/v1/index.php?action=payment_success_saving"
         const val UPLOAD_PRODUCT_ADDITIONAL_INFO_URL = BASE_URL + "api/v1/?action=getCustomFieldByCatID&catid=%s&subcatid=%s&additionalinfo=%s"
         const val FLAG_IMAGE_URL = "https://www.countryflags.io/%s/flat/64.png"
         const val IS_ADMIN_APP = false
@@ -45,8 +46,8 @@ class AppConstants {
         const val CURRENCY_IN_LEFT= "1"
         const val PREF_FILE = "bylancer_appsgeek"
         const val SUPPORT_EMAIL = "apps.bylancer@gmail.com"
-        const val PRODUCT_LOADING_LIMIT = "36"
-        const val PRODUCT_LOADING_OFFSET = 20
+        const val PRODUCT_LOADING_LIMIT = "16"
+        const val PRODUCT_LOADING_OFFSET = 8
         const val PRODUCT_STATUS = "active"
 
         const val ERROR = "error"
@@ -101,13 +102,27 @@ class AppConstants {
         const val SEARCH_PULL_TO_REFRESH_COLOR = 0xFF313C3F
         const val PULL_TO_REFRESH_COLOR_SCHEME = Color.WHITE
 
+        const val PAYMENT_TYPE_PREMIUM = "premium"
+        const val PAYMENT_TRANSACTION_DETAILS = "package"
+        const val PRODUCT_ACTIVE = "active"
+
+
         /*PayUMoney Constants */
+        const val PAY_U_MONEY = "payumoney"
         const val SURL = "https://www.payumoney.com/mobileapp/payumoney/success.php"
         const val FURL = "https://www.payumoney.com/mobileapp/payumoney/failure.php"
         const val MERCHANT_KEY = "DW3joUcu"
         const val MERCHANT_ID = "6415539"
         const val DEBUG = false
         /* PayUMoney Constants Ends */
+
+        /*PayStack*/
+        const val PAY_STACK = "paystack"
+        const val PAY_STACK_CARD_DETAILS = "pay_stack_card_details"
+        const val PAY_STACK_PUBLIC_KEY = "pk_live_d66ae0cbe93f69d213ef9766ea76afa3a54d6dd0"
+        /*PayStack Ends*/
+        const val PAY_STACK_ACTIVE = true
+        const val PAY_U_MONEY_ACTIVE = true
 
         enum class PREFERENCES private constructor(private val value: String) {
             USER_ID("user_id"),
