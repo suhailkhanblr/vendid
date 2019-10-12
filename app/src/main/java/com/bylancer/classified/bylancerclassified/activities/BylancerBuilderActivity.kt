@@ -313,7 +313,7 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
             if (transactionResponse?.getPayuResponse() != null) {
                 when {
                     transactionResponse.transactionStatus == TransactionResponse.TransactionStatus.SUCCESSFUL -> { uploadTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, SessionState.instance.userId,
-                            mProductIdForPremium!!, mPremiumFeatures!![0], mPremiumFeatures!![1], mPremiumFeatures!![2], AppConstants.PAY_STACK,
+                            mProductIdForPremium!!, mPremiumFeatures!![0], mPremiumFeatures!![1], mPremiumFeatures!![2], AppConstants.PAY_U_MONEY,
                             AppConstants.PAYMENT_TYPE_PREMIUM, AppConstants.PAYMENT_TRANSACTION_DETAILS) }
                     transactionResponse.transactionStatus == TransactionResponse.TransactionStatus.CANCELLED -> showAlert(false)
                     transactionResponse.transactionStatus == TransactionResponse.TransactionStatus.FAILED -> showAlert(false)
