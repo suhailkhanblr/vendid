@@ -383,7 +383,7 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
             premiumDialog.showDialog(AppConstants.GO_FOR_PREMIUM_APP, object : OnPremiumDoneButtonClicked {
                 override fun onPremiumDoneButtonClicked(totalCost: String, premiumFeatures: Array<String>) {
                     val title = SessionState.instance.displayName + "_" + SessionState.instance.email
-                    mActivity?.showPaymentGatewayOptions(title, ("$totalCost.00"), AppConstants.GO_FOR_PREMIUM_APP, null, premiumFeatures)
+                    mActivity?.showPaymentGatewayOptions(title, totalCost, AppConstants.GO_FOR_PREMIUM_APP, null, premiumFeatures)
                 }
             })
         }

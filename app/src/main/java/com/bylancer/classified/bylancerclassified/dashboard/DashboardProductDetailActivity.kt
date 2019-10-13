@@ -385,7 +385,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
                 override fun onPremiumDoneButtonClicked(totalCost: String, premiumFeatures: Array<String>) {
                     if (mDashboardDetailModel?.productId != null) {
                         showPaymentGatewayOptions(mDashboardDetailModel?.title
-                                ?: getString(R.string.app_name), ("$totalCost.00"), AppConstants.GO_FOR_PREMIUM_AD, mDashboardDetailModel?.productId!!, premiumFeatures)
+                                ?: getString(R.string.app_name), totalCost, AppConstants.GO_FOR_PREMIUM_AD, mDashboardDetailModel?.productId!!, premiumFeatures)
                     }
                 }
             })

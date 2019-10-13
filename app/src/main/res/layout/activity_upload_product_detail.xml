@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
                     android:text="@string/this_is_listing_under"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/light_gray_color_text"
                     android:textSize="@dimen/text_size_normal"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -116,7 +116,7 @@
                     android:layout_gravity="start"
                     android:textAlignment="viewStart"
                     android:textColor="@color/black_color_text"
-                    android:textColorHint="@color/gray"
+                    android:textColorHint="@color/light_gray_color_text"
                     android:textSize="@dimen/text_size_sixteen" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -170,7 +170,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:textColor="@color/black_color_text"
-                    android:textColorHint="@color/gray"
+                    android:textColorHint="@color/light_gray_color_text"
                     android:textSize="@dimen/text_size_sixteen" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -202,7 +202,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:textColor="@color/black_color_text"
-                    android:textColorHint="@color/gray"
+                    android:textColorHint="@color/light_gray_color_text"
                     android:textSize="@dimen/text_size_sixteen" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -235,7 +235,7 @@
                     android:textAlignment="viewStart"
                     android:minHeight="@dimen/upload_description_edit_text_min_size"
                     android:textColor="@color/black_color_text"
-                    android:textColorHint="@color/gray"
+                    android:textColorHint="@color/light_gray_color_text"
                     android:textSize="@dimen/text_size_sixteen" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -263,10 +263,10 @@
                     android:fontFamily="@font/roboto_regular"
                     android:hint="@string/country"
                     app:jrs_title="@string/select_country"
-                    app:jrs_icon_tint="@color/light_gray"
+                    app:jrs_icon_tint="@color/gray"
                     android:inputType="textCapSentences"
                     android:textColor="@color/black_color_text"
-                    android:textColorHint="@color/gray"
+                    android:textColorHint="@color/light_gray_color_text"
                     android:textSize="@dimen/text_size_sixteen" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -294,11 +294,11 @@
                     android:fontFamily="@font/roboto_regular"
                     android:hint="@string/state"
                     app:jrs_title="@string/select_state"
-                    app:jrs_icon_tint="@color/light_gray"
+                    app:jrs_icon_tint="@color/gray"
                     android:imeOptions="actionNext"
                     android:inputType="textCapSentences"
                     android:textColor="@color/black_color_text"
-                    android:textColorHint="@color/gray"
+                    android:textColorHint="@color/light_gray_color_text"
                     android:textSize="@dimen/text_size_sixteen" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -324,13 +324,13 @@
                     app:jrs_title="@string/select_city"
                     android:layout_gravity="start"
                     android:textAlignment="viewStart"
-                    app:jrs_icon_tint="@color/light_gray"
+                    app:jrs_icon_tint="@color/gray"
                     android:fontFamily="@font/roboto_regular"
                     android:hint="@string/city"
                     android:imeOptions="actionDone"
                     android:inputType="textCapSentences"
                     android:textColor="@color/black_color_text"
-                    android:textColorHint="@color/gray"
+                    android:textColorHint="@color/light_gray_color_text"
                     android:textSize="@dimen/text_size_sixteen" />
 
             </com.google.android.material.textfield.TextInputLayout>
