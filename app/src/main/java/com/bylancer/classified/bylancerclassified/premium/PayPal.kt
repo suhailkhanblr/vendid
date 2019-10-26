@@ -1,6 +1,7 @@
 package com.bylancer.classified.bylancerclassified.premium
 
 import android.net.Uri
+import com.bylancer.classified.bylancerclassified.utils.AppConstants
 import com.bylancer.classified.bylancerclassified.utils.SessionState
 import com.paypal.android.sdk.payments.PayPalConfiguration
 import com.paypal.android.sdk.payments.PayPalPayment
@@ -15,14 +16,14 @@ class PayPal {
          * - Set to PayPalConfiguration.ENVIRONMENT_NO_NETWORK to kick the tires
          * without communicating to PayPal's servers.
          */
-        private val CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_NO_NETWORK
-
-        // note that these credentials will differ between live & sandbox environments.
-        private val CONFIG_CLIENT_ID = "credentials from developer.paypal.com"
         fun getPayPalConfig(env: String?, clientId: String?): PayPalConfiguration {
+            var CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_PRODUCTION
+            if (AppConstants.YES.equals(env, true)) {
+                CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX
+            }
             return PayPalConfiguration()
                     .environment(CONFIG_ENVIRONMENT)
-                    .clientId(CONFIG_CLIENT_ID)
+                    .clientId(clientId)
                     .merchantName(SessionState.instance.appName ?: "")
                     .merchantPrivacyPolicyUri(Uri.parse(SessionState.instance.privacyPolicyUrl))
                     .merchantUserAgreementUri(Uri.parse(SessionState.instance.termsConditionUrl))

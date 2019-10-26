@@ -240,7 +240,7 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         if (SessionState.instance.phoneNumber.isNullOrEmpty()) {
             SessionState.instance.phoneNumber = "9999999999"
         }
-
+        val isDebug = "test".equals(mTransactionVendorDetails?.payumoneySandboxMode)
         val builder = PayUmoneySdkInitializer.PaymentParam.Builder()
         builder.setAmount(amount)
                 .setTxnId(System.currentTimeMillis().toString() + "")
@@ -255,9 +255,9 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
                 .setUdf3("cc")
                 .setUdf4("dd")
                 .setUdf5("ee")
-                .setIsDebug(AppConstants.DEBUG)
-                .setKey(AppConstants.MERCHANT_KEY)
-                .setMerchantId(AppConstants.MERCHANT_ID)
+                .setIsDebug(isDebug)
+                .setKey(mTransactionVendorDetails?.payumoneyMerchantKey)
+                .setMerchantId(mTransactionVendorDetails?.payumoneyMerchantId)
 
         try {
             var mPaymentParams = builder.build()
@@ -451,12 +451,12 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
             paymentGatewayChooserDialog.dismiss()
             val intent = Intent(this, PayPalService::class.java)
             intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,
-                    PayPal.getPayPalConfig(mTransactionVendorDetails?.paypalApiUsername, mTransactionVendorDetails?.paypalApiSignature))
+                    PayPal.getPayPalConfig(mTransactionVendorDetails?.paypalSandboxMode, mTransactionVendorDetails?.paypalClientId))
             startService(intent)
 
             val paymentIntent = Intent(this, PaymentActivity::class.java)
             paymentIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,
-                    PayPal.getPayPalConfig(mTransactionVendorDetails?.paypalApiUsername, mTransactionVendorDetails?.paypalApiSignature))
+                    PayPal.getPayPalConfig(mTransactionVendorDetails?.paypalSandboxMode, mTransactionVendorDetails?.paypalClientId))
             paymentIntent.putExtra(PaymentActivity.EXTRA_PAYMENT, PayPal.getPayPalItemDetails(amount, title))
             startActivityForResult(paymentIntent, REQUEST_PAY_PAL_CODE_PAYMENT)
         }
