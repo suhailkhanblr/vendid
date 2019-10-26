@@ -123,9 +123,7 @@ class AppConstants {
         const val PAY_U_MONEY = "payumoney"
         const val SURL = "https://www.payumoney.com/mobileapp/payumoney/success.php"
         const val FURL = "https://www.payumoney.com/mobileapp/payumoney/failure.php"
-        const val MERCHANT_KEY = "DW3joUcu"
-        const val MERCHANT_ID = "6415539"
-        const val DEBUG = false
+        const val PAY_U_MONEY_TEST_ACCOUNT = "test"
         /* PayUMoney Constants Ends */
 
         /*PayStack*/

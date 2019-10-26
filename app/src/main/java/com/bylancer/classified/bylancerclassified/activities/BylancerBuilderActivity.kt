@@ -240,7 +240,7 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         if (SessionState.instance.phoneNumber.isNullOrEmpty()) {
             SessionState.instance.phoneNumber = "9999999999"
         }
-        val isDebug = "test".equals(mTransactionVendorDetails?.payumoneySandboxMode)
+        val isDebug = AppConstants.PAY_U_MONEY_TEST_ACCOUNT.equals(mTransactionVendorDetails?.payumoneySandboxMode, true)
         val builder = PayUmoneySdkInitializer.PaymentParam.Builder()
         builder.setAmount(amount)
                 .setTxnId(System.currentTimeMillis().toString() + "")
