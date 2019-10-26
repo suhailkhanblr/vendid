@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -26,10 +27,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.telephony.TelephonyManager
 import android.text.Html
+import android.text.Layout.JUSTIFICATION_MODE_INTER_WORD
 import android.text.TextUtils
 import android.util.Patterns
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
@@ -37,6 +40,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatTextView
 import com.agrawalsuneet.dotsloader.loaders.SlidingLoader
 import com.asksira.bsimagepicker.BSImagePicker
 import com.asksira.bsimagepicker.Utils
@@ -45,6 +50,7 @@ import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.premium.PremiumObjectDetails
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.AddTokenStatus
+import com.bylancer.classified.bylancerclassified.widgets.CustomAlertDialog
 import com.gmail.samehadar.iosdialog.IOSDialog
 import retrofit2.Call
 import retrofit2.Callback
@@ -550,9 +556,18 @@ fun Context.getDefaultFont() = ResourcesCompat.getFont(this, R.font.roboto_regul
 
 fun Context.getPremiumAdItemsList() : ArrayList<PremiumObjectDetails> {
     val list = arrayListOf<PremiumObjectDetails>()
-    list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.featured_ad_premium)), LanguagePack.getString(getString(R.string.featured_ad_premium_description)), AppConstants.PREMIUM_ADS_FEATURED_COST, canCancelSelection = true, isSelected = false))
-    list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.urgent_ad_premium_)), LanguagePack.getString(getString(R.string.urgent_ad_premium_description)), AppConstants.PREMIUM_ADS_URGENT_COST, canCancelSelection = true, isSelected = false))
-    list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.highlighted_ad_premium)), LanguagePack.getString(getString(R.string.highlighted_ad_premium_description)), AppConstants.PREMIUM_ADS_HIGHLIGHTED_COST, canCancelSelection = true, isSelected = false))
+    if (SessionState.instance.featuredProductFee.isNullOrEmpty() || !isNumber(SessionState.instance.featuredProductFee)) {
+        SessionState.instance.featuredProductFee = AppConstants.PREMIUM_ADS_FEATURED_COST.toString()
+    }
+    if (SessionState.instance.urgentProductFee.isNullOrEmpty() || !isNumber(SessionState.instance.urgentProductFee)) {
+        SessionState.instance.urgentProductFee = AppConstants.PREMIUM_ADS_URGENT_COST.toString()
+    }
+    if (SessionState.instance.highlightProductFee.isNullOrEmpty() || !isNumber(SessionState.instance.highlightProductFee)) {
+        SessionState.instance.highlightProductFee = AppConstants.PREMIUM_ADS_HIGHLIGHTED_COST.toString()
+    }
+    list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.featured_ad_premium)), LanguagePack.getString(getString(R.string.featured_ad_premium_description)), SessionState.instance.featuredProductFee.toInt(), canCancelSelection = true, isSelected = false))
+    list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.urgent_ad_premium_)), LanguagePack.getString(getString(R.string.urgent_ad_premium_description)), SessionState.instance.urgentProductFee.toInt(), canCancelSelection = true, isSelected = false))
+    list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.highlighted_ad_premium)), LanguagePack.getString(getString(R.string.highlighted_ad_premium_description)), SessionState.instance.highlightProductFee.toInt(), canCancelSelection = true, isSelected = false))
     return list
 }
 
@@ -564,5 +579,41 @@ fun Context.calculateNoOfColumns(columnWidthDp: Float): Int {
     val displayMetrics = resources.displayMetrics
     val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
     return (screenWidthDp / columnWidthDp + 0.5).toInt()
+}
+
+fun Context.showAppUpgradeAlert() {
+    val versionUpgradeDialog = CustomAlertDialog(this, R.style.custom_login_dialog)
+    versionUpgradeDialog.setContentView(R.layout.custom_alert_version_upgrade)
+    versionUpgradeDialog.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+    versionUpgradeDialog.window?.setBackgroundDrawable(ColorDrawable(resources.getColor(android.R.color.transparent)))
+    /*versionUpgradeDialog.setCanceledOnTouchOutside(false)
+    versionUpgradeDialog.setCancelable(false)*/
+    versionUpgradeDialog.show()
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val versionUpgradeText = versionUpgradeDialog.findViewById<AppCompatTextView>(R.id.new_version_text)
+        versionUpgradeText.justificationMode = JUSTIFICATION_MODE_INTER_WORD
+    }
+
+    val submit = versionUpgradeDialog.findViewById<AppCompatButton>(R.id.process_upgrade)
+    submit.setOnClickListener(View.OnClickListener {
+        val appPackageName = packageName // getPackageName() from Context or Activity object
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+        } catch (anfe: android.content.ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+        }
+
+        versionUpgradeDialog.dismiss()
+    })
+}
+
+fun isNumber(value: String): Boolean {
+    var isNumber = true
+    try {
+        value.toInt()
+    } catch (e: NumberFormatException) { isNumber = false}
+
+    return isNumber
 }
 

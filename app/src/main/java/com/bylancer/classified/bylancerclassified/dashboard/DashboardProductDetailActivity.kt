@@ -197,6 +197,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             product_detail_price_text_view.visibility = View.INVISIBLE
         }
 
+        product_detail_title_text_view.text = dashboardDetailModel.title
         product_detail_timeline_text_view.text = dashboardDetailModel.createdAt
         product_details_category_text_view.text = LanguagePack.getString("Ad Views") + " - " + dashboardDetailModel.view
         product_detail_age_desc.text = dashboardDetailModel.updatedAt
@@ -384,7 +385,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             premiumDialog.showDialog(AppConstants.GO_FOR_PREMIUM_AD, object : OnPremiumDoneButtonClicked {
                 override fun onPremiumDoneButtonClicked(totalCost: String, premiumFeatures: Array<String>) {
                     if (mDashboardDetailModel?.productId != null) {
-                        showPaymentGatewayOptions(mDashboardDetailModel?.title
+                        getTransactionVendorCredentials(mDashboardDetailModel?.title
                                 ?: getString(R.string.app_name), totalCost, AppConstants.GO_FOR_PREMIUM_AD, mDashboardDetailModel?.productId!!, premiumFeatures)
                     }
                 }
@@ -534,7 +535,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             makeAnOfferData.ownerName = getFormattedValue(mDashboardDetailModel?.sellerName)
             makeAnOfferData.productId = getFormattedValue(mDashboardDetailModel?.productId)
             makeAnOfferData.productName = getFormattedValue(mDashboardDetailModel?.title)
-            makeAnOfferData.userId = getFormattedValue(mDashboardDetailModel?.sellerEmail)
+            makeAnOfferData.userId = getFormattedValue(mDashboardDetailModel?.sellerId)
             makeAnOfferData.type = "make_offer"
             makeAnOfferData.senderId = SessionState.instance.userId
             makeAnOfferData.senderName = SessionState.instance.displayName

@@ -16,6 +16,13 @@ class SessionState private constructor() {
     var address: String = ""
     var userId: String = ""
     var token: String = ""
+    var isTokenSent: Boolean = false
+    var isPayUMoneyActive: Boolean = AppConstants.PAY_U_MONEY_ACTIVE
+    var isPayStackActive: Boolean = AppConstants.PAY_STACK_ACTIVE
+    var isPayPalActive: Boolean = AppConstants.PAY_PAL_ACTIVE
+    var isStripeActive: Boolean = AppConstants.PAY_STRIPE_ACTIVE
+    var is2CheckOutActive: Boolean = AppConstants.CHECKOUT_2_ACTIVE
+    var isWireTransferActive: Boolean = AppConstants.WIRE_TRANSFER_ACTIVE
     var userName: String = ""
     var profilePicUrl: String = ""
     var appName: String = ""
@@ -41,6 +48,9 @@ class SessionState private constructor() {
     var uploadedProductAdditionalInfo: String = ""
     var appVersionFromServer : String = ""
     var paymentCurrencyCode : String = ""
+    var featuredProductFee : String = ""
+    var urgentProductFee : String = ""
+    var highlightProductFee : String = ""
     var paymentCurrencySign : String = ""
 
     val isLoggedIn: Boolean
@@ -61,6 +71,7 @@ class SessionState private constructor() {
             this.userId = prefs.getString(AppConstants.Companion.PREFERENCES.USER_ID.toString(), "")!!
             this.address = prefs.getString(AppConstants.Companion.PREFERENCES.ADDRESS.toString(), "")!!
             this.token = prefs.getString(AppConstants.Companion.PREFERENCES.DEVICE_ID.toString(), "")!!
+            this.isTokenSent = prefs.getBoolean(AppConstants.Companion.PREFERENCES.IS_TOKEN_SENT.toString(), false)!!
             this.userName = prefs.getString(AppConstants.Companion.PREFERENCES.USERNAME.toString(), "")!!
             this.profilePicUrl = prefs.getString(AppConstants.Companion.PREFERENCES.PROFILE_PIC.toString(), "")!!
             this.appName = prefs.getString(AppConstants.Companion.PREFERENCES.APP_NAME.toString(), "")!!
@@ -104,9 +115,7 @@ class SessionState private constructor() {
     }
 
     fun removePreference(context: Context) {
-        if (context != null) {
-            context.getSharedPreferences(AppConstants.PREF_FILE, Context.MODE_PRIVATE).edit().clear().commit()
-        }
+        context?.getSharedPreferences(AppConstants.PREF_FILE, Context.MODE_PRIVATE)?.edit()?.clear()?.commit()
     }
 
     fun clearSession() {
@@ -126,6 +135,16 @@ class SessionState private constructor() {
         this.uploadedProductLongitude = ""
         this.uploadedProductAdditionalInfo = ""
         this.appVersionFromServer = ""
+        this.isTokenSent = false
+        this.featuredProductFee = ""
+        this.urgentProductFee = ""
+        this.highlightProductFee = ""
+        this.isPayUMoneyActive = false
+        this.isPayStackActive = false
+        this.isPayPalActive = false
+        this.isStripeActive = false
+        this.is2CheckOutActive = false
+        this.isWireTransferActive = false
     }
 
     companion object {

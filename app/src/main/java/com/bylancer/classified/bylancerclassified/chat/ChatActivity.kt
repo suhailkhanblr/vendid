@@ -15,6 +15,7 @@ import com.bylancer.classified.bylancerclassified.utils.Utility
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.chat.ChatMessageModel
 import com.bylancer.classified.bylancerclassified.webservices.chat.ChatSentStatus
+import com.gmail.samehadar.iosdialog.IOSDialog
 import kotlinx.android.synthetic.main.activity_chat.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,6 +26,7 @@ class ChatActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<L
     var isConnectionSuccess = true
     var isFirstTime = true
     var handler: Handler? = null
+    var iOSDialog: IOSDialog? = null
 
     override fun setLayoutView() = R.layout.activity_chat
 
@@ -32,13 +34,18 @@ class ChatActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<L
         val bundle = intent.getBundleExtra(AppConstants.BUNDLE)
         handler = Handler()
         write_chat_edit_text.hint = LanguagePack.getString(getString(R.string.enter_message))
+        iOSDialog = Utility.showProgressView(this, LanguagePack.getString("Loading..."))
 
         if (bundle != null) {
             chat_title_text_view.text = bundle.getString(AppConstants.CHAT_TITLE, "")
             var chatUserName = bundle.getString(AppConstants.CHAT_USER_NAME, "")
             chatUserId = bundle.getString(AppConstants.CHAT_USER_ID, "")
             val chatUserImage = AppConstants.IMAGE_URL + bundle.getString(AppConstants.CHAT_USER_IMAGE, "")
-            Glide.with(this).load(chatUserImage).apply(RequestOptions().circleCrop()).into(chat_user_image_view)
+            if (bundle.getString(AppConstants.CHAT_USER_IMAGE, "").isNullOrEmpty()) {
+                Glide.with(this).load(getDefaultImage()).apply(RequestOptions().circleCrop()).into(chat_user_image_view)
+            } else {
+                Glide.with(this).load(chatUserImage).apply(RequestOptions().circleCrop()).into(chat_user_image_view)
+            }
 
             val linearLayoutManager = LinearLayoutManager(this)
             linearLayoutManager.reverseLayout = true
@@ -51,7 +58,7 @@ class ChatActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<L
     private fun getChatMessages() {
         if (isConnectionSuccess) {
             if (isFirstTime) {
-                chat_sliding_progress_indicator.visibility = View.VISIBLE
+                iOSDialog?.show()
             }
             RetrofitController.fetchChatMessages(SessionState.instance.userId,
                     chatUserId, "1", this)
@@ -59,7 +66,7 @@ class ChatActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<L
     }
 
     override fun onFailure(call: Call<List<ChatMessageModel>>?, t: Throwable?) {
-        Utility.removeProgressBar(chat_sliding_progress_indicator)
+        removeProgressBar()
         isConnectionSuccess = false
         if (isFirstTime) {
             isFirstTime = false
@@ -68,9 +75,9 @@ class ChatActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<L
     }
 
     override fun onResponse(call: Call<List<ChatMessageModel>>?, response: Response<List<ChatMessageModel>>?) {
-        Utility.removeProgressBar(chat_sliding_progress_indicator)
-        if(response != null && response.isSuccessful && recycler_view_chat_message_list != null) {
-            recycler_view_chat_message_list.adapter = ChatMessageAdapter(response.body())
+        removeProgressBar()
+        if(response != null && response.isSuccessful && recycler_view_chat_message_list != null && response.body() != null) {
+            recycler_view_chat_message_list.adapter = ChatMessageAdapter(response.body()!!)
             initializeContinuousMonitor()
         } else  {
             isConnectionSuccess = false
@@ -124,5 +131,15 @@ class ChatActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<L
                 getChatMessages()
             }, 5000)
         }
+    }
+
+    private fun removeProgressBar() {
+        if (iOSDialog != null) {
+            iOSDialog?.dismiss()
+        }
+    }
+
+    private fun getDefaultImage(): Int {
+        return resources.getIdentifier("ic_bylancer_icon", "drawable", packageName)
     }
 }

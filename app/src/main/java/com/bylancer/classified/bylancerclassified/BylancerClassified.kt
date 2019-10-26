@@ -35,7 +35,6 @@ class BylancerClassified : Application() {
 
         //PayStack for Africa
         PaystackSdk.initialize(applicationContext)
-        PaystackSdk.setPublicKey(AppConstants.PAY_STACK_PUBLIC_KEY)
     }
 
     companion object {

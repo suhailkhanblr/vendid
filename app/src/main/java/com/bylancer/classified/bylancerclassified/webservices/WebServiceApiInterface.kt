@@ -10,6 +10,7 @@ import com.bylancer.classified.bylancerclassified.webservices.languagepack.Langu
 import com.bylancer.classified.bylancerclassified.webservices.login.UserLoginStatus
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferStatus
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.AddTokenStatus
+import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.NotificationCounter
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.NotificationDataModel
 import com.bylancer.classified.bylancerclassified.webservices.productlist.ProductsData
 import com.bylancer.classified.bylancerclassified.webservices.registration.UserForgetPasswordStatus
@@ -19,6 +20,7 @@ import com.bylancer.classified.bylancerclassified.webservices.settings.CountryLi
 import com.bylancer.classified.bylancerclassified.webservices.settings.ProductUploadProductModel
 import com.bylancer.classified.bylancerclassified.webservices.settings.StateListModel
 import com.bylancer.classified.bylancerclassified.webservices.transaction.TransactionResponseModel
+import com.bylancer.classified.bylancerclassified.webservices.transaction.TransactionVendorModel
 import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.PostedProductResponseModel
 import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.UploadProductModel
 import retrofit2.Call
@@ -28,8 +30,6 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.http.POST
 import retrofit2.http.Multipart
-
-
 
 interface WebServiceApiInterface {
 
@@ -137,5 +137,11 @@ interface WebServiceApiInterface {
                         @Query("folder") description:String,
                         @Query("payment_type") location:String,
                         @Query("trans_desc") hidePhone:String): Call<TransactionResponseModel>
+
+    @GET(AppConstants.GET_UNREAD_MESSAGE_COUNT_URL)
+    fun getUnReadMessageCount(@Query("user_id") userId:String): Call<NotificationCounter>
+
+    @GET(AppConstants.GET_TRANSACTION_VENDOR_CRED_URL)
+    fun fetchPaymentVendorCredentials(): Call<TransactionVendorModel>
 
 }

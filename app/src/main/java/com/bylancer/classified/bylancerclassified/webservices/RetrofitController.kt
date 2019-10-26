@@ -1,7 +1,7 @@
 package com.bylancer.classified.bylancerclassified.webservices
 
-import com.bylancer.classified.bylancerclassified.dashboard.DashboardDetailModel
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigModel
+import com.bylancer.classified.bylancerclassified.dashboard.DashboardDetailModel
 import com.bylancer.classified.bylancerclassified.utils.AppConstants.Companion.BASE_URL
 import com.bylancer.classified.bylancerclassified.utils.SessionState
 import com.bylancer.classified.bylancerclassified.webservices.chat.ChatMessageModel
@@ -13,6 +13,7 @@ import com.bylancer.classified.bylancerclassified.webservices.login.UserLoginSta
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferData
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferStatus
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.AddTokenStatus
+import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.NotificationCounter
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.NotificationDataModel
 import com.bylancer.classified.bylancerclassified.webservices.productlist.ProductInputData
 import com.bylancer.classified.bylancerclassified.webservices.productlist.ProductsData
@@ -24,16 +25,14 @@ import com.bylancer.classified.bylancerclassified.webservices.settings.CountryLi
 import com.bylancer.classified.bylancerclassified.webservices.settings.ProductUploadProductModel
 import com.bylancer.classified.bylancerclassified.webservices.settings.StateListModel
 import com.bylancer.classified.bylancerclassified.webservices.transaction.TransactionResponseModel
+import com.bylancer.classified.bylancerclassified.webservices.transaction.TransactionVendorModel
 import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.PostedProductResponseModel
 import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.UploadDataDetailModel
 import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.UploadProductModel
 import com.google.gson.GsonBuilder
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
-
 import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -216,6 +215,16 @@ class RetrofitController {
                     paymentType,
                     transactionDetails)
             call.enqueue(postedTransactionCallback)
+        }
+
+        fun fetchNotificationCount(fetchNotificationCountCallBack: Callback<NotificationCounter>) {
+            val call = webserviceApi.getUnReadMessageCount(SessionState.instance.userId)
+            call.enqueue(fetchNotificationCountCallBack)
+        }
+
+        fun fetchTransactionVendorCredentials(fetchVendorCredentialsCallBack: Callback<TransactionVendorModel>) {
+            val call = webserviceApi.fetchPaymentVendorCredentials()
+            call.enqueue(fetchVendorCredentialsCallBack)
         }
     }
 }

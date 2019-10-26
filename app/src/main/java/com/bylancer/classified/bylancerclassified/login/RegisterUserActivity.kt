@@ -116,8 +116,8 @@ class RegisterUserActivity : BylancerBuilderActivity(), View.OnFocusChangeListen
     }
 
     override fun onResponse(call: Call<UserRegistrationStatus>?, response: Response<UserRegistrationStatus>?) {
-        if (response != null && response.isSuccessful) {
-            val responseBody: UserRegistrationStatus = response.body()
+        if (response != null && response.isSuccessful && response.body() != null) {
+            val responseBody: UserRegistrationStatus = response.body()!!
             if (responseBody != null && AppConstants.SUCCESS.equals(responseBody.status!!)) {
                  SessionState.instance.displayName = responseBody.name!!
                 SessionState.instance.userName = responseBody.username!!

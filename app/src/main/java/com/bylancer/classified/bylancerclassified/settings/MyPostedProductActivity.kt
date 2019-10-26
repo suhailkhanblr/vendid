@@ -83,11 +83,11 @@ class MyPostedProductActivity : BylancerBuilderActivity(), OnProductItemClickLis
     override fun onResponse(call: Call<List<ProductsData>>?, response: Response<List<ProductsData>>?) {
         if(!this.isFinishing) {
             iosDialog?.dismiss()
-            if(response != null && response.isSuccessful) {
+            if(response != null && response.isSuccessful && response.body() != null) {
                 if (my_posted_property_pull_to_refresh != null && my_posted_property_pull_to_refresh.isRefreshing) {
                     productDataList.clear()
                 }
-                productDataList.addAll(response.body())
+                productDataList.addAll(response.body()!!)
                 if(!productDataList.isNullOrEmpty()) {
                     no_my_products_frame.visibility = View.GONE
                     my_products_recycler_view.visibility = View.VISIBLE

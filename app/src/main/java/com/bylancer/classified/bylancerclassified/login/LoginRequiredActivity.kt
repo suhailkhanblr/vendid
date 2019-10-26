@@ -19,7 +19,7 @@ class LoginRequiredActivity : BylancerBuilderActivity(), View.OnClickListener {
     override fun setLayoutView() = R.layout.fragment_login_required
 
     override fun initialize(savedInstanceState: Bundle?) {
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         setFinishOnTouchOutside(false)
 
         login_required_text_view.text = LanguagePack.getString(getString(R.string.login_required))

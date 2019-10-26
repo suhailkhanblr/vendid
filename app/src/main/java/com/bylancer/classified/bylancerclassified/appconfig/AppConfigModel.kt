@@ -51,8 +51,20 @@ class AppConfigModel {
     var languages: List<Language>? = null
     @SerializedName("currency_code")
     @Expose
-    val currencyCode: String? = null
+    var currencyCode: String? = null
     @SerializedName("currency_sign")
     @Expose
-    val currencySign: String? = null
+    var currencySign: String? = null
+    @SerializedName("featured_fee")
+    @Expose
+    var featuredFee: String? = null
+    @SerializedName("urgent_fee")
+    @Expose
+    var urgentFee: String? = null
+    @SerializedName("highlight_fee")
+    @Expose
+    var highlightFee: String? = null
+    @SerializedName("payment_method")
+    @Expose
+    var paymentMethod: PaymentMethod? = null
 }

@@ -7,7 +7,7 @@
     android:background="@color/denied_red"
     tools:context=".splash.SplashActivity">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -16,25 +16,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/splash_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
+            android:fontFamily="@font/roboto_condensed_bold"
             android:gravity="center"
-            android:textSize="@dimen/text_size_xxlarge"
+            android:text="@string/app_name"
+            app:layout_constraintTop_toTopOf="parent"
             android:textColor="@color/white_color_text"
-            android:fontFamily="@font/roboto_condensed_bold" />
+            android:textSize="@dimen/text_size_xxlarge"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/divider_for_splash"
             android:textColor="@color/white_color_text"
             android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="none"
+            app:layout_constraintStart_toStartOf="@id/splash_app_name"
+            app:layout_constraintEnd_toEndOf="@id/splash_app_name"
+            app:layout_constraintTop_toBottomOf="@id/splash_app_name"
             android:fontFamily="@font/roboto_condensed_bold" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/pBar"

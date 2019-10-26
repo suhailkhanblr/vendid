@@ -269,8 +269,8 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
         RetrofitController.fetchCountryDetails(object: Callback<List<CountryListModel>> {
             override fun onResponse(call: Call<List<CountryListModel>>?, response: Response<List<CountryListModel>>?) {
                 if(isAdded && isVisible) {
-                    if (response != null && response.isSuccessful && settings_country_spinner != null) {
-                        countryList.addAll(response.body())
+                    if (response != null && response.isSuccessful && settings_country_spinner != null && response.body() != null) {
+                        countryList.addAll(response.body()!!)
                         saveCountryDetailData()
                     }
                     dismissProgressDialog()
@@ -292,8 +292,8 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
             override fun onResponse(call: Call<List<StateListModel>>?, response: Response<List<StateListModel>>?) {
                 if (isAdded && isVisible) {
                     dismissProgressDialog()
-                    if (response != null && response.isSuccessful && settings_state_spinner != null) {
-                        stateList.addAll(response.body())
+                    if (response != null && response.isSuccessful && settings_state_spinner != null && response.body() != null) {
+                        stateList.addAll(response.body()!!)
                         saveStateDetailData()
                     }
                 }
@@ -314,8 +314,8 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
             override fun onResponse(call: Call<List<CityListModel>>?, response: Response<List<CityListModel>>?) {
                 if (isAdded && isVisible) {
                     dismissProgressDialog()
-                    if (response != null && response.isSuccessful && settings_city_spinner != null) {
-                        cityList.addAll(response.body())
+                    if (response != null && response.isSuccessful && settings_city_spinner != null && response.body() != null) {
+                        cityList.addAll(response.body()!!)
                         saveCityDetailData()
                     }
                 }
@@ -383,7 +383,7 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
             premiumDialog.showDialog(AppConstants.GO_FOR_PREMIUM_APP, object : OnPremiumDoneButtonClicked {
                 override fun onPremiumDoneButtonClicked(totalCost: String, premiumFeatures: Array<String>) {
                     val title = SessionState.instance.displayName + "_" + SessionState.instance.email
-                    mActivity?.showPaymentGatewayOptions(title, totalCost, AppConstants.GO_FOR_PREMIUM_APP, null, premiumFeatures)
+                   // mActivity?.showPaymentGatewayOptions(title, totalCost, AppConstants.GO_FOR_PREMIUM_APP, null, premiumFeatures)
                 }
             })
         }
@@ -487,8 +487,8 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
 
             override fun onResponse(call: Call<AppConfigModel>?, response: Response<AppConfigModel>?) {
                 if (isAdded && isVisible) {
-                    if (context != null && response != null && response.isSuccessful) {
-                        val appConfigUrl: AppConfigModel = response.body()
+                    if (context != null && response != null && response.isSuccessful && response.body() != null) {
+                        val appConfigUrl: AppConfigModel = response.body()!!
                         AppConfigDetail.saveAppConfigData(context!!, Gson().toJson(appConfigUrl))
                         AppConfigDetail.initialize(Gson().toJson(appConfigUrl))
                         dismissProgressDialog()

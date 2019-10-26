@@ -38,6 +38,8 @@ class AppConstants {
         const val UPLOAD_PRODUCT_PIC_URL = "api/v1/index.php?action=upload_product_picture"
         const val UPLOAD_PRODUCT_SAVE_POST_URL = "api/v1/index.php?action=save_post"
         const val UPLOAD_PRODUCT_PREMIUM_TRANSACTION_URL = "api/v1/index.php?action=payment_success_saving"
+        const val GET_UNREAD_MESSAGE_COUNT_URL = "api/v1/index.php?action=unread_note_chat_count"
+        const val GET_TRANSACTION_VENDOR_CRED_URL = "api/v1/index.php?action=payment_api_detail_config"
         const val UPLOAD_PRODUCT_ADDITIONAL_INFO_URL = BASE_URL + "api/v1/?action=getCustomFieldByCatID&catid=%s&subcatid=%s&additionalinfo=%s"
         const val FLAG_IMAGE_URL = "https://www.countryflags.io/%s/flat/64.png"
         const val IS_ADMIN_APP = false
@@ -76,6 +78,10 @@ class AppConstants {
         const val COUNTRY_PAGER_POSITION = 0
         const val STATE_PAGER_POSITION = 1
         const val CITY_PAGER_POSITION = 2
+
+        const val AD_APPROVE = "ad_approve"
+        const val AD_DELETE = "ad_delete"
+        const val AD_MESSAGE = ""
 
         const val GO_FOR_PREMIUM_APP = 1
         const val GO_FOR_PREMIUM_AD = 2
@@ -129,10 +135,17 @@ class AppConstants {
         /*PayStack Ends*/
         const val PAY_STACK_ACTIVE = true
         const val PAY_U_MONEY_ACTIVE = true
+        const val WIRE_TRANSFER_ACTIVE = true
+        const val CHECKOUT_2_ACTIVE = true
+        const val PAY_STRIPE_ACTIVE = true
+
+        const val PAY_PAL = "paypal"
+        const val PAY_PAL_ACTIVE = true
 
         enum class PREFERENCES private constructor(private val value: String) {
             USER_ID("user_id"),
             DEVICE_ID("deviceId"),
+            IS_TOKEN_SENT("is_token_sent"),
             USERNAME("username"),
             LOGIN_STATUS("LoginStatus"),
             EMAIL("email_id"),
@@ -165,6 +178,9 @@ class AppConstants {
             APP_CONFIG("app_config_details"),
             APP_VERSION_FROM_SERVER("app_version_server"),
             PREMIUM_APP("premium_app"),
+            FEATURED_PRODUCT_PRICE("featured_product_price"),
+            URGENT_PRODUCT_PRICE("urgent_product_price"),
+            HIGHLIGHTED_PRODUCT_PRICE("highlighted_product_price"),
             IS_FIRST_TIME_LOGIN("is_first_time_login"),
             GOOGLE_BANNER("google_banner"),
             GOOGLE_INTERSTITIAL("google_interstitial"),

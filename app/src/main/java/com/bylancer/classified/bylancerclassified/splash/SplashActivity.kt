@@ -73,8 +73,8 @@ class SplashActivity : BylancerBuilderActivity() {
                     }
 
                     override fun onResponse(call: Call<AppConfigModel>?, response: Response<AppConfigModel>?) {
-                        if (response != null && response.isSuccessful) {
-                            val appConfigUrl: AppConfigModel = response.body()
+                        if (response != null && response.isSuccessful && response.body() != null) {
+                            val appConfigUrl: AppConfigModel = response.body()!!
                             AppConfigDetail.saveAppConfigData(this@SplashActivity, Gson().toJson(appConfigUrl))
                             AppConfigDetail.initialize(Gson().toJson(appConfigUrl))
                             saveAndLaunchScreen()

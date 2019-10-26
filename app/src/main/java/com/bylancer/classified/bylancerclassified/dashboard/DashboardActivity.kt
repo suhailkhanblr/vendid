@@ -12,8 +12,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.core.content.ContextCompat
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatTextView
+import com.bylancer.classified.bylancerclassified.BuildConfig
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
 import com.bylancer.classified.bylancerclassified.alarm.NotificationMessagesFragment
@@ -21,18 +24,19 @@ import com.bylancer.classified.bylancerclassified.chat.GroupChatFragment
 import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
 import com.bylancer.classified.bylancerclassified.settings.SettingsFragment
 import com.bylancer.classified.bylancerclassified.uploadproduct.categoryselection.UploadCategorySelectionActivity
-import com.bylancer.classified.bylancerclassified.utils.AppConstants
-import com.bylancer.classified.bylancerclassified.utils.SessionState
-import com.bylancer.classified.bylancerclassified.utils.Utility
-import com.bylancer.classified.bylancerclassified.utils.getCurrentCountry
+import com.bylancer.classified.bylancerclassified.utils.*
+import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
+import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.NotificationCounter
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_dashboard.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
-
 
 class DashboardActivity : BylancerBuilderActivity() {
     private val dashboardFragment = DashboardFragment()
@@ -40,6 +44,8 @@ class DashboardActivity : BylancerBuilderActivity() {
     private val groupChatFragment = GroupChatFragment()
     private val settingsFragment = SettingsFragment()
     val MY_PERMISSIONS_REQUEST_LOCATION = 88
+    private var mChatBadgeTextView: AppCompatTextView? = null
+    private var mNotificationBadgeTextView: AppCompatTextView? = null
 
     override fun setLayoutView() = R.layout.activity_dashboard
 
@@ -57,10 +63,15 @@ class DashboardActivity : BylancerBuilderActivity() {
 
         setUpListeners()
 
+        if (!BuildConfig.VERSION_CODE.toString().equals(SessionState.instance.appVersionFromServer)) {
+            showAppUpgradeAlert()
+        }
+
         if (SessionState.instance.isGoogleBannerSupported) {
             setBannerAdListener()
             scheduleBannerAd()
         }
+        getNotificationCount()
     }
 
     private fun setUpListeners() {
@@ -79,6 +90,7 @@ class DashboardActivity : BylancerBuilderActivity() {
                         true
                     }
                     R.id.action_alarm -> {
+                        removeBadgeFromIcon(1)
                         if (SessionState.instance.isLoggedIn) {
                             commitFragment(1)
                         } else  {
@@ -95,6 +107,7 @@ class DashboardActivity : BylancerBuilderActivity() {
                         true
                     }
                     R.id.action_chat -> {
+                        removeBadgeFromIcon(3)
                         if (SessionState.instance.isLoggedIn) {
                             commitFragment(3)
                         } else  {
@@ -149,6 +162,11 @@ class DashboardActivity : BylancerBuilderActivity() {
                     })
 
         }
+
+        if (SessionState.instance.isLogin && !SessionState.instance.isTokenSent) {
+            sendTokenToServer()
+            SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.IS_TOKEN_SENT.toString(), true)
+        }
     }
 
     private fun subscribeToTopic() {
@@ -184,7 +202,7 @@ class DashboardActivity : BylancerBuilderActivity() {
 
     }
 
-    fun commitFragment(tabPosition : Int) {
+    private fun commitFragment(tabPosition : Int) {
         val fragmentTransaction = supportFragmentManager.beginTransaction();
         when(tabPosition) {
             0 -> fragmentTransaction.replace(R.id.fragment_container, dashboardFragment, dashboardFragment::class.simpleName)
@@ -200,7 +218,7 @@ class DashboardActivity : BylancerBuilderActivity() {
                                             permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_LOCATION -> {
-                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(this,
                                     Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
@@ -259,6 +277,54 @@ class DashboardActivity : BylancerBuilderActivity() {
             override fun onAdClosed() {
                 bylancer_ad_view_layout.visibility = View.GONE
             }
+        }
+    }
+
+    private fun getNotificationCount() {
+        RetrofitController.fetchNotificationCount(object : Callback<NotificationCounter> {
+            override fun onFailure(call: Call<NotificationCounter>?, t: Throwable?) {}
+
+            override fun onResponse(call: Call<NotificationCounter>?, response: Response<NotificationCounter>?) {
+                if (response != null && response.isSuccessful && response.body() != null) {
+                    val body = response.body()
+                    if (!body.unreadChat.isNullOrEmpty() && !body.unreadChat.equals("0")) {
+                        showBadgeOnIcon(3, body.unreadChat!!)
+                    } else {
+
+                    }
+                    if (!body.unreadNotification.isNullOrEmpty() && !body.unreadNotification.equals("0")) {
+                        showBadgeOnIcon(1, body.unreadNotification!!)
+                    } else {
+
+                    }
+                }
+            }
+
+        })
+    }
+
+    private fun showBadgeOnIcon(index: Int, count: String) {
+        val bottomNavigationMenuView = bottom_navigation_menu?.getChildAt(0) as BottomNavigationMenuView
+        val itemView = bottomNavigationMenuView?.getChildAt(index) as BottomNavigationItemView
+        val badge = LayoutInflater.from(this).inflate(R.layout.badge_layout, itemView, true)
+        val badgeTextView = badge.findViewById<AppCompatTextView>(R.id.notifications_badge)
+        if (badgeTextView != null) {
+            if (index == 1) {
+                mNotificationBadgeTextView = badgeTextView
+                mNotificationBadgeTextView?.visibility = View.VISIBLE
+            } else {
+                mChatBadgeTextView = badgeTextView
+                mChatBadgeTextView?.visibility = View.VISIBLE
+            }
+        }
+        badgeTextView?.text = count
+    }
+
+    private fun removeBadgeFromIcon(index: Int) {
+        if (index == 1) {
+            mNotificationBadgeTextView?.visibility = View.GONE
+        } else {
+            mChatBadgeTextView?.visibility = View.GONE
         }
     }
 }

@@ -31,7 +31,7 @@
         android:layout_marginStart="@dimen/margin_twenty_five"
         android:layout_marginTop="@dimen/margin_ten"
         android:layout_marginEnd="@dimen/margin_thirty"
-        android:background="@color/light_gray"
+        android:background="@color/light_gray_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appCompatTextView" />
@@ -102,7 +102,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/settings_login_sign_up_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bottom_navigation_bar_divider_height"
                     android:layout_marginTop="@dimen/margin_fifteen"
-                    android:background="@color/light_gray"
+                    android:background="@color/light_gray_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/settings_login_sign_up_text" />
@@ -143,7 +143,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/settings_my_ads_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bottom_navigation_bar_divider_height"
                     android:layout_marginTop="@dimen/margin_fifteen"
-                    android:background="@color/light_gray"
+                    android:background="@color/light_gray_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/settings_my_ads_text" />
@@ -184,7 +184,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/settings_my_fav_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -202,7 +202,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bottom_navigation_bar_divider_height"
                     android:layout_marginTop="@dimen/margin_fifteen"
-                    android:background="@color/light_gray"
+                    android:background="@color/light_gray_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/settings_my_fav_text" />
@@ -226,7 +226,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/settings_my_saved_search_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -244,14 +244,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bottom_navigation_bar_divider_height"
                     android:layout_marginTop="@dimen/margin_fifteen"
-                    android:background="@color/light_gray"
+                    android:background="@color/light_gray_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/settings_my_saved_search_text" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/settings_caption_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -270,7 +270,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_xsmall"
                 android:layout_marginTop="@dimen/margin_fifteen"
-                android:background="@color/light_gray"
+                android:background="@color/light_gray_background"
                 android:layout_marginStart="@dimen/default_margin"
                 android:layout_marginEnd="@dimen/default_margin"/>
 
@@ -289,7 +289,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/settings_country_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -318,7 +318,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/select_country"
-                        android:textColorHint="@color/light_gray"
+                        android:textColorHint="@color/light_gray_background"
                         android:background="@android:color/transparent"
                         android:padding="@dimen/margin_ten"
                         android:layout_gravity="start"
@@ -326,7 +326,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="@color/shadow_black"
                         app:jrs_title="@string/select_country"
-                        app:jrs_icon_tint="@color/light_gray"/>
+                        app:jrs_icon_tint="@color/light_gray_background"/>
 
                 </FrameLayout>
 
@@ -334,7 +334,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bottom_navigation_bar_divider_height"
                     android:layout_marginTop="@dimen/margin_fifteen"
-                    android:background="@color/light_gray"
+                    android:background="@color/light_gray_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/country_dropdown_layout" />
@@ -356,7 +356,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/settings_state_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -391,9 +391,9 @@
                         android:textAlignment="viewStart"
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="@color/shadow_black"
-                        android:textColorHint="@color/light_gray"
+                        android:textColorHint="@color/light_gray_background"
                         app:jrs_title="@string/select_state"
-                        app:jrs_icon_tint="@color/light_gray"/>
+                        app:jrs_icon_tint="@color/light_gray_background"/>
 
                 </FrameLayout>
 
@@ -401,7 +401,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bottom_navigation_bar_divider_height"
                     android:layout_marginTop="@dimen/margin_fifteen"
-                    android:background="@color/light_gray"
+                    android:background="@color/light_gray_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/state_dropdown_layout" />
@@ -423,7 +423,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/settings_city_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -458,9 +458,9 @@
                         android:textAlignment="viewStart"
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="@color/shadow_black"
-                        android:textColorHint="@color/light_gray"
+                        android:textColorHint="@color/light_gray_background"
                         app:jrs_title="@string/select_city"
-                        app:jrs_icon_tint="@color/light_gray"/>
+                        app:jrs_icon_tint="@color/light_gray_background"/>
 
                 </FrameLayout>
 
@@ -468,7 +468,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bottom_navigation_bar_divider_height"
                     android:layout_marginTop="@dimen/margin_fifteen"
-                    android:background="@color/light_gray"
+                    android:background="@color/light_gray_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/city_dropdown_layout" />
@@ -490,7 +490,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/settings_language_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -524,10 +524,10 @@
                         android:padding="@dimen/margin_ten"
                         android:layout_gravity="start"
                         android:textAlignment="viewStart"
-                        android:textColorHint="@color/light_gray"
+                        android:textColorHint="@color/light_gray_background"
                         android:textColor="@color/shadow_black"
                         app:jrs_title="@string/select_language"
-                        app:jrs_icon_tint="@color/light_gray"/>
+                        app:jrs_icon_tint="@color/light_gray_background"/>
 
                 </FrameLayout>
 
@@ -535,7 +535,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bottom_navigation_bar_divider_height"
                     android:layout_marginTop="@dimen/margin_fifteen"
-                    android:background="@color/light_gray"
+                    android:background="@color/light_gray_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/language_dropdown_layout" />
@@ -558,7 +558,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/settings_support_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -576,7 +576,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bottom_navigation_bar_divider_height"
                     android:layout_marginTop="@dimen/margin_fifteen"
-                    android:background="@color/light_gray"
+                    android:background="@color/light_gray_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/settings_support_text" />
@@ -599,7 +599,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/settings_terms_condition_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -617,7 +617,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bottom_navigation_bar_divider_height"
                     android:layout_marginTop="@dimen/margin_fifteen"
-                    android:background="@color/light_gray"
+                    android:background="@color/light_gray_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/settings_terms_condition_text" />

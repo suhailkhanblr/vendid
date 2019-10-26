@@ -62,8 +62,8 @@ class ForgotPasswordActivity : BylancerBuilderActivity(), TextWatcher, View.OnCl
     override fun onResponse(call: Call<UserForgetPasswordStatus>?, response: Response<UserForgetPasswordStatus>?) {
         forget_password_sliding_progress_indicator.visibility = View.GONE
 
-        if (response != null && response.isSuccessful) {
-            val responseBody: UserForgetPasswordStatus = response.body()
+        if (response != null && response.isSuccessful && response.body() != null) {
+            val responseBody: UserForgetPasswordStatus = response.body()!!
             if (responseBody != null && AppConstants.SUCCESS.equals(responseBody.status!!)) {
                 val bundle = Bundle()
                 bundle.putString(AppConstants.MESSAGE, responseBody.message!!)

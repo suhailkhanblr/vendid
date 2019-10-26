@@ -358,13 +358,13 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
 
                 override fun onResponse(call: Call<List<ProductsData>>?, response: Response<List<ProductsData>>?) {
                     if (this@DashboardFragment.isAdded && this@DashboardFragment.isVisible) {
-                        if(response != null && response.isSuccessful) {
+                        if(response != null && response.isSuccessful && response.body() != null) {
                             if (dashboard_pull_to_refresh != null && dashboard_pull_to_refresh.isRefreshing) {
                                 featuredDataList.clear()
                                 dashboard_featured_recycler_view?.recycledViewPool?.clear()
                                 dashboard_featured_recycler_view?.adapter?.notifyDataSetChanged()
                             }
-                            featuredDataList.addAll(response.body())
+                            featuredDataList.addAll(response.body()!!)
                             if (!featuredDataList.isNullOrEmpty()) {
                                 featured_text_layout.visibility = View.VISIBLE
                                 if (dashboard_featured_recycler_view.adapter != null) {
@@ -413,13 +413,13 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
             progress_view_dashboard.clearAnimation()
             animUpDown = null
 
-            if(response != null && response.isSuccessful) {
+            if(response != null && response.isSuccessful && response.body() != null) {
                 if (dashboard_pull_to_refresh != null && dashboard_pull_to_refresh.isRefreshing) {
                     productDataList.clear()
                     dashboard_recycler_view?.recycledViewPool?.clear()
                     dashboard_recycler_view?.adapter?.notifyDataSetChanged()
                 }
-                productDataList.addAll(response.body())
+                productDataList.addAll(response.body()!!)
                 if (!productDataList.isNullOrEmpty()) {
                     top_picks_layout.visibility = View.VISIBLE
                     if (dashboard_recycler_view.adapter != null) {

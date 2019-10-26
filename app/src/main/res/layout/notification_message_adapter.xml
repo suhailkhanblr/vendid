@@ -12,29 +12,34 @@
         android:layout_height="wrap_content"
         android:background="@color/white_background">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/notification_sender_name_circular_first_name"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/notification_details_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:src="@drawable/ic_next"
+            android:tint="@color/shadow_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/notification_type_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginTop="@dimen/default_margin"
             android:layout_marginEnd="@dimen/default_margin"
-            android:textColor="@color/white_color_text"
-            android:textSize="@dimen/text_size_xxlarge"
-            android:padding="@dimen/margin_ten"
-            android:fontFamily="@font/roboto_regular"
-            android:textStyle="bold"
             app:layout_constraintHorizontal_bias="0.04"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/notification_sender_name"
-            android:layout_width="wrap_content"
+            android:id="@+id/notification_title_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
-            android:layout_marginTop="@dimen/default_margin"
             android:layout_marginEnd="@dimen/default_margin"
             android:textColor="@color/shadow_black"
             android:textSize="@dimen/text_size_eighteen"
@@ -42,25 +47,25 @@
             android:textStyle="bold"
             android:paddingTop="@dimen/default_margin"
             android:layout_marginLeft="@dimen/margin_ten"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginRight="@dimen/margin_ten"
+            app:layout_constraintEnd_toStartOf="@id/notification_details_icon"
             app:layout_constraintHorizontal_bias="0.04"
-            app:layout_constraintStart_toEndOf="@id/notification_sender_name_circular_first_name"
+            app:layout_constraintStart_toEndOf="@id/notification_type_icon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/notification_message_text_view"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/default_margin"
+            android:paddingEnd="@dimen/default_margin"
+            android:fontFamily="@font/roboto_regular"
             android:paddingTop="@dimen/margin_xsmall"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingBottom="@dimen/margin_small"
             android:textColor="@color/shadow_black"
             android:textSize="@dimen/text_size_sixteen"
-            android:fontFamily="@font/roboto_regular"
-            android:paddingBottom="@dimen/margin_small"
-            app:layout_constraintHorizontal_bias="0.04"
-            app:layout_constraintStart_toStartOf="@id/notification_sender_name"
-            app:layout_constraintTop_toBottomOf="@+id/notification_sender_name" />
+            app:layout_constraintEnd_toEndOf="@id/notification_title_name"
+            app:layout_constraintStart_toStartOf="@id/notification_title_name"
+            app:layout_constraintTop_toBottomOf="@+id/notification_title_name" />
 
         <View
             android:id="@+id/notification_message_separator"
@@ -72,6 +77,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/notification_message_text_view"
             app:layout_constraintTop_toBottomOf="@+id/notification_message_text_view" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
+

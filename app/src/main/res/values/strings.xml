@@ -177,4 +177,7 @@
 
     <string name="label_secure_submission">Secure Submission</string>
 
+    <string name="new_version">A new version of the application is available for download. We have fixed few bugs and enhanced user experience. Please click on Upgrade Now button to update the application. It will not change any of your existing information.</string>
+    <string name="upgrade">Upgrade Now</string>
+    <string name="version_available">New Version Available</string>
 </resources>

@@ -60,12 +60,12 @@ class LanguageSelectionActivity : BylancerBuilderActivity(), LanguageSelection {
             }
 
             override fun onResponse(call: Call<AppConfigModel>?, response: Response<AppConfigModel>?) {
-                if (!this@LanguageSelectionActivity.isFinishing && response != null && response.isSuccessful) {
-                    val appConfigUrl: AppConfigModel = response.body()
+                if (!this@LanguageSelectionActivity.isFinishing && response != null && response.isSuccessful && response.body() != null) {
+                    val appConfigUrl: AppConfigModel = response.body()!!
                     AppConfigDetail.saveAppConfigData(this@LanguageSelectionActivity, Gson().toJson(appConfigUrl))
                     AppConfigDetail.initialize(Gson().toJson(appConfigUrl))
-                    dismissProgressDialog()
                 }
+                dismissProgressDialog()
             }
 
         })

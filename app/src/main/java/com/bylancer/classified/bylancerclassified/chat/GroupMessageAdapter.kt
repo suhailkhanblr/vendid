@@ -39,6 +39,7 @@ class GroupMessageAdapter(val mChatMessageListModel: List<GroupChatModel>, val p
         Glide.with(chatViewHolder.currentUserChatImageView.context).load(AppConstants.IMAGE_URL + groupChatModel!!.fromUserImage).apply(RequestOptions().circleCrop()).into(chatViewHolder.currentUserChatImageView)
         chatViewHolder.groupChatCardView.setOnClickListener() {
             val bundle = Bundle()
+            chatViewHolder?.clientUserChatCounterTextView?.visibility = View.GONE
             bundle.putString(AppConstants.CHAT_TITLE, groupChatModel!!.fromFullname)
             bundle.putString(AppConstants.CHAT_USER_NAME, groupChatModel!!.fromUsername)
             bundle.putString(AppConstants.CHAT_USER_IMAGE, groupChatModel!!.fromUserImage)

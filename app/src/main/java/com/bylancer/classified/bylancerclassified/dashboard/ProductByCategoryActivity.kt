@@ -132,12 +132,12 @@ class ProductByCategoryActivity : BylancerBuilderActivity(), OnProductItemClickL
     override fun onResponse(call: Call<List<ProductsData>>?, response: Response<List<ProductsData>>?) {
         if (!this.isFinishing) {
             iosDialog?.dismiss()
-            if(response != null && response.isSuccessful) {
+            if(response != null && response.isSuccessful && response.body() != null) {
                 if (search_pull_to_refresh != null && search_pull_to_refresh.isRefreshing) {
                     productDataList.clear()
                     search_pull_to_refresh.isRefreshing = false
                 }
-                productDataList.addAll(response.body())
+                productDataList.addAll(response.body()!!)
                 if(!productDataList.isNullOrEmpty()) {
                     no_product_by_category_frame.visibility = View.GONE
                     product_by_category_recycler_view.visibility = View.VISIBLE

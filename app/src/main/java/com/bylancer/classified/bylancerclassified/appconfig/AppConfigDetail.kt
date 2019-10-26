@@ -37,6 +37,17 @@ class AppConfigDetail {
                 SessionState.instance.isFacebookInterstitialSupported = if (appConfig.facebookInterstitial != null) appConfig.facebookInterstitial!! else true
                 SessionState.instance.paymentCurrencyCode = if (appConfig.currencyCode != null) appConfig.currencyCode!! else "INR"
                 SessionState.instance.paymentCurrencySign = if (appConfig.currencySign != null) appConfig.currencySign!! else "₹"
+                SessionState.instance.featuredProductFee = if (appConfig.featuredFee != null) appConfig.featuredFee!! else AppConstants.PREMIUM_ADS_FEATURED_COST.toString()
+                SessionState.instance.urgentProductFee = if (appConfig.urgentFee != null) appConfig.urgentFee!! else AppConstants.PREMIUM_ADS_URGENT_COST.toString()
+                SessionState.instance.highlightProductFee = if (appConfig.highlightFee != null) appConfig.highlightFee!! else AppConstants.PREMIUM_ADS_HIGHLIGHTED_COST.toString()
+
+                SessionState.instance.is2CheckOutActive = if (appConfig.paymentMethod?.is2CheckoutActive() != null) appConfig.paymentMethod?.is2CheckoutActive()!!  else AppConstants.CHECKOUT_2_ACTIVE
+                SessionState.instance.isPayPalActive = if (appConfig.paymentMethod?.isPayPalActive() != null) appConfig.paymentMethod?.isPayPalActive()!!  else AppConstants.PAY_PAL_ACTIVE
+                SessionState.instance.isPayUMoneyActive = if (appConfig.paymentMethod?.isPayUMoneyActive() != null) appConfig.paymentMethod?.isPayUMoneyActive()!!  else AppConstants.PAY_U_MONEY_ACTIVE
+                SessionState.instance.isPayStackActive = if (appConfig.paymentMethod?.isPayStackActive() != null) appConfig.paymentMethod?.isPayStackActive()!!  else AppConstants.PAY_STACK_ACTIVE
+                SessionState.instance.isWireTransferActive = if (appConfig.paymentMethod?.isWireTransferActive() != null) appConfig.paymentMethod?.isWireTransferActive()!!  else AppConstants.WIRE_TRANSFER_ACTIVE
+                SessionState.instance.isStripeActive = if (appConfig.paymentMethod?.isStripeActive() != null) appConfig.paymentMethod?.isStripeActive()!!  else AppConstants.PAY_STRIPE_ACTIVE
+
                 appVersionFromServer = if (appConfig.appVersion != null) appConfig.appVersion!! else ""
                 if (SessionState.instance.selectedLanguage.isNullOrEmpty() && !appConfig.defaultLang.isNullOrEmpty()) {
                     SessionState.instance.selectedLanguage = appConfig.defaultLang!!

@@ -15,7 +15,7 @@ class BylancerProgressBar {
             var dialog = Dialog(context)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
             //dialog.setContentView(R.layout.dialog_login)
-            dialog.getWindow().setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
+            dialog.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
            // mDialog = dialog
         }
     }

@@ -52,7 +52,8 @@ class NotificationMessagesFragment : BylancerBuilderFragment(), Callback<List<No
                 if (response.body().isNullOrEmpty()) {
                     Utility.showSnackBar(notification_alarm_parent_layout, getString(R.string.no_notification), context!!)
                 } else {
-                    recycler_view_notification_alarm_message_list.adapter = NotificationMessageAdapter(response.body())
+                    recycler_view_notification_alarm_message_list.adapter =
+                            NotificationMessageAdapter(this@NotificationMessagesFragment, response.body()!!)
                 }
             } else {
                 Utility.showSnackBar(notification_alarm_parent_layout, getString(R.string.some_wrong), context!!)

@@ -20,6 +20,7 @@
     <color name="gray_color_text">#666666</color>
     <color name="light_gray_color_text">#999999</color>
     <color name="light_gray_background">#d3d3d3</color>
+    <color name="light_gray">#d3d3d3</color>
     <color name="disabled_color">#B3E0E0E0</color>
     <color name="disabled_text_color">#9D9FA2</color>
     <color name="transparent">#d3d3d3</color>
@@ -85,7 +86,6 @@
     <color name="off_red">#E74C47</color>
     <color name="off_yellow">#ED820F</color>
 
-    <color name="light_gray">#F0F5F5</color>
     <color name="translucent_white">#80FFFFFF</color>
     <color name="dark_gray">#243037</color>
 

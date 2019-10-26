@@ -332,8 +332,8 @@ class UploadProductDetail : BylancerBuilderActivity(), View.OnClickListener, BSI
         RetrofitController.fetchCountryDetails(object: Callback<List<CountryListModel>> {
             override fun onResponse(call: Call<List<CountryListModel>>?, response: Response<List<CountryListModel>>?) {
                 if (!this@UploadProductDetail.isFinishing) {
-                    if (response != null && response.isSuccessful && upload_detail_enter_country_edit_text != null) {
-                        countryList.addAll(response.body())
+                    if (response != null && response.isSuccessful && response.body() != null && upload_detail_enter_country_edit_text != null) {
+                        countryList.addAll(response.body()!!)
                         val listOfCountry = arrayListOf<String>()
                         countryList.forEach { listOfCountry.add(it.name!!)}
                         upload_detail_enter_country_edit_text.setItems(listOfCountry.toArray(arrayOfNulls<String>(countryList.size)))
@@ -357,8 +357,8 @@ class UploadProductDetail : BylancerBuilderActivity(), View.OnClickListener, BSI
             override fun onResponse(call: Call<List<StateListModel>>?, response: Response<List<StateListModel>>?) {
                 if (!this@UploadProductDetail.isFinishing) {
                     dismissProgressDialog()
-                    if (response != null && response.isSuccessful && upload_detail_enter_state_edit_text != null) {
-                        stateList.addAll(response.body())
+                    if (response != null && response.isSuccessful && response.body() != null && upload_detail_enter_state_edit_text != null) {
+                        stateList.addAll(response.body()!!)
                         val listOfState = arrayListOf<String>()
                         stateList.forEach { listOfState.add(it.name!!)}
                         upload_detail_enter_state_edit_text.setItems(listOfState.toArray(arrayOfNulls<String>(stateList.size)))
@@ -381,8 +381,8 @@ class UploadProductDetail : BylancerBuilderActivity(), View.OnClickListener, BSI
             override fun onResponse(call: Call<List<CityListModel>>?, response: Response<List<CityListModel>>?) {
                 if (!this@UploadProductDetail.isFinishing) {
                     dismissProgressDialog()
-                    if (response != null && response.isSuccessful && upload_detail_enter_city_edit_text != null) {
-                        cityList.addAll(response.body())
+                    if (response != null && response.isSuccessful && response.body() != null && upload_detail_enter_city_edit_text != null) {
+                        cityList.addAll(response.body()!!)
                         val listOfCity = arrayListOf<String>()
                         cityList.forEach { listOfCity.add(it.name!!)}
                         upload_detail_enter_city_edit_text.setItems(listOfCity.toArray(arrayOfNulls<String>(cityList.size)))
@@ -451,7 +451,7 @@ class UploadProductDetail : BylancerBuilderActivity(), View.OnClickListener, BSI
 
             override fun onResponse(call: Call<PostedProductResponseModel>?, response: Response<PostedProductResponseModel>?) {
                 if (!this@UploadProductDetail.isFinishing) {
-                    if (response != null && response.isSuccessful && response.body() != null && AppConstants.SUCCESS.equals(response.body().status)) {
+                    if (response != null && response.isSuccessful && response.body() != null && AppConstants.SUCCESS.equals(response.body()?.status)) {
                         dismissProgressDialog()
                         Toast.makeText(this@UploadProductDetail, "Congratulations!! You have successfully posted", Toast.LENGTH_SHORT).show()
                         SessionState.instance.apply {

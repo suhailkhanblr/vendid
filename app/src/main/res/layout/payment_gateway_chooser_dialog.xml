@@ -39,4 +39,15 @@
         android:layout_marginBottom="@dimen/margin_ten"
         android:src="@drawable/paystack_button"/>
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/pay_pal_gateway"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="@dimen/margin_ten"
+        android:layout_marginStart="@dimen/margin_ten"
+        android:layout_marginEnd="@dimen/margin_ten"
+        android:layout_marginBottom="@dimen/margin_ten"
+        android:src="@drawable/ic_paypalbutton"/>
+
 </LinearLayout>

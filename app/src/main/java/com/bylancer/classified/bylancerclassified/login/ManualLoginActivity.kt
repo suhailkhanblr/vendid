@@ -102,8 +102,8 @@ class ManualLoginActivity : BylancerBuilderActivity(), View.OnFocusChangeListene
     }
 
     override fun onResponse(call: Call<UserLoginStatus>?, response: Response<UserLoginStatus>?) {
-        if (response != null && response.isSuccessful) {
-            val responseBody: UserLoginStatus = response.body()
+        if (response != null && response.isSuccessful && response.body() != null) {
+            val responseBody: UserLoginStatus = response.body()!!
             if (responseBody != null && AppConstants.SUCCESS.equals(responseBody.status!!)) {
                 SessionState.instance.displayName = responseBody.name!!
                 SessionState.instance.userName = responseBody.username!!

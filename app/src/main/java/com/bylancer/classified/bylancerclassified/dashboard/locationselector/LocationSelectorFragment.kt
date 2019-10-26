@@ -148,8 +148,8 @@ class LocationSelectorFragment : BylancerBuilderFragment(), LocationSelectedList
         RetrofitController.fetchCountryDetails(object: Callback<List<CountryListModel>> {
             override fun onResponse(call: Call<List<CountryListModel>>?, response: Response<List<CountryListModel>>?) {
                 if (isAdded && isVisible) {
-                    if (response != null && response.isSuccessful) {
-                        countryList.addAll(response.body())
+                    if (response != null && response.isSuccessful && response.body() != null) {
+                        countryList.addAll(response.body()!!)
                         saveCountryDetailData()
                         setCountryDataToAdapter()
                     }
@@ -172,8 +172,8 @@ class LocationSelectorFragment : BylancerBuilderFragment(), LocationSelectedList
             override fun onResponse(call: Call<List<StateListModel>>?, response: Response<List<StateListModel>>?) {
                 if (isAdded && isVisible) {
                     dismissProgressDialog()
-                    if (response != null && response.isSuccessful) {
-                        stateList.addAll(response.body())
+                    if (response != null && response.isSuccessful && response.body() != null) {
+                        stateList.addAll(response.body()!!)
                         saveStateDetailData()
                         setStateDataToAdapter()
                     }
@@ -195,8 +195,8 @@ class LocationSelectorFragment : BylancerBuilderFragment(), LocationSelectedList
             override fun onResponse(call: Call<List<CityListModel>>?, response: Response<List<CityListModel>>?) {
                 if (isAdded && isVisible) {
                     dismissProgressDialog()
-                    if (response != null && response.isSuccessful) {
-                        cityList.addAll(response.body())
+                    if (response != null && response.isSuccessful && response.body() != null) {
+                        cityList.addAll(response.body()!!)
                         saveCityDetailData()
                         setCityDataToAdapter()
                     }

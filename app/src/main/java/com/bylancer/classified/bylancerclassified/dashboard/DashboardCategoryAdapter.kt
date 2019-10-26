@@ -30,8 +30,8 @@ class DashboardCategoryAdapter(val items : List<Category>, val parentActivity: D
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val category: Category = items.get(position)
         holder?.categoryName?.text = category.name
-        Glide.with(holder?.categoryIcon.context).load(category.picture).into(holder?.categoryIcon)
-        holder?.categoryParentLayout.setOnClickListener() {
+        Glide.with(holder?.categoryIcon?.context).load(category.picture).into(holder?.categoryIcon)
+        holder?.categoryParentLayout?.setOnClickListener() {
             showSubCategoryInSearchBar(parentActivity, category.subCategory!!, category.id!!, category.name!!, category.picture!!)
         }
     }

@@ -30,6 +30,7 @@ import com.bylancer.classified.bylancerclassified.login.LoginActivity
 import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
 import com.bylancer.classified.bylancerclassified.login.ManualLoginActivity
 import com.bylancer.classified.bylancerclassified.login.RegisterUserActivity
+import com.bylancer.classified.bylancerclassified.premium.PayPal
 import com.bylancer.classified.bylancerclassified.splash.SplashActivity
 import com.bylancer.classified.bylancerclassified.submitcreditcardflow.PayStackCard
 import com.bylancer.classified.bylancerclassified.submitcreditcardflow.SubmitCreditCardActivity
@@ -37,11 +38,15 @@ import com.bylancer.classified.bylancerclassified.uploadproduct.categoryselectio
 import com.bylancer.classified.bylancerclassified.utils.*
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.transaction.TransactionResponseModel
+import com.bylancer.classified.bylancerclassified.webservices.transaction.TransactionVendorModel
 import com.bylancer.classified.bylancerclassified.widgets.CustomAlertDialog
 import com.bylancer.classified.bylancerclassified.widgets.ProgressUtils
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
+import com.paypal.android.sdk.payments.PayPalService
+import com.paypal.android.sdk.payments.PaymentActivity
+import com.paypal.android.sdk.payments.PaymentConfirmation
 import com.payumoney.core.PayUmoneyConfig
 import com.payumoney.core.PayUmoneySdkInitializer
 import com.payumoney.core.entity.TransactionResponse
@@ -57,9 +62,12 @@ import java.util.*
  * Created by Ani on 3/20/18.
  */
 abstract class BylancerBuilderActivity : AppCompatActivity() {
+    companion object {
+        const val CARD_DETAILS_REQUEST = 1010
+        const val REQUEST_PAY_PAL_CODE_PAYMENT = 2020
+    }
     lateinit var mInterstitialAd: InterstitialAd
     private var mPremiumUpgradeType: Int = AppConstants.GO_FOR_PREMIUM_APP
-    private val CARD_DETAILS_REQUEST = 1010
     private var mPayStackTransaction : Transaction? = null
     private var mTransactionAmount = "0"
     private var mProductIdForPremium : String? = null
@@ -67,6 +75,7 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
     private var mPremiumFeatures: Array<String>? = null
     var isPaymentActive = false
     private var mAdTimer : Timer? = null
+    private var mTransactionVendorDetails: TransactionVendorModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         isRTLSupportRequired()
@@ -312,9 +321,11 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
 
             if (transactionResponse?.getPayuResponse() != null) {
                 when {
-                    transactionResponse.transactionStatus == TransactionResponse.TransactionStatus.SUCCESSFUL -> { uploadTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, SessionState.instance.userId,
-                            mProductIdForPremium!!, mPremiumFeatures!![0], mPremiumFeatures!![1], mPremiumFeatures!![2], AppConstants.PAY_U_MONEY,
-                            AppConstants.PAYMENT_TYPE_PREMIUM, AppConstants.PAYMENT_TRANSACTION_DETAILS) }
+                    transactionResponse.transactionStatus == TransactionResponse.TransactionStatus.SUCCESSFUL -> {
+                        uploadTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, SessionState.instance.userId,
+                                mProductIdForPremium!!, mPremiumFeatures!![0], mPremiumFeatures!![1], mPremiumFeatures!![2], AppConstants.PAY_U_MONEY,
+                                AppConstants.PAYMENT_TYPE_PREMIUM, AppConstants.PAYMENT_TRANSACTION_DETAILS)
+                    }
                     transactionResponse.transactionStatus == TransactionResponse.TransactionStatus.CANCELLED -> showAlert(false)
                     transactionResponse.transactionStatus == TransactionResponse.TransactionStatus.FAILED -> showAlert(false)
                 }
@@ -335,8 +346,36 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
             }
         } else if (requestCode == CARD_DETAILS_REQUEST && resultCode == Activity.RESULT_CANCELED) {
             showAlert(false)
+        } else if (requestCode == REQUEST_PAY_PAL_CODE_PAYMENT) {
+            if (resultCode == Activity.RESULT_OK) {
+                val confirm = data?.getParcelableExtra<PaymentConfirmation>(PaymentActivity.EXTRA_RESULT_CONFIRMATION)
+                if (confirm != null) {
+                    try {
+                        /**
+                         * send 'confirm' (and possibly confirm.getPayment() to your server for verification
+                         * or consent completion.
+                         * See https://developer.paypal.com/webapps/developer/docs/integration/mobile/verify-mobile-payment/
+                         * for more details.
+                         * For sample mobile backend interactions, see
+                         * https://github.com/paypal/rest-api-sdk-python/tree/master/samples/mobile_backend
+                         */
+                        uploadTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, SessionState.instance.userId,
+                                mProductIdForPremium!!, mPremiumFeatures!![0], mPremiumFeatures!![1], mPremiumFeatures!![2], AppConstants.PAY_PAL,
+                                AppConstants.PAYMENT_TYPE_PREMIUM, AppConstants.PAYMENT_TRANSACTION_DETAILS)
+                    } catch (e: JSONException) {
+                        showAlert(false)
+                    }
+
+
+                }
+            }  else if (resultCode == Activity.RESULT_CANCELED) {
+                showAlert(false)
+            } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+                showAlert(false)
+            }
         }
     }
+
     /********************PayUMoney payment ends here ******************/
 
     private fun showAlert(isSuccess : Boolean) {
@@ -385,12 +424,16 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         dialogTitle.text = LanguagePack.getString("Pay Using")
 
         val payUMoney = paymentGatewayChooserDialog.findViewById(R.id.pay_u_money_gateway) as AppCompatImageView
-        if (!AppConstants.PAY_U_MONEY_ACTIVE) {
+        if (!SessionState.instance.isPayUMoneyActive) {
             payUMoney.visibility = View.GONE
         }
         val payStack = paymentGatewayChooserDialog.findViewById(R.id.pay_stack_gateway) as AppCompatImageView
-        if (!AppConstants.PAY_STACK_ACTIVE) {
+        if (!SessionState.instance.isPayStackActive) {
             payStack.visibility = View.GONE
+        }
+        val payPal = paymentGatewayChooserDialog.findViewById(R.id.pay_pal_gateway) as AppCompatImageView
+        if (!SessionState.instance.isPayPalActive) {
+            payPal.visibility = View.GONE
         }
         payUMoney.setOnClickListener() {
             isPaymentActive = true
@@ -399,8 +442,23 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         }
         payStack.setOnClickListener() {
             isPaymentActive = true
+            PaystackSdk.setPublicKey(mTransactionVendorDetails?.paystackPublicKey)
             paymentGatewayChooserDialog.dismiss()
             startActivityForResult(SubmitCreditCardActivity :: class.java, false, null, CARD_DETAILS_REQUEST)
+        }
+        payPal.setOnClickListener() {
+            isPaymentActive = true
+            paymentGatewayChooserDialog.dismiss()
+            val intent = Intent(this, PayPalService::class.java)
+            intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,
+                    PayPal.getPayPalConfig(mTransactionVendorDetails?.paypalApiUsername, mTransactionVendorDetails?.paypalApiSignature))
+            startService(intent)
+
+            val paymentIntent = Intent(this, PaymentActivity::class.java)
+            paymentIntent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,
+                    PayPal.getPayPalConfig(mTransactionVendorDetails?.paypalApiUsername, mTransactionVendorDetails?.paypalApiSignature))
+            paymentIntent.putExtra(PaymentActivity.EXTRA_PAYMENT, PayPal.getPayPalItemDetails(amount, title))
+            startActivityForResult(paymentIntent, REQUEST_PAY_PAL_CODE_PAYMENT)
         }
     }
 
@@ -504,7 +562,34 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         })
     }
 
+    fun getTransactionVendorCredentials(title: String, amount: String, upgradeType: Int, productId : String?, premiumFeatures: Array<String>) {
+        ProgressUtils.showLoadingDialog(this)
+        RetrofitController.fetchTransactionVendorCredentials(object : Callback<TransactionVendorModel> {
+            override fun onFailure(call: Call<TransactionVendorModel>?, t: Throwable?) {
+                if (!this@BylancerBuilderActivity.isFinishing) {
+                    showToast(getString(R.string.internet_issue))
+                    ProgressUtils.cancelLoading()
+                }
+            }
+
+            override fun onResponse(call: Call<TransactionVendorModel>?, response: retrofit2.Response<TransactionVendorModel>?) {
+                if (!this@BylancerBuilderActivity.isFinishing) {
+                    if (response != null && response.isSuccessful && response.body() != null) {
+                        mTransactionVendorDetails = response.body()!!
+                        showPaymentGatewayOptions(title, amount, upgradeType, productId, premiumFeatures)
+                    } else {
+                        showToast(getString(R.string.some_wrong))
+                    }
+                    ProgressUtils.cancelLoading()
+                }
+            }
+
+        })
+    }
+
     open fun onProductBecamePremium(productId: String) {}
+
+    /*******************All Payments End Here ************************/
 
     override fun onResume() {
         super.onResume()
@@ -517,5 +602,9 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         mAdTimer?.cancel()
         mAdTimer = null
     }
-}
 
+    override fun onDestroy() {
+        super.onDestroy()
+        stopService(Intent(this, PayPalService::class.java))
+    }
+}

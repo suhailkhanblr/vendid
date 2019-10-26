@@ -46,8 +46,8 @@ class GroupChatFragment : BylancerBuilderFragment(), Callback<List<GroupChatMode
 
     override fun onResponse(call: Call<List<GroupChatModel>>?, response: Response<List<GroupChatModel>>?) {
         removeProgressBar()
-        if (response != null && response.isSuccessful && recycler_view_group_chat_message_list != null) {
-            recycler_view_group_chat_message_list.adapter = GroupMessageAdapter(response.body(), activity as DashboardActivity)
+        if (response != null && response.isSuccessful && recycler_view_group_chat_message_list != null && response.body() != null) {
+            recycler_view_group_chat_message_list.adapter = GroupMessageAdapter(response.body()!!, activity as DashboardActivity)
         } else {
             Utility.showSnackBar(group_chat_parent_layout, getString(R.string.some_wrong), context!!)
         }
