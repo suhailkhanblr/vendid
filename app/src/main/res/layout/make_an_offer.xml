@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/product_detail_dialog_box"
+    android:background="@drawable/rounded_background_white"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/make_an_offer_title_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/margin_twenty_five"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="@dimen/text_size_twenty_two"
+        android:textColor="@color/shadow_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/make_an_offer_title_sub_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/margin_ten"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:fontFamily="@font/roboto_regular"
+        android:textSize="@dimen/small_text_size"
+        android:textColor="@color/dark_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/make_an_offer_title_text_view" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/user_bid_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/edit_text_height"
+        android:layout_marginStart="@dimen/margin_fifteen"
+        android:layout_marginTop="@dimen/margin_ten"
+        android:layout_marginEnd="@dimen/margin_fifteen"
+        android:paddingStart="@dimen/margin_ten"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:paddingEnd="@dimen/margin_ten"
+        android:layout_gravity="start"
+        android:textAlignment="viewStart"
+        android:textColor="@color/shadow_black"
+        android:background="@drawable/rounded_background_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/make_an_offer_title_sub_text_view" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_fifteen"
+        android:layout_marginTop="@dimen/margin_twenty_five"
+        android:layout_marginEnd="@dimen/margin_fifteen"
+        android:layout_marginBottom="@dimen/margin_twenty"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_bid_edit_text">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bid_cancel_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_corner_with_stroke_gray"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="@dimen/text_size_eighteen"
+            android:textColor="@color/shadow_black"
+            android:padding="@dimen/margin_fifteen"
+            app:layout_constraintStart_toStartOf="@+id/user_bid_edit_text"
+            app:layout_constraintTop_toBottomOf="@+id/user_bid_edit_text" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight=".2"
+            android:background="@android:color/transparent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bid_confirm_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_bold"
+            android:background="@drawable/rounded_background_green"
+            android:textColor="@color/white_color_text"
+            android:padding="@dimen/margin_fifteen"
+            android:textSize="@dimen/text_size_eighteen"
+            app:layout_constraintEnd_toEndOf="@+id/user_bid_edit_text"
+            app:layout_constraintTop_toBottomOf="@+id/user_bid_edit_text" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

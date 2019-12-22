@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_margin="@dimen/margin_small"
+    android:background="@color/white_background"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_background">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/notification_details_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:src="@drawable/ic_next"
+            android:tint="@color/shadow_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/notification_type_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            app:layout_constraintHorizontal_bias="0.04"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/notification_title_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:textColor="@color/shadow_black"
+            android:textSize="@dimen/text_size_eighteen"
+            android:fontFamily="@font/roboto_regular"
+            android:textStyle="bold"
+            android:paddingTop="@dimen/default_margin"
+            android:layout_marginLeft="@dimen/margin_ten"
+            android:layout_marginRight="@dimen/margin_ten"
+            app:layout_constraintEnd_toStartOf="@id/notification_details_icon"
+            app:layout_constraintHorizontal_bias="0.04"
+            app:layout_constraintStart_toEndOf="@id/notification_type_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/notification_message_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/default_margin"
+            android:fontFamily="@font/roboto_regular"
+            android:paddingTop="@dimen/margin_xsmall"
+            android:paddingBottom="@dimen/margin_small"
+            android:textColor="@color/shadow_black"
+            android:textSize="@dimen/text_size_sixteen"
+            app:layout_constraintEnd_toEndOf="@id/notification_title_name"
+            app:layout_constraintStart_toStartOf="@id/notification_title_name"
+            app:layout_constraintTop_toBottomOf="@+id/notification_title_name" />
+
+        <View
+            android:id="@+id/notification_message_separator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_navigation_bar_divider_height"
+            android:layout_marginTop="@dimen/margin_ten"
+            android:layout_marginEnd="@dimen/margin_ten"
+            android:background="@color/light_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/notification_message_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/notification_message_text_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
+

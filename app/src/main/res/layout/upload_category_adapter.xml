@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/upload_category_card_view_size"
+    android:layout_height="wrap_content"
+    app:elevation="@dimen/margin_fifteen"
+    app:cardUseCompatPadding="true"
+    android:layout_marginBottom="@dimen/margin_twelve"
+    android:background="@color/white_background"
+    app:cardCornerRadius="@dimen/margin_small">
+
+    <LinearLayout
+        android:id="@+id/category_parent_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/white_background"
+        android:padding="@dimen/default_margin">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/top_layout_category_icon"
+            android:layout_width="@dimen/category_layout_size_image_size"
+            android:layout_height="@dimen/category_layout_size_image_size"
+            android:background="@color/white_background"
+            android:layout_gravity="center_horizontal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/top_layout_category_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/default_margin"
+            android:ellipsize="end"
+            android:textSize="@dimen/small_text_size"
+            android:gravity="center_horizontal"
+            android:textColor="@color/dark_gray"
+            android:background="@color/white_background"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/motors" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/custom_alert_width_size"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_background_white">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/new_version_title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/version_available"
+        android:padding="@dimen/margin_ten"
+        android:fontFamily="@font/museo_bold"
+        android:textColor="@color/denied_red"
+        android:textSize="@dimen/custom_alert_title_text_size" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/new_version_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/new_version"
+        android:padding="@dimen/margin_ten"
+        android:fontFamily="@font/museo_bold"
+        android:textColor="@color/shadow_black"
+        android:textSize="@dimen/text_size_normal" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/process_upgrade"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/custom_alert_button_height_size"
+        android:text="@string/upgrade"
+        android:textColor="@color/white_color_text"
+        android:background="@color/dark_green"
+        android:layout_margin="@dimen/margin_small"
+        android:fontFamily="@font/museo_bold"
+        android:paddingLeft="@dimen/default_margin"
+        android:paddingRight="@dimen/default_margin"/>
+
+</LinearLayout>

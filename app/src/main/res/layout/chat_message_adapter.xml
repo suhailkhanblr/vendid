@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/current_user_chat_parent_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_ten"
+        android:layout_marginBottom="@dimen/margin_ten"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/current_user_chat_text_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_current_user_chat"
+            android:padding="@dimen/margin_ten"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/current_user_chat_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/white_color_text"
+                android:textSize="@dimen/text_size_sixteen"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/current_user_chat_text_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_gravity="start"
+                android:gravity="start"
+                android:paddingTop="@dimen/margin_small"
+                android:textColor="@color/white_color_text"
+                android:textSize="@dimen/text_size_ten"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/current_user_chat_image_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_current_user_chat"
+            android:padding="@dimen/margin_ten"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/current_user_chat_image"
+                android:layout_width="@dimen/chat_box_image_size"
+                android:layout_height="@dimen/chat_box_image_size"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/current_user_chat_image_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:paddingTop="@dimen/margin_small"
+                android:textColor="@color/white_color_text"
+                android:textSize="@dimen/text_size_ten"/>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/client_user_chat_parent_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_ten"
+        android:layout_marginBottom="@dimen/margin_ten"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/client_user_chat_text_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_client_user_chat"
+            android:padding="@dimen/margin_ten"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/client_user_chat_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/white_color_text"
+                android:textSize="@dimen/text_size_sixteen" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/client_user_chat_text_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:paddingTop="@dimen/margin_small"
+                android:textColor="@color/white_color_text"
+                android:textSize="@dimen/text_size_ten"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/client_user_chat_image_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_client_user_chat"
+            android:padding="@dimen/margin_ten"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/client_user_chat_image"
+                android:layout_width="@dimen/chat_box_image_size"
+                android:layout_height="@dimen/chat_box_image_size"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/client_user_chat_image_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:paddingTop="@dimen/margin_small"
+                android:textColor="@color/white_color_text"
+                android:textSize="@dimen/text_size_ten"/>
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

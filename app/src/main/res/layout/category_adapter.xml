@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/category_parent_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginEnd="@dimen/margin_twenty">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/top_layout_category_icon"
+        android:layout_width="@dimen/category_layout_size_image_size"
+        android:layout_height="@dimen/category_layout_size_image_size"
+        android:layout_gravity="center_horizontal" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/top_layout_category_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/default_margin"
+        android:ellipsize="end"
+        android:textSize="@dimen/small_text_size"
+        android:gravity="center_horizontal"
+        android:textColor="@color/dark_gray"
+        android:fontFamily="@font/roboto_regular"
+        android:singleLine="true"
+        android:text="@string/motors" />
+
+</LinearLayout>
