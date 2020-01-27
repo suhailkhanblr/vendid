@@ -10,8 +10,8 @@ android {
         applicationId "com.bylancer.classified.bylancerclassified"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 11
-        versionName "11.0"
+        versionCode 12
+        versionName "12.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -81,6 +81,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.android.gms:play-services-ads:18.1.1'
     implementation 'com.facebook.android:audience-network-sdk:5.+'
+    implementation 'com.github.tntkhang:full-screen-image-view-library:1.1.0'
 
     //Payments
     implementation 'com.payumoney.sdkui:plug-n-play:1.5.0'

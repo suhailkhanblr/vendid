@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/products_additional_info_parent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_background"
+    android:paddingStart="@dimen/margin_twelve"
+    android:orientation="vertical"
+    android:paddingEnd="@dimen/margin_twelve">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:clipToPadding="false"
+        android:translationZ="@dimen/default_margin"
+        android:elevation="@dimen/default_margin">
+
+        <ImageView
+            android:id="@+id/close_membership_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:layout_marginTop="@dimen/margin_twelve"
+            android:layout_marginBottom="@dimen/default_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_back" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/membership_title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/membership"
+            android:fontFamily="@font/roboto_regular"
+            android:textStyle="bold"
+            android:textColor="@color/shadow_black"
+            android:textSize="@dimen/text_size_eighteen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/membership_title_separator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_navigation_bar_divider_height"
+            android:layout_marginStart="@dimen/margin_twenty_five"
+            android:layout_marginTop="@dimen/margin_ten"
+            android:layout_marginEnd="@dimen/margin_thirty"
+            android:background="@color/light_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/products_additional_info_title_text_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/membership_recycler_view"
+        android:layout_width="match_parent"
+        android:background="@color/white_background"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

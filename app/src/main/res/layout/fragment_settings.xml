@@ -45,16 +45,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/settings_title_separator">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/profile_icon_image_view"
+        <FrameLayout
             android:layout_width="@dimen/settings_profile_pic_size"
             android:layout_height="@dimen/settings_profile_pic_size"
             android:layout_marginTop="@dimen/margin_twenty_five"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/settings_profile_icon"
-            android:elevation="@dimen/margin_ten" />
+            android:layout_gravity="center_horizontal">
 
-        <androidx.appcompat.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/profile_icon_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/settings_profile_icon"
+                android:elevation="@dimen/margin_ten" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/badge_icon_image_view"
+                android:layout_width="@dimen/dimen_40dp"
+                android:layout_height="@dimen/dimen_40dp"
+                android:src="@drawable/ic_basic_user"
+                android:visibility="gone"
+                android:elevation="@dimen/margin_ten"
+                android:layout_gravity="top|end"/>
+
+        </FrameLayout>
+
+
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/go_premium_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,6 +81,8 @@
             android:textColor="@color/white"
             android:paddingStart="@dimen/margin_fifteen"
             android:paddingEnd="@dimen/margin_fifteen"
+            android:paddingTop="@dimen/margin_ten"
+            android:paddingBottom="@dimen/margin_ten"
             android:textSize="@dimen/text_size_sixteen"
             android:text="@string/premium"
             android:visibility="gone"

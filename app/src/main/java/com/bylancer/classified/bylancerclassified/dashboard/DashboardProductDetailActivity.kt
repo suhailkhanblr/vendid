@@ -568,7 +568,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
     }
 
     override fun onProductBecamePremium(productId: String) {
-        if (!this.isFinishing && productId.equals(mDashboardDetailModel?.productId)) {
+        if (!this.isFinishing && productId.equals(mDashboardDetailModel?.productId, true)) {
             go_premium_ad_button?.visibility = View.GONE
             make_an_offer_text_view?.visibility = View.VISIBLE
         }

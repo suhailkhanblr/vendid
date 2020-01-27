@@ -14,7 +14,6 @@ import com.gmail.samehadar.iosdialog.IOSDialog
 import kotlinx.android.synthetic.main.activity_product_additional_info_webview.*
 
 class ProductAdditionalInfoWebview : BylancerBuilderActivity(), View.OnClickListener {
-    var mProgressDialog: IOSDialog? = null
     var title = ""
 
     override fun setLayoutView() = R.layout.activity_product_additional_info_webview
@@ -26,7 +25,7 @@ class ProductAdditionalInfoWebview : BylancerBuilderActivity(), View.OnClickList
     }
 
     private fun initializeWebView() {
-        val webView = findViewById(R.id.products_additional_info_webview) as WebView
+        val webView = findViewById<WebView>(R.id.products_additional_info_webview)
         var catId = "1"
         var subCatId = "1"
         if (intent != null && intent.getBundleExtra(AppConstants.BUNDLE) != null) {
@@ -43,10 +42,10 @@ class ProductAdditionalInfoWebview : BylancerBuilderActivity(), View.OnClickList
         webView.loadUrl(url)
 
         webView.addJavascriptInterface(this, "AndroidInterface") // To call methods in Android from using js in the html, AndroidInterface.showToast, AndroidInterface.getAndroidVersion etc
-        val webSettings = webView.getSettings()
+        val webSettings = webView.settings
         webSettings.setJavaScriptEnabled(true)
-        webView.setWebViewClient(MyWebViewClient())
-        webView.setWebChromeClient(MyWebChromeClient())
+        webView.webViewClient = MyWebViewClient()
+        webView.webChromeClient = MyWebChromeClient()
     }
 
     private inner class MyWebViewClient : WebViewClient() {
@@ -72,18 +71,6 @@ class ProductAdditionalInfoWebview : BylancerBuilderActivity(), View.OnClickList
                 setResult(Activity.RESULT_OK)
             }
             onBackPressed()
-        }
-    }
-
-    fun showProgressDialog(message: String) {
-        mProgressDialog = Utility.showProgressView(this, message)
-        mProgressDialog?.show()
-    }
-
-    fun dismissProgressDialog() {
-        if (mProgressDialog != null) {
-            mProgressDialog?.dismiss()
-            mProgressDialog = null
         }
     }
 

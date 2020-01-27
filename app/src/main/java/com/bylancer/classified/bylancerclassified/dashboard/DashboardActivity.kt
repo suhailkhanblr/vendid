@@ -63,8 +63,12 @@ class DashboardActivity : BylancerBuilderActivity() {
 
         setUpListeners()
 
-        if (!BuildConfig.VERSION_CODE.toString().equals(SessionState.instance.appVersionFromServer)) {
-            showAppUpgradeAlert()
+        SessionState.instance.appVersionFromServer?.let {
+            try {
+                if (BuildConfig.VERSION_CODE > it.toInt()) {
+                    showAppUpgradeAlert()
+                }
+            } catch (e: NumberFormatException) {}
         }
 
         if (SessionState.instance.isGoogleBannerSupported) {

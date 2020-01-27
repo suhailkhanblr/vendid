@@ -1,7 +1,7 @@
 package com.bylancer.classified.bylancerclassified.webservices
 
-import com.bylancer.classified.bylancerclassified.dashboard.DashboardDetailModel
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigModel
+import com.bylancer.classified.bylancerclassified.dashboard.DashboardDetailModel
 import com.bylancer.classified.bylancerclassified.utils.AppConstants
 import com.bylancer.classified.bylancerclassified.webservices.chat.ChatMessageModel
 import com.bylancer.classified.bylancerclassified.webservices.chat.ChatSentStatus
@@ -9,6 +9,8 @@ import com.bylancer.classified.bylancerclassified.webservices.chat.GroupChatMode
 import com.bylancer.classified.bylancerclassified.webservices.languagepack.LanguagePackModel
 import com.bylancer.classified.bylancerclassified.webservices.login.UserLoginStatus
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferStatus
+import com.bylancer.classified.bylancerclassified.webservices.membership.CurrentUserMembershipPlan
+import com.bylancer.classified.bylancerclassified.webservices.membership.MembershipPlanList
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.AddTokenStatus
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.NotificationCounter
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.NotificationDataModel
@@ -23,13 +25,9 @@ import com.bylancer.classified.bylancerclassified.webservices.transaction.Transa
 import com.bylancer.classified.bylancerclassified.webservices.transaction.TransactionVendorModel
 import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.PostedProductResponseModel
 import com.bylancer.classified.bylancerclassified.webservices.uploadproduct.UploadProductModel
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
-import okhttp3.RequestBody
-import okhttp3.MultipartBody
-import okhttp3.ResponseBody
-import retrofit2.http.POST
-import retrofit2.http.Multipart
 
 interface WebServiceApiInterface {
 
@@ -138,10 +136,25 @@ interface WebServiceApiInterface {
                         @Query("payment_type") location:String,
                         @Query("trans_desc") hidePhone:String): Call<TransactionResponseModel>
 
+
+    @POST(AppConstants.UPLOAD_PRODUCT_PREMIUM_TRANSACTION_URL)
+    fun postPremiumAppTransactionDetail(@Query("name") planName:String,
+                                    @Query("amount") amount:String,
+                                     @Query("user_id") userId: String,
+                                     @Query("sub_id") planId: String,
+                                     @Query("folder") description:String,
+                                     @Query("payment_type") paymentType:String): Call<TransactionResponseModel>
+
     @GET(AppConstants.GET_UNREAD_MESSAGE_COUNT_URL)
     fun getUnReadMessageCount(@Query("user_id") userId:String): Call<NotificationCounter>
 
     @GET(AppConstants.GET_TRANSACTION_VENDOR_CRED_URL)
     fun fetchPaymentVendorCredentials(): Call<TransactionVendorModel>
+
+    @GET(AppConstants.GET_MEMBERSHIP_PLAN_URL)
+    fun fetchMembershipPlan(): Call<MembershipPlanList>
+
+    @GET(AppConstants.GET_USER_MEMBERSHIP_PLAN_URL)
+    fun fetchCurrentUserMembershipPlan(@Query("user_id") userId: String): Call<CurrentUserMembershipPlan>
 
 }

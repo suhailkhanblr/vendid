@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_ten"
+    app:cardBackgroundColor="@color/white_background"
+    app:cardElevation="@dimen/margin_ten">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_ten"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/charges_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_twelve"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:drawablePadding="@dimen/margin_ten"
+            android:drawableStart="@drawable/ic_ok_32"
+            android:text="@string/continue_browsing_path_demo"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/text_size_twenty" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/post_limit_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_twelve"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_gravity="center_horizontal"
+            android:drawablePadding="@dimen/margin_ten"
+            android:drawableStart="@drawable/ic_ok_32"
+            android:text="@string/continue_browsing_path_demo"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/text_size_normal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/ad_expiry_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_twelve"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_gravity="center_horizontal"
+            android:drawablePadding="@dimen/margin_ten"
+            android:drawableStart="@drawable/ic_ok_32"
+            android:text="@string/continue_browsing_path_demo"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/text_size_normal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/featured_fee_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_twelve"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_gravity="center_horizontal"
+            android:drawablePadding="@dimen/margin_ten"
+            android:drawableStart="@drawable/ic_ok_32"
+            android:text="@string/continue_browsing_path_demo"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/text_size_normal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/urgent_fee_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_twelve"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_gravity="center_horizontal"
+            android:drawablePadding="@dimen/margin_ten"
+            android:drawableStart="@drawable/ic_ok_32"
+            android:text="@string/continue_browsing_path_demo"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/text_size_normal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/highlight_ad_fee_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_twelve"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_gravity="center_horizontal"
+            android:drawablePadding="@dimen/margin_ten"
+            android:drawableStart="@drawable/ic_ok_32"
+            android:text="@string/continue_browsing_path_demo"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/text_size_normal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/top_search_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_twelve"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_gravity="center_horizontal"
+            android:drawablePadding="@dimen/margin_ten"
+            android:drawableStart="@drawable/ic_ok_32"
+            android:text="@string/continue_browsing_path_demo"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/text_size_normal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/show_ad_as_premium_on_home_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_twelve"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_gravity="center_horizontal"
+            android:drawablePadding="@dimen/margin_ten"
+            android:drawableStart="@drawable/ic_ok_32"
+            android:text="@string/continue_browsing_path_demo"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/text_size_normal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/show_ad_from_search_on_home_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_twelve"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_gravity="center_horizontal"
+            android:drawablePadding="@dimen/margin_ten"
+            android:drawableStart="@drawable/ic_ok_32"
+            android:text="@string/continue_browsing_path_demo"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/text_size_normal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/upgrade_membership_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/upgrade"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_fifteen"
+            android:layout_marginBottom="@dimen/margin_fifteen"
+            android:textColor="@color/white_color_text"
+            android:fontFamily="@font/museo_bold"
+            android:textSize="@dimen/text_size_sixteen"
+            android:paddingStart="@dimen/margin_fifteen"
+            android:paddingEnd="@dimen/margin_fifteen"
+            android:paddingTop="@dimen/margin_ten"
+            android:paddingBottom="@dimen/margin_ten"
+            android:background="@drawable/rounded_background_premium"/>
+
+        <com.bylancer.classified.bylancerclassified.widgets.CurrentPlanShinnyTextView
+            android:id="@+id/current_plan_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/upgrade"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_fifteen"
+            android:layout_marginBottom="@dimen/margin_fifteen"
+            android:fontFamily="@font/museo_bold"
+            android:visibility="gone"
+            android:textSize="@dimen/text_size_twenty_two"
+            android:paddingStart="@dimen/margin_fifteen"
+            android:paddingEnd="@dimen/margin_fifteen"
+            android:paddingTop="@dimen/margin_ten"
+            android:paddingBottom="@dimen/margin_ten"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

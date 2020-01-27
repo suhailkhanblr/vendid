@@ -20,11 +20,10 @@ import com.bylancer.classified.bylancerclassified.fragments.BylancerBuilderFragm
 import com.bylancer.classified.bylancerclassified.login.LoginActivity
 import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
 import com.bylancer.classified.bylancerclassified.login.TermsAndConditionWebView
-import com.bylancer.classified.bylancerclassified.premium.OnPremiumDoneButtonClicked
-import com.bylancer.classified.bylancerclassified.premium.PremiumAlertDialog
-import com.bylancer.classified.bylancerclassified.premium.PremiumObjectDetails
+import com.bylancer.classified.bylancerclassified.member.MembershipUpgradeViewActivity
 import com.bylancer.classified.bylancerclassified.utils.*
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
+import com.bylancer.classified.bylancerclassified.webservices.membership.CurrentUserMembershipPlan
 import com.bylancer.classified.bylancerclassified.webservices.settings.CityListModel
 import com.bylancer.classified.bylancerclassified.webservices.settings.CountryListModel
 import com.bylancer.classified.bylancerclassified.webservices.settings.ProductUploadProductModel
@@ -50,6 +49,7 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
     val stateList = arrayListOf<StateListModel>()
     val cityList = arrayListOf<CityListModel>()
     val PROFILE_IMAGE_PICKER = "profile_image_picker"
+    var isFromMembershipScreen = false
 
     override fun setLayoutView() = R.layout.fragment_settings
 
@@ -69,16 +69,16 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
             if (!SessionState.instance.profilePicUrl.isNullOrEmpty()) {
                 Glide.with(profile_icon_image_view.context).load(SessionState.instance.profilePicUrl).apply(RequestOptions().circleCrop()).into(profile_icon_image_view);
             }
-            /*if (!SessionState.instance.isUserHasPremiumApp) {
+            if (SessionState.instance.isLoggedIn) {
                 go_premium_button.visibility = View.VISIBLE
-                go_premium_button.text = LanguagePack.getString(getString(R.string.premium))
-            }*/
+                go_premium_button.text = LanguagePack.getString(getString(R.string.membership))
+            }
         } else {
             settings_login_sign_up_text.text = LanguagePack.getString(getString(R.string.login_sign_up))
         }
 
         settings_country_spinner.setHintTextColor(resources.getColor(R.color.light_gray)) //change title of spinner-dialog programmatically
-        if (!AppConstants.EMPTY.equals(SessionState.instance.selectedCountry)) {
+        if (!AppConstants.EMPTY.equals(SessionState.instance.selectedCountry, true)) {
             settings_country_spinner.setText(SessionState.instance.selectedCountry)
         }
         settings_country_spinner.setExpandTint(R.color.transparent)
@@ -146,11 +146,7 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
                     SessionState.instance.selectedCity)
         }
 
-        if (LanguagePack.instance.languagePackData == null) {
-            fetchLanguagePackDetails()
-        } else {
-            initializeLanguagePack()
-        }
+        getUserMembershipPlan()
     }
 
     private fun fetchLanguagePackDetails() {
@@ -198,8 +194,8 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
     }
 
     private fun initializeLanguagePack() {
-        settings_language_spinner.hint = LanguagePack.getString(getString(R.string.select_language))
-        settings_language_spinner.setOnItemClickListener{ position ->
+        settings_language_spinner?.hint = LanguagePack.getString(getString(R.string.select_language))
+        settings_language_spinner?.setOnItemClickListener{ position ->
             if(LanguagePack.instance.languagePackData != null) {
                 SessionState.instance.selectedLanguage = if (LanguagePack.instance.languagePackData?.get(position)?.language != null) LanguagePack.instance.languagePackData?.get(position)?.language!! else ""
                 SessionState.instance.selectedLanguageCode = if (LanguagePack.instance.languagePackData?.get(position)?.languageCode != null) LanguagePack.instance.languagePackData?.get(position)?.languageCode!! else ""
@@ -237,12 +233,12 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
         } else  {
             languageList.add("English")
         }
-        settings_language_spinner.setItems(languageList.toArray(arrayOfNulls<String>(languageList.size))) //this is important, you must set it to set the item list
-        settings_language_spinner.setHintTextColor(resources.getColor(R.color.light_gray))
-        settings_language_spinner.setExpandTint(R.color.transparent)
-        settings_language_spinner.setExpandTint(R.color.transparent)
+        settings_language_spinner?.setItems(languageList.toArray(arrayOfNulls<String>(languageList.size))) //this is important, you must set it to set the item list
+        settings_language_spinner?.setHintTextColor(resources.getColor(R.color.light_gray))
+        settings_language_spinner?.setExpandTint(R.color.transparent)
+        settings_language_spinner?.setExpandTint(R.color.transparent)
 
-        if (settings_country_spinner.text.isNullOrEmpty()) {
+        if (settings_country_spinner?.text.isNullOrEmpty()) {
             fetchCountryList() // To load only first time
         } else {
             AppConfigDetail.loadLocationDetail(mContext)
@@ -379,13 +375,8 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
 
     private fun startPremiumFlow() {
         if (mContext != null) {
-            val premiumDialog = PremiumAlertDialog(mContext!!, getPremiumItemsList(), R.style.premium_dialog)
-            premiumDialog.showDialog(AppConstants.GO_FOR_PREMIUM_APP, object : OnPremiumDoneButtonClicked {
-                override fun onPremiumDoneButtonClicked(totalCost: String, premiumFeatures: Array<String>) {
-                    val title = SessionState.instance.displayName + "_" + SessionState.instance.email
-                   // mActivity?.showPaymentGatewayOptions(title, totalCost, AppConstants.GO_FOR_PREMIUM_APP, null, premiumFeatures)
-                }
-            })
+            isFromMembershipScreen = true
+            startActivity(MembershipUpgradeViewActivity::class.java, false)
         }
     }
 
@@ -558,11 +549,39 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
         }
     }
 
-    private fun getPremiumItemsList() : ArrayList<PremiumObjectDetails> {
-        val list = arrayListOf<PremiumObjectDetails>()
-        list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.no_advertisement_add)), LanguagePack.getString(getString(R.string.no_advertisement_add_description)), AppConstants.PREMIUM_ADS_FREE_COST, canCancelSelection = false, isSelected = true))
-        list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.priority_support)), LanguagePack.getString(getString(R.string.no_advertisement_add_description)), AppConstants.PREMIUM_PRIORITY_SUPPORT_COST, canCancelSelection = false, isSelected = true))
-        list.add(PremiumObjectDetails(LanguagePack.getString(getString(R.string.all_ads_premium)), LanguagePack.getString(getString(R.string.no_advertisement_add_description)), AppConstants.PREMIUM_ALL_ADS_PREMIUM_COST, canCancelSelection = false, isSelected = true))
-        return list
+    private fun getUserMembershipPlan(isLanguageFetchRequired: Boolean = true) {
+        showProgressDialog(LanguagePack.getString(getString(R.string.loading)))
+        RetrofitController.fetchCurrentUserMembershipPlan(object : Callback<CurrentUserMembershipPlan>{
+            override fun onFailure(call: Call<CurrentUserMembershipPlan>?, t: Throwable?) {
+                dismissProgressDialog()
+                if (isLanguageFetchRequired) initLanguagePack()
+            }
+
+            override fun onResponse(call: Call<CurrentUserMembershipPlan>?, response: Response<CurrentUserMembershipPlan>?) {
+                if (response != null && response.isSuccessful && response.body() != null && !response.body().imageUrl.isNullOrEmpty()) {
+                    badge_icon_image_view.visibility = View.VISIBLE
+                    Glide.with(badge_icon_image_view.context).load(response.body().imageUrl).into(badge_icon_image_view)
+                }
+                dismissProgressDialog()
+                if (isLanguageFetchRequired) initLanguagePack()
+            }
+
+        })
+    }
+
+    private fun initLanguagePack() {
+        if (LanguagePack.instance.languagePackData == null) {
+            fetchLanguagePackDetails()
+        } else {
+            initializeLanguagePack()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isFromMembershipScreen) {
+            isFromMembershipScreen != isFromMembershipScreen
+            getUserMembershipPlan(false)
+        }
     }
 }

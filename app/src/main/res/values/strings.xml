@@ -119,6 +119,8 @@
     <string name="english">English</string>
     <string name="rupees">₹</string>
     <string name="premium">Upgrade To Premium</string>
+    <string name="success_upgraded">Successfully Upgraded</string>
+    <string name="membership">Premium Membership</string>
     <string name="premium_dialog_title">Awesome!! You are just one step away from Premium</string>
     <string name="fetch_country">Loading countries..</string>
     <string name="fetch_state">Loading states..</string>
@@ -180,4 +182,16 @@
     <string name="new_version">A new version of the application is available for download. We have fixed few bugs and enhanced user experience. Please click on Upgrade Now button to update the application. It will not change any of your existing information.</string>
     <string name="upgrade">Upgrade Now</string>
     <string name="version_available">New Version Available</string>
+
+    <string name="ad_post_limit">Ad Post Limit %1$s</string>
+    <string name="ad_expiry_in">Ad Expiry in %1$s</string>
+    <string name="ad_featured_fee">Featured Ad fee %1$s</string>
+    <string name="ad_urgent_fee">Urgent Ad fee %1$s</string>
+    <string name="ad_highlighted_fee">Highlight Ad fee %1$s</string>
+    <string name="ad_top_search_result_category">Top in search results and category</string>
+    <string name="ad_show_as_premium_on_home">Show ad on home page premium ad section</string>
+    <string name="ad_show_on_home_as_search_result">Show ad on home page search result</string>
+    <string name="for_text">for</string>
+    <string name="days">days</string>
+    <string name="your_current_plan">Your Current Plan</string>
 </resources>
