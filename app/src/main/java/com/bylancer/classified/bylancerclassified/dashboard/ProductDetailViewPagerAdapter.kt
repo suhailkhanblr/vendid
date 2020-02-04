@@ -8,14 +8,14 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.utils.LanguagePack
 import com.bylancer.classified.bylancerclassified.utils.Utility
-import com.github.tntkhang.fullscreenimageview.library.FullScreenImageViewActivity
+import com.himangi.imagepreview.ImagePreviewActivity
+import com.himangi.imagepreview.PreviewFile
 
 
 class ProductDetailViewPagerAdapter(private val mContext: Context, private val images: List<String>, private val imagePath:String, private val adView: String?) : PagerAdapter() {
@@ -34,17 +34,17 @@ class ProductDetailViewPagerAdapter(private val mContext: Context, private val i
             Glide.with(mContext).load(imagePath + images[position]).apply(RequestOptions().placeholder(Utility.getCircularProgressDrawable(mContext))).into(productImage)
         }
 
-        val fullPathImageList = arrayListOf<String>()
+        val fullPathImageList = arrayListOf<PreviewFile>()
         for (image in images) {
-            fullPathImageList.add(String.format("%s%s", imagePath, image))
+            fullPathImageList.add(PreviewFile(String.format("%s%s", imagePath, image), ""))
         }
 
         val parentLayout = layout.findViewById(R.id.product_detail_image_parent_layout) as FrameLayout
         parentLayout?.context?.let {
             parentLayout?.setOnClickListener { _ ->
-                val fullImageIntent = Intent(it, FullScreenImageViewActivity::class.java)
-                fullImageIntent.putExtra(FullScreenImageViewActivity.URI_LIST_DATA, fullPathImageList)
-                fullImageIntent.putExtra(FullScreenImageViewActivity.IMAGE_FULL_SCREEN_CURRENT_POS, position)
+                val fullImageIntent = Intent(it, ImagePreviewActivity::class.java)
+                fullImageIntent.putExtra(ImagePreviewActivity.IMAGE_LIST, fullPathImageList)
+                fullImageIntent.putExtra(ImagePreviewActivity.CURRENT_ITEM, position)
                 it.startActivity(fullImageIntent)
             }
         }

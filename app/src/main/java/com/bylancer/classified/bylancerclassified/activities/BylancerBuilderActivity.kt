@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.text.HtmlCompat
 import co.paystack.android.Paystack.TransactionCallback
 import co.paystack.android.PaystackSdk
 import co.paystack.android.Transaction
@@ -238,7 +239,8 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         this.mPremiumUpgradeType = upgradeType
         val payUmoneyConfig = PayUmoneyConfig.getInstance()
         payUmoneyConfig.payUmoneyActivityTitle = if (SessionState.instance.appName.isNullOrEmpty()) getString(R.string.app_name) else SessionState.instance.appName
-        payUmoneyConfig.doneButtonText = "Pay " + SessionState.instance.paymentCurrencySign + amount
+        payUmoneyConfig.doneButtonText = "Pay " + HtmlCompat.fromHtml(SessionState.instance.paymentCurrencySign,
+                HtmlCompat.FROM_HTML_MODE_LEGACY) + amount
         if (SessionState.instance.phoneNumber.isNullOrEmpty()) {
             SessionState.instance.phoneNumber = "9999999999"
         }

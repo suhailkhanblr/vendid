@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.text.Html
 import android.text.Spannable
 import android.view.WindowManager
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bylancer.classified.bylancerclassified.R
@@ -93,9 +94,10 @@ class PremiumAlertDialog(context: Context, private val productItemList : ArrayLi
         }
 
         if (totalCost > 0) {
-            val cost = LanguagePack.getString("Total price ${SessionState.instance.paymentCurrencySign}") + "$totalCost"
-            premium_title?.text = Html.fromHtml(LanguagePack.getString(mContext?.getString(R.string.premium_dialog_title)) +
-                    "<br><b><font color=#006400>$cost</font></b>")
+            val cost = LanguagePack.getString("Total price ${HtmlCompat.fromHtml(SessionState.instance.paymentCurrencySign,
+                    HtmlCompat.FROM_HTML_MODE_LEGACY)}") + "$totalCost"
+            premium_title?.text = HtmlCompat.fromHtml(LanguagePack.getString(mContext?.getString(R.string.premium_dialog_title)) +
+                    "<br><b><font color=#006400>$cost</font></b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
         } else {
             premium_title?.text = LanguagePack.getString(mContext?.getString(R.string.premium_dialog_title))
         }

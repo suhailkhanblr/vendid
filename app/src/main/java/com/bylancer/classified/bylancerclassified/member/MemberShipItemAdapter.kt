@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.dashboard.OnProductItemClickListener
@@ -25,7 +26,8 @@ class MemberShipItemAdapter(private val mMembershipPlanItemList : List<Membershi
 
     override fun onBindViewHolder(holder : MembershipPlanItemListHolder, position : Int) {
         val dataModel : MembershipPlan = mMembershipPlanItemList[position]
-        holder.chargesTV?.text = String.format("%s%s / %s",SessionState.instance.paymentCurrencySign, dataModel.cost, dataModel.term)
+        holder.chargesTV?.text = String.format("%s%s / %s",HtmlCompat.fromHtml(SessionState.instance.paymentCurrencySign,
+                HtmlCompat.FROM_HTML_MODE_LEGACY), dataModel.cost, dataModel.term)
         holder.postLimitTV?.context?.let { context ->
             holder.postLimitTV?.text = getSpannableString(LanguagePack.getString(context.getString(R.string.ad_post_limit)), dataModel.limit)
 
