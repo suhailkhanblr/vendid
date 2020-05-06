@@ -638,6 +638,7 @@
                     android:layout_marginTop="@dimen/margin_fifteen"
                     android:background="@color/light_gray_background"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:paddingBottom="@dimen/margin_fifty_six"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/settings_terms_condition_text" />
 

@@ -60,6 +60,7 @@ import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 import java.util.regex.Pattern
 
 
@@ -92,7 +93,11 @@ class Utility {
                 val sbView = snackbar.getView()
                 val textView = sbView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
                 textView?.typeface = ResourcesCompat.getFont(context, R.font.roboto_bold)
-                textView?.gravity = Gravity.CENTER
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    textView?.textAlignment = View.TEXT_ALIGNMENT_CENTER;
+                } else {
+                    textView?.gravity = Gravity.CENTER_HORIZONTAL;
+                }
                 textView?.textSize = 18.0f
                 textView?.setTextColor(context.resources.getColor(R.color.white_color_text))
                 snackbar.show()
@@ -666,5 +671,17 @@ fun getSpannableString(normalString: String?, spannedString: String?): Spannable
     val bss = StyleSpan(Typeface.BOLD)
     sb.setSpan(bss, (normalString.length - 4), str.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     return sb
+}
+
+fun getJsonDataFromAsset(context: Context): String? {
+    val jsonString: String
+    val fileName = "language/all-languages.json"
+    try {
+        jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+    } catch (ioException: IOException) {
+        ioException.printStackTrace()
+        return null
+    }
+    return jsonString
 }
 

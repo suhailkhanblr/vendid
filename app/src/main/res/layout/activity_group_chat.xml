@@ -39,6 +39,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:paddingTop="@dimen/margin_twenty"
+        android:paddingBottom="@dimen/margin_fifty_six"
         app:layout_constraintTop_toBottomOf="@id/group_chat_title_text_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

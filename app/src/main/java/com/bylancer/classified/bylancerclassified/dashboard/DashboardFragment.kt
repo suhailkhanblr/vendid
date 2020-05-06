@@ -233,7 +233,7 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
                 searchItemList.clear()
                 searchItemList.add(DashboardSearchItemModel(LanguagePack.getString("All")))
                 for (subCategoryName in subCategory!!) {
-                    searchItemList.add(DashboardSearchItemModel(LanguagePack.getString(subCategoryName.name!!)))
+                    searchItemList.add(DashboardSearchItemModel(LanguagePack.getString(subCategoryName.name)))
                 }
             }
 

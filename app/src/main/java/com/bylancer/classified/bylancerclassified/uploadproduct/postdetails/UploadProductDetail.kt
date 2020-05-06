@@ -421,8 +421,8 @@ class UploadProductDetail : BylancerBuilderActivity(), View.OnClickListener, BSI
         uploadDataDetailModel.city = cityId
         uploadDataDetailModel.description = upload_detail_enter_description_edit_text.text.toString()
         uploadDataDetailModel.location = upload_detail_enter_country_edit_text.text.toString() + " > " + upload_detail_enter_state_edit_text.text.toString() + " > " + upload_detail_enter_city_edit_text.text.toString()
-        uploadDataDetailModel.hidePhone = if (upload_detail_hide_phone_switch.isChecked) AppConstants.YES else AppConstants.NO
-        uploadDataDetailModel.negotiable = if (upload_detail_is_negotiable_switch.isChecked) AppConstants.YES else AppConstants.NO
+        uploadDataDetailModel.hidePhone = if (upload_detail_hide_phone_switch.isChecked) AppConstants.HIDE_PHONE else AppConstants.HIDE_PHONE_NO
+        uploadDataDetailModel.negotiable = if (upload_detail_is_negotiable_switch.isChecked) AppConstants.IS_NEGOTIABLE_YES else AppConstants.IS_NEGOTIABLE_NO
         uploadDataDetailModel.price = upload_detail_enter_price_edit_text.text.toString()
         uploadDataDetailModel.phone = upload_detail_enter_phone_edit_text.text.toString()
         uploadDataDetailModel.latitude = SessionState.instance.uploadedProductLatitude
@@ -465,11 +465,17 @@ class UploadProductDetail : BylancerBuilderActivity(), View.OnClickListener, BSI
         showProgressDialog("Uploading...")
         var x = 0
         for (uri in selectedImageList) {
-            val file = File(uri.path)
-            if (file != null) {
+            if (uri.path != null) {
+                val file = File(uri.path)
                 val bitmap = BitmapFactory.decodeFile(uri.path)
                 val out = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out) //100-best quality
+                bitmap.compress(
+                        when (file.extension.toLowerCase()) {
+                            "png" -> Bitmap.CompressFormat.PNG
+                            else -> Bitmap.CompressFormat.JPEG
+                        }
+                , 80, out)
+                          //100-best quality
                 val byteArray = out.toByteArray()
                 out.close()
 

@@ -63,7 +63,10 @@ class AppConstants {
         const val PRODUCT_OWNER_NAME = "product_owner_name"
         const val TERMS_CONDITION_TITLE = "terms_condition_title"
         const val TERMS_CONDITION_URL = "terms_condition_url"
-        const val HIDE_PHONE = "yes"
+        const val HIDE_PHONE = "1"
+        const val HIDE_PHONE_NO = "0"
+        const val IS_NEGOTIABLE_NO = "0"
+        const val IS_NEGOTIABLE_YES = "1"
         const val YES = "yes"
         const val NO = "no"
         const val IS_ACTIVE = "1"
@@ -112,7 +115,7 @@ class AppConstants {
         const val ADDITIONAL_INFO_ACTIVITY_TITLE = "ADDITIONAL_INFO_ACTIVITY_TITLE"
         const val DIRECTION_RTL = "rtl"
 
-        const val BANNER_DELAY = 2.0
+        const val BANNER_DELAY = 3.0
         const val INTERSTITIAL_DELAY = 3.0
         const val FACEBOOK_INTERSTITIAL_PLACEMENT = "2244587745860156_2351931271792469"
 

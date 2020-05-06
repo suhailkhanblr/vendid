@@ -161,7 +161,7 @@
                 android:background="@null"
                 android:fontFamily="@font/roboto_regular"
                 android:hint="@string/password"
-                android:imeOptions="actionDone"
+                android:imeOptions="actionNext"
                 android:inputType="textPassword"
                 android:padding="@dimen/margin_fifteen"
                 android:layout_gravity="start"
@@ -175,6 +175,50 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/phone_number_frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/margin_twenty_five"
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/default_margin"
+            app:layout_constraintEnd_toEndOf="@dimen/default_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/register_user_password_frame"
+            android:background="@drawable/rounded_login_edit_text_states"
+            android:orientation="horizontal">
+
+            <com.rilixtech.widget.countrycodepicker.CountryCodePicker
+                android:id="@+id/register_ccp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_ten"
+                app:ccp_backgroundColor="@color/white_background"
+                app:ccp_defaultNameCode="IN"/>
+
+            <EditText
+                android:id="@+id/register_phone_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/mobile"
+                android:imeOptions="actionDone"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/black_color_text"
+                android:inputType="phone"
+                android:layout_gravity="start"
+                android:textAlignment="viewStart"
+                android:textColorHint="@color/gray"
+                android:background="@null"
+                android:textSize="@dimen/text_size_sixteen"
+                android:paddingStart="@dimen/margin_small"
+                android:paddingEnd="@dimen/margin_fifteen"
+                android:paddingTop="@dimen/margin_fifteen"
+                android:paddingBottom="@dimen/margin_fifteen"/>
+
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/register_user_button"
@@ -193,7 +237,7 @@
             android:background="@drawable/rounded_login_button_states"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register_user_password_frame" />
+            app:layout_constraintTop_toBottomOf="@+id/phone_number_frame_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

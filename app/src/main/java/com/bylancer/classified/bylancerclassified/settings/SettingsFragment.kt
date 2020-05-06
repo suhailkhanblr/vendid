@@ -7,15 +7,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import com.android.volley.Request
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.asksira.bsimagepicker.BSImagePicker
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigModel
+import com.bylancer.classified.bylancerclassified.dashboard.DashboardActivity
 import com.bylancer.classified.bylancerclassified.fragments.BylancerBuilderFragment
 import com.bylancer.classified.bylancerclassified.login.LoginActivity
 import com.bylancer.classified.bylancerclassified.login.LoginRequiredActivity
@@ -146,24 +144,18 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
                     SessionState.instance.selectedCity)
         }
 
-        getUserMembershipPlan()
+        if (isAdded && isVisible) getUserMembershipPlan()
     }
 
     private fun fetchLanguagePackDetails() {
-        var mRequestQueue = Volley.newRequestQueue(context)
-
-        //String Request initialized
-        var mStringRequest = StringRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, com.android.volley.Response.Listener<String> { response ->
-            if (context != null) {
-                LanguagePack.instance.saveLanguageData(context!!, response)
+        context?.let {
+            val response = getJsonDataFromAsset(it)
+            if (response != null) {
+                LanguagePack.instance.saveLanguageData(it, response)
                 LanguagePack.instance.setLanguageData(response)
                 initializeLanguagePack()
             }
-        }, com.android.volley.Response.ErrorListener {
-            initializeLanguagePack()
-        })
-
-        mRequestQueue.add(mStringRequest)
+        }
     }
 
     private fun initializeTextViewsWithLanguagePack(languageCode: String?) {
@@ -203,7 +195,7 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
                         SessionState.instance.selectedLanguage)
                 SessionState.instance.saveValuesToPreferences(context!!, AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE_CODE.toString(),
                         SessionState.instance.selectedLanguageCode)
-                if (SessionState.instance.selectedLanguageDirection.equals(LanguagePack.instance.languagePackData?.get(position)?.direction)) {
+                if (SessionState.instance.selectedLanguageDirection.equals(LanguagePack.instance.languagePackData?.get(position)?.direction, true)) {
                     initializeTextViewsWithLanguagePack(SessionState.instance.selectedLanguageCode)
                 } else {
                     SessionState.instance.selectedLanguageDirection = if (LanguagePack.instance.languagePackData?.get(position)?.direction != null) LanguagePack.instance.languagePackData?.get(position)?.direction!! else ""
@@ -213,7 +205,6 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
                         refreshCategoriesWithLanguageCode(SessionState.instance.selectedLanguageCode, true)
                     }
                 }
-
             } else  {
                 SessionState.instance.selectedLanguage = "English"
                 SessionState.instance.saveValuesToPreferences(context!!, AppConstants.Companion.PREFERENCES.SELECTED_LANGUAGE.toString(),
@@ -221,8 +212,8 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
             }
         }
 
-        if (!AppConstants.EMPTY.equals(SessionState.instance.selectedLanguage)) {
-            settings_language_spinner.setText(SessionState.instance.selectedLanguage)
+        if (!AppConstants.EMPTY.equals(SessionState.instance.selectedLanguage, true)) {
+            settings_language_spinner?.setText(SessionState.instance.selectedLanguage)
         }
 
         var languageList = arrayListOf<String?>()
@@ -484,7 +475,8 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
                         AppConfigDetail.initialize(Gson().toJson(appConfigUrl))
                         dismissProgressDialog()
                         if (isRecreateActivityRequired) {
-                            this@SettingsFragment.activity?.recreate()
+                            //this@SettingsFragment.activity?.recreate()
+                            recreateView()
                         }
                     }
                 }
@@ -570,10 +562,12 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
     }
 
     private fun initLanguagePack() {
-        if (LanguagePack.instance.languagePackData == null) {
-            fetchLanguagePackDetails()
-        } else {
-            initializeLanguagePack()
+        if (isAdded && isVisible) {
+            if (LanguagePack.instance.languagePackData == null) {
+                fetchLanguagePackDetails()
+            } else {
+                initializeLanguagePack()
+            }
         }
     }
 
@@ -583,5 +577,10 @@ class SettingsFragment : BylancerBuilderFragment(), View.OnClickListener, BSImag
             isFromMembershipScreen != isFromMembershipScreen
             getUserMembershipPlan(false)
         }
+    }
+
+    private fun recreateView() {
+        startActivity(DashboardActivity::class.java, true)
+        this@SettingsFragment.activity?.finishAffinity()
     }
 }

@@ -187,28 +187,14 @@ class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<
     }
 
     private fun fetchLanguagePackDetails() {
-        var mRequestQueue = Volley.newRequestQueue(this)
-
-        //String Request initialized
-        var mStringRequest = JsonArrayRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, null, com.android.volley.Response.Listener<JSONArray> { response ->
-            if (response != null) {
-                LanguagePack.instance.saveLanguageData(this@LoginActivity, response.toString())
-                LanguagePack.instance.setLanguageData(response.toString())
-                SessionState.instance.isLogin = true
-                SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
-                moveToDashboard()
-            } else {
-                Utility.showSnackBar(login_screen_parent_layout, getString(R.string.internet_issue), this)
-            }
-        }, com.android.volley.Response.ErrorListener {
-            if (Utility.isNetworkAvailable(this@LoginActivity)) {
-                fetchLanguagePackDetails()
-            } else {
-                Utility.showSnackBar(login_screen_parent_layout, getString(R.string.internet_issue), this)
-            }
-        })
-
-        mRequestQueue.add(mStringRequest)
+        val response = getJsonDataFromAsset(this)
+        if (response != null) {
+            LanguagePack.instance.saveLanguageData(this@LoginActivity, response.toString())
+            LanguagePack.instance.setLanguageData(response.toString())
+        }
+        SessionState.instance.isLogin = true
+        SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
+        moveToDashboard()
     }
 
     private fun moveToDashboard() {
@@ -243,7 +229,7 @@ class LoginActivity : BylancerBuilderActivity(), View.OnClickListener, Callback<
     }
 
     private fun loadTermsAndConditionWebView(titleId: Int, url: String) {
-        var bundle = Bundle()
+        val bundle = Bundle()
         bundle.putString(AppConstants.TERMS_CONDITION_TITLE, LanguagePack.getString(getString(titleId)))
         bundle.putString(AppConstants.TERMS_CONDITION_URL, url)
         startActivity(TermsAndConditionWebView ::class.java, false, bundle)

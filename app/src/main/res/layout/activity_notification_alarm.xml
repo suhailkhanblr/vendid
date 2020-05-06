@@ -38,6 +38,7 @@
         android:id="@+id/recycler_view_notification_alarm_message_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:paddingBottom="@dimen/margin_fifty_six"
         app:layout_constraintTop_toBottomOf="@id/notification_alarm_title_separator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

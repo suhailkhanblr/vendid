@@ -11,10 +11,7 @@ import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActi
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigDetail
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigModel
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardActivity
-import com.bylancer.classified.bylancerclassified.utils.AppConstants
-import com.bylancer.classified.bylancerclassified.utils.LanguagePack
-import com.bylancer.classified.bylancerclassified.utils.SessionState
-import com.bylancer.classified.bylancerclassified.utils.Utility
+import com.bylancer.classified.bylancerclassified.utils.*
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.google.gson.Gson
 import org.json.JSONArray
@@ -23,8 +20,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SplashActivity : BylancerBuilderActivity() {
-    private val SLEEP_TIME : Long = 3000L
-
     override fun setLayoutView(): Int {
         return R.layout.activity_splash
     }
@@ -42,11 +37,10 @@ class SplashActivity : BylancerBuilderActivity() {
 
     private fun saveAndLaunchScreen() {
         if (LanguagePack.instance.languagePackData.isNullOrEmpty()
-                || !SessionState.instance.appVersionFromServer.equals(AppConfigDetail.appVersionFromServer)) {
+                || !SessionState.instance.appVersionFromServer.equals(AppConfigDetail.appVersionFromServer, false)) {
             if (!AppConfigDetail.appVersionFromServer.isNullOrEmpty()) {
                 SessionState.instance.saveValuesToPreferences(this, AppConstants.Companion.PREFERENCES.APP_VERSION_FROM_SERVER.toString(), AppConfigDetail.appVersionFromServer)
             }
-
             fetchLanguagePackDetails()
         } else {
             navigateToNextScreen()
@@ -117,26 +111,28 @@ class SplashActivity : BylancerBuilderActivity() {
     }
 
     private fun fetchLanguagePackDetails() {
-        var mRequestQueue = Volley.newRequestQueue(this)
-
+        //var mRequestQueue = Volley.newRequestQueue(this)
+        val response = getJsonDataFromAsset(this)
         //String Request initialized
-        var mStringRequest = JsonArrayRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, null, com.android.volley.Response.Listener<JSONArray> { response ->
+       // var mStringRequest = JsonArrayRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, null, com.android.volley.Response.Listener<JSONArray> { response ->
             if (response != null) {
                 LanguagePack.instance.saveLanguageData(this@SplashActivity, response.toString())
                 LanguagePack.instance.setLanguageData(response.toString())
                 navigateToNextScreen()
+            } else {
+                navigateToNextScreen()
             }
-        }, com.android.volley.Response.ErrorListener {
+        /*}, com.android.volley.Response.ErrorListener {
             navigateToNextScreen()
-            /*if (Utility.isNetworkAvailable(this@SplashActivity)) {
+            *//*if (Utility.isNetworkAvailable(this@SplashActivity)) {
                 fetchLanguagePackDetails()
             } else {
                 Utility.showSnackBar(activity_login_user_parent_layout, getString(R.string.internet_issue), this)
-            }*/
+            }*//*
 
         })
 
-        mRequestQueue.add(mStringRequest)
+        mRequestQueue.add(mStringRequest)*/
     }
 
     private fun navigateToNextScreen() {
@@ -150,5 +146,9 @@ class SplashActivity : BylancerBuilderActivity() {
             startActivity(DashboardActivity :: class.java, false)
         }
         finish()
+    }
+
+    companion object {
+        const val SLEEP_TIME : Long = 3000L
     }
 }
