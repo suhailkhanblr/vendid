@@ -134,6 +134,7 @@
                             android:id="@+id/dashboard_recycler_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/margin_fifty_six"
                             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
                     </LinearLayout>

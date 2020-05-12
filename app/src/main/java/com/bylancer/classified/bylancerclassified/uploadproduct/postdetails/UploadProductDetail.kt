@@ -2,6 +2,8 @@ package com.bylancer.classified.bylancerclassified.uploadproduct.postdetails
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
@@ -40,7 +42,9 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 
 class UploadProductDetail : BylancerBuilderActivity(), View.OnClickListener, BSImagePicker.OnMultiImageSelectedListener, TextWatcher {
     private var googleMap: GoogleMap? = null
@@ -56,7 +60,6 @@ class UploadProductDetail : BylancerBuilderActivity(), View.OnClickListener, BSI
     private var stateCode = ""
     private var cityId = ""
     private var selectedImagesToPost = ""
-    var mProgressDialog: IOSDialog? = null
     val countryList = arrayListOf<CountryListModel>()
     val stateList = arrayListOf<StateListModel>()
     val cityList = arrayListOf<CityListModel>()
@@ -399,18 +402,6 @@ class UploadProductDetail : BylancerBuilderActivity(), View.OnClickListener, BSI
         })
     }
 
-    fun showProgressDialog(message: String) {
-        mProgressDialog = Utility.showProgressView(this, message)
-        mProgressDialog?.show()
-    }
-
-    fun dismissProgressDialog() {
-        if (mProgressDialog != null) {
-            mProgressDialog?.dismiss()
-            mProgressDialog = null
-        }
-    }
-
     private fun showNetworkErrorSnackBar() {
         if (activity_upload_products_parent_layout != null) Utility.showSnackBar(activity_upload_products_parent_layout, "Please check your internet connection", this)
     }
@@ -430,8 +421,8 @@ class UploadProductDetail : BylancerBuilderActivity(), View.OnClickListener, BSI
         uploadDataDetailModel.city = cityId
         uploadDataDetailModel.description = upload_detail_enter_description_edit_text.text.toString()
         uploadDataDetailModel.location = upload_detail_enter_country_edit_text.text.toString() + " > " + upload_detail_enter_state_edit_text.text.toString() + " > " + upload_detail_enter_city_edit_text.text.toString()
-        uploadDataDetailModel.hidePhone = if (upload_detail_hide_phone_switch.isChecked) AppConstants.YES else AppConstants.NO
-        uploadDataDetailModel.negotiable = if (upload_detail_is_negotiable_switch.isChecked) AppConstants.YES else AppConstants.NO
+        uploadDataDetailModel.hidePhone = if (upload_detail_hide_phone_switch.isChecked) AppConstants.HIDE_PHONE else AppConstants.HIDE_PHONE_NO
+        uploadDataDetailModel.negotiable = if (upload_detail_is_negotiable_switch.isChecked) AppConstants.IS_NEGOTIABLE_YES else AppConstants.IS_NEGOTIABLE_NO
         uploadDataDetailModel.price = upload_detail_enter_price_edit_text.text.toString()
         uploadDataDetailModel.phone = upload_detail_enter_phone_edit_text.text.toString()
         uploadDataDetailModel.latitude = SessionState.instance.uploadedProductLatitude
@@ -474,11 +465,23 @@ class UploadProductDetail : BylancerBuilderActivity(), View.OnClickListener, BSI
         showProgressDialog("Uploading...")
         var x = 0
         for (uri in selectedImageList) {
-            val file = File(uri.path)
-            if (file != null) {
-                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+            if (uri.path != null) {
+                val file = File(uri.path)
+                val bitmap = BitmapFactory.decodeFile(uri.path)
+                val out = ByteArrayOutputStream()
+                bitmap.compress(
+                        when (file.extension.toLowerCase()) {
+                            "png" -> Bitmap.CompressFormat.PNG
+                            else -> Bitmap.CompressFormat.JPEG
+                        }
+                , 80, out)
+                          //100-best quality
+                val byteArray = out.toByteArray()
+                out.close()
+
+                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), byteArray)
                 // MultipartBody.Part is used to send also the actual file name
-                val body = MultipartBody.Part.createFormData("fileToUpload", file.getName(), requestFile)
+                val body = MultipartBody.Part.createFormData("fileToUpload", file.name, requestFile)
                 RetrofitController.updateUserPostedProductPic(body, object: Callback<UploadProductModel> {
                     override fun onFailure(call: Call<UploadProductModel>?, t: Throwable?) {
                         if (!this@UploadProductDetail.isFinishing) {
@@ -491,7 +494,7 @@ class UploadProductDetail : BylancerBuilderActivity(), View.OnClickListener, BSI
                         if (!this@UploadProductDetail.isFinishing) {
                             if (response != null && response.isSuccessful) {
                                 val responseBody = response.body()
-                                if (responseBody != null && AppConstants.SUCCESS.equals(responseBody.status)) {
+                                if (responseBody != null && AppConstants.SUCCESS.equals(responseBody.status, true)) {
                                     if (selectedImagesToPost.isNullOrEmpty()) {
                                         selectedImagesToPost = responseBody.url!!
                                     } else {

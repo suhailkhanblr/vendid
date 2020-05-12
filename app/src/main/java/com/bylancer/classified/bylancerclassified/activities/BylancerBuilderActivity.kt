@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.text.HtmlCompat
 import co.paystack.android.Paystack.TransactionCallback
 import co.paystack.android.PaystackSdk
 import co.paystack.android.Transaction
@@ -41,6 +42,7 @@ import com.bylancer.classified.bylancerclassified.webservices.transaction.Transa
 import com.bylancer.classified.bylancerclassified.webservices.transaction.TransactionVendorModel
 import com.bylancer.classified.bylancerclassified.widgets.CustomAlertDialog
 import com.bylancer.classified.bylancerclassified.widgets.ProgressUtils
+import com.gmail.samehadar.iosdialog.IOSDialog
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
@@ -66,6 +68,7 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         const val CARD_DETAILS_REQUEST = 1010
         const val REQUEST_PAY_PAL_CODE_PAYMENT = 2020
     }
+    var mProgressDialog: IOSDialog? = null
     lateinit var mInterstitialAd: InterstitialAd
     private var mPremiumUpgradeType: Int = AppConstants.GO_FOR_PREMIUM_APP
     private var mPayStackTransaction : Transaction? = null
@@ -236,7 +239,8 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         this.mPremiumUpgradeType = upgradeType
         val payUmoneyConfig = PayUmoneyConfig.getInstance()
         payUmoneyConfig.payUmoneyActivityTitle = if (SessionState.instance.appName.isNullOrEmpty()) getString(R.string.app_name) else SessionState.instance.appName
-        payUmoneyConfig.doneButtonText = "Pay " + SessionState.instance.paymentCurrencySign + amount
+        payUmoneyConfig.doneButtonText = "Pay " + HtmlCompat.fromHtml(SessionState.instance.paymentCurrencySign,
+                HtmlCompat.FROM_HTML_MODE_LEGACY) + amount
         if (SessionState.instance.phoneNumber.isNullOrEmpty()) {
             SessionState.instance.phoneNumber = "9999999999"
         }
@@ -313,7 +317,7 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PayUmoneyFlowManager.REQUEST_CODE_PAYMENT && resultCode == Activity.RESULT_OK && data != null) {
 
             val transactionResponse = data.getParcelableExtra<TransactionResponse>(PayUmoneyFlowManager.INTENT_EXTRA_TRANSACTION_RESPONSE)
@@ -322,9 +326,15 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
             if (transactionResponse?.getPayuResponse() != null) {
                 when {
                     transactionResponse.transactionStatus == TransactionResponse.TransactionStatus.SUCCESSFUL -> {
-                        uploadTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, SessionState.instance.userId,
-                                mProductIdForPremium!!, mPremiumFeatures!![0], mPremiumFeatures!![1], mPremiumFeatures!![2], AppConstants.PAY_U_MONEY,
-                                AppConstants.PAYMENT_TYPE_PREMIUM, AppConstants.PAYMENT_TRANSACTION_DETAILS)
+                        if (AppConstants.GO_FOR_PREMIUM_APP == mPremiumUpgradeType) {
+                            if (!mProductTitleForPremium.isNullOrEmpty() && !mProductIdForPremium.isNullOrEmpty()) {
+                                uploadPremiumAppTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, mProductIdForPremium!!, AppConstants.PAY_U_MONEY)
+                            }
+                        } else {
+                            uploadTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, SessionState.instance.userId,
+                                    mProductIdForPremium!!, mPremiumFeatures!![0], mPremiumFeatures!![1], mPremiumFeatures!![2], AppConstants.PAY_U_MONEY,
+                                    AppConstants.PAYMENT_TYPE_PREMIUM, AppConstants.PAYMENT_TRANSACTION_DETAILS)
+                        }
                     }
                     transactionResponse.transactionStatus == TransactionResponse.TransactionStatus.CANCELLED -> showAlert(false)
                     transactionResponse.transactionStatus == TransactionResponse.TransactionStatus.FAILED -> showAlert(false)
@@ -359,9 +369,15 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
                          * For sample mobile backend interactions, see
                          * https://github.com/paypal/rest-api-sdk-python/tree/master/samples/mobile_backend
                          */
-                        uploadTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, SessionState.instance.userId,
-                                mProductIdForPremium!!, mPremiumFeatures!![0], mPremiumFeatures!![1], mPremiumFeatures!![2], AppConstants.PAY_PAL,
-                                AppConstants.PAYMENT_TYPE_PREMIUM, AppConstants.PAYMENT_TRANSACTION_DETAILS)
+                        if (AppConstants.GO_FOR_PREMIUM_APP == mPremiumUpgradeType) {
+                            if (!mProductTitleForPremium.isNullOrEmpty() && !mProductIdForPremium.isNullOrEmpty()) {
+                                uploadPremiumAppTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, mProductIdForPremium!!, AppConstants.PAY_PAL)
+                            }
+                        } else {
+                            uploadTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, SessionState.instance.userId,
+                                    mProductIdForPremium!!, mPremiumFeatures!![0], mPremiumFeatures!![1], mPremiumFeatures!![2], AppConstants.PAY_PAL,
+                                    AppConstants.PAYMENT_TYPE_PREMIUM, AppConstants.PAYMENT_TRANSACTION_DETAILS)
+                        }
                     } catch (e: JSONException) {
                         showAlert(false)
                     }
@@ -383,7 +399,7 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         successOrFailureDialog.setContentView(R.layout.success_dialog)
         successOrFailureDialog.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
         successOrFailureDialog.window?.setBackgroundDrawable(ColorDrawable(resources.getColor(android.R.color.transparent)))
-        successOrFailureDialog.setCanceledOnTouchOutside(true)
+        successOrFailureDialog.setCanceledOnTouchOutside(false)
         successOrFailureDialog.show()
 
         if (!isSuccess) {
@@ -403,6 +419,9 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         okButton.text = LanguagePack.getString(getString(R.string.btn_ok))
         okButton.setOnClickListener {
             successOrFailureDialog.dismiss()
+            if (isSuccess && AppConstants.GO_FOR_PREMIUM_APP == mPremiumUpgradeType) {
+                onProductBecamePremium("")
+            }
         }
 
         successOrFailureDialog.setOnDismissListener {  isPaymentActive = false }
@@ -435,19 +454,21 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         if (!SessionState.instance.isPayPalActive) {
             payPal.visibility = View.GONE
         }
-        payUMoney.setOnClickListener() {
+        payUMoney.setOnClickListener {
             isPaymentActive = true
             paymentGatewayChooserDialog.dismiss()
             launchPayUPaymentFlow(title, amount, upgradeType)
         }
-        payStack.setOnClickListener() {
+        payStack.setOnClickListener {
             isPaymentActive = true
+            this.mPremiumUpgradeType = upgradeType
             PaystackSdk.setPublicKey(mTransactionVendorDetails?.paystackPublicKey)
             paymentGatewayChooserDialog.dismiss()
             startActivityForResult(SubmitCreditCardActivity :: class.java, false, null, CARD_DETAILS_REQUEST)
         }
-        payPal.setOnClickListener() {
+        payPal.setOnClickListener {
             isPaymentActive = true
+            this.mPremiumUpgradeType = upgradeType
             paymentGatewayChooserDialog.dismiss()
             val intent = Intent(this, PayPalService::class.java)
             intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,
@@ -471,6 +492,9 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         val cardExpiry = payStackcard.expiredDate?.split("/")
         val cardBuilder = Card.Builder(payStackcard.cardNumber, cardExpiry?.get(0)?.toInt(), cardExpiry?.get(1)?.toInt(), payStackcard.cvvCode)
         cardBuilder.setName(payStackcard.cardHolder)
+        if (mTransactionAmount.contains(".")) {
+            mTransactionAmount = mTransactionAmount.split(".")[0]
+        }
         charge.amount = mTransactionAmount.toInt()
         charge.currency = SessionState.instance.paymentCurrencyCode
         charge.email = SessionState.instance.email
@@ -491,11 +515,17 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
             override fun onSuccess(transaction : Transaction) {
                 ProgressUtils.cancelLoading()
                 mPayStackTransaction = transaction
-                if (!mProductTitleForPremium.isNullOrEmpty() && !mProductIdForPremium.isNullOrEmpty() &&
-                        !mPremiumFeatures.isNullOrEmpty()) {
-                    uploadTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, SessionState.instance.userId,
-                            mProductIdForPremium!!, mPremiumFeatures!![0], mPremiumFeatures!![1], mPremiumFeatures!![2], AppConstants.PAY_STACK,
-                            AppConstants.PAYMENT_TYPE_PREMIUM, AppConstants.PAYMENT_TRANSACTION_DETAILS)
+                if (AppConstants.GO_FOR_PREMIUM_APP == mPremiumUpgradeType) {
+                    if (!mProductTitleForPremium.isNullOrEmpty() && !mProductIdForPremium.isNullOrEmpty()) {
+                        uploadPremiumAppTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, mProductIdForPremium!!, AppConstants.PAY_STACK)
+                    }
+                } else {
+                    if (!mProductTitleForPremium.isNullOrEmpty() && !mProductIdForPremium.isNullOrEmpty() &&
+                            !mPremiumFeatures.isNullOrEmpty()) {
+                                uploadTransactionDetails(mProductTitleForPremium!!, mTransactionAmount, SessionState.instance.userId,
+                                        mProductIdForPremium!!, mPremiumFeatures!![0], mPremiumFeatures!![1], mPremiumFeatures!![2], AppConstants.PAY_STACK,
+                                        AppConstants.PAYMENT_TYPE_PREMIUM, AppConstants.PAYMENT_TRANSACTION_DETAILS)
+                            }
                 }
                 //new verifyOnServer().execute(transaction.getReference());
             }
@@ -545,7 +575,7 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<TransactionResponseModel>?, response: retrofit2.Response<TransactionResponseModel>?) {
                 if (response != null && response.isSuccessful) {
-                    if (AppConstants.SUCCESS.equals(response.body()?.success)) {
+                    if (AppConstants.SUCCESS.equals(response.body()?.success, true)) {
                         if (mProductIdForPremium != null) {
                             onProductBecamePremium(mProductIdForPremium!!)
                         }
@@ -557,6 +587,27 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
                 } else {
                     uploadTransactionDetails(productName, amount, userId, productId, isFeatured, isUrgent,
                             isHighlighted, folder, paymentType, transactionDetails)
+                }
+            }
+        })
+    }
+
+    private fun uploadPremiumAppTransactionDetails(planName: String, amount: String, subId: String, folder: String) {
+        RetrofitController.postPremiumAppTransactionDetails(planName, amount, SessionState.instance.userId, subId, folder,
+                object : Callback<TransactionResponseModel> {
+            override fun onFailure(call: Call<TransactionResponseModel>?, t: Throwable?) {
+                uploadPremiumAppTransactionDetails(planName, amount, subId, folder)
+            }
+
+            override fun onResponse(call: Call<TransactionResponseModel>?, response: retrofit2.Response<TransactionResponseModel>?) {
+                if (response != null && response.isSuccessful) {
+                    if (AppConstants.SUCCESS.equals(response.body()?.success, true)) {
+                        showAlert(true)
+                    } else {
+                        uploadPremiumAppTransactionDetails(planName, amount, subId, folder)
+                    }
+                } else {
+                    uploadPremiumAppTransactionDetails(planName, amount, subId, folder)
                 }
             }
         })
@@ -601,6 +652,18 @@ abstract class BylancerBuilderActivity : AppCompatActivity() {
         mAdTimer?.purge()
         mAdTimer?.cancel()
         mAdTimer = null
+    }
+
+    fun showProgressDialog(message: String) {
+        mProgressDialog = Utility.showProgressView(this, message)
+        mProgressDialog?.show()
+    }
+
+    fun dismissProgressDialog() {
+        if (mProgressDialog != null) {
+            mProgressDialog?.dismiss()
+            mProgressDialog = null
+        }
     }
 
     override fun onDestroy() {

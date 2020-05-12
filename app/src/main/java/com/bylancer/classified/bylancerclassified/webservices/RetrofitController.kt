@@ -2,6 +2,7 @@ package com.bylancer.classified.bylancerclassified.webservices
 
 import com.bylancer.classified.bylancerclassified.appconfig.AppConfigModel
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardDetailModel
+import com.bylancer.classified.bylancerclassified.utils.AppConstants
 import com.bylancer.classified.bylancerclassified.utils.AppConstants.Companion.BASE_URL
 import com.bylancer.classified.bylancerclassified.utils.SessionState
 import com.bylancer.classified.bylancerclassified.webservices.chat.ChatMessageModel
@@ -12,6 +13,8 @@ import com.bylancer.classified.bylancerclassified.webservices.login.UserLoginDat
 import com.bylancer.classified.bylancerclassified.webservices.login.UserLoginStatus
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferData
 import com.bylancer.classified.bylancerclassified.webservices.makeanoffer.MakeAnOfferStatus
+import com.bylancer.classified.bylancerclassified.webservices.membership.CurrentUserMembershipPlan
+import com.bylancer.classified.bylancerclassified.webservices.membership.MembershipPlanList
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.AddTokenStatus
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.NotificationCounter
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.NotificationDataModel
@@ -217,6 +220,18 @@ class RetrofitController {
             call.enqueue(postedTransactionCallback)
         }
 
+        fun postPremiumAppTransactionDetails(planName: String, amount: String, userId: String, subId: String, folder: String,
+                                             postedTransactionCallback: Callback<TransactionResponseModel>) {
+            val call = webserviceApi.postPremiumAppTransactionDetail(planName,
+                    amount,
+                    userId,
+                    subId,
+                    folder,
+                    AppConstants.PAYMENT_TYPE_APP_PREMIUM)
+            call.enqueue(postedTransactionCallback)
+        }
+
+
         fun fetchNotificationCount(fetchNotificationCountCallBack: Callback<NotificationCounter>) {
             val call = webserviceApi.getUnReadMessageCount(SessionState.instance.userId)
             call.enqueue(fetchNotificationCountCallBack)
@@ -225,6 +240,16 @@ class RetrofitController {
         fun fetchTransactionVendorCredentials(fetchVendorCredentialsCallBack: Callback<TransactionVendorModel>) {
             val call = webserviceApi.fetchPaymentVendorCredentials()
             call.enqueue(fetchVendorCredentialsCallBack)
+        }
+
+        fun fetchMembershipPlan(fetchMemberShipPlan: Callback<MembershipPlanList>) {
+            val call = webserviceApi.fetchMembershipPlan()
+            call.enqueue(fetchMemberShipPlan)
+        }
+
+        fun fetchCurrentUserMembershipPlan(fetchCurrentUserMemberShipPlan: Callback<CurrentUserMembershipPlan>) {
+            val call = webserviceApi.fetchCurrentUserMembershipPlan(SessionState.instance.userId)
+            call.enqueue(fetchCurrentUserMemberShipPlan)
         }
     }
 }

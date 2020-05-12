@@ -81,7 +81,7 @@ class ManualLoginActivity : BylancerBuilderActivity(), View.OnFocusChangeListene
         }
     }
 
-    fun loginUser() {
+    private fun loginUser() {
         Utility.hideKeyboard(this)
         login_sliding_progress_indicator.visibility = View.VISIBLE
         val userLoginData = UserLoginData()
@@ -129,28 +129,14 @@ class ManualLoginActivity : BylancerBuilderActivity(), View.OnFocusChangeListene
     }
 
     private fun fetchLanguagePackDetails() {
-        var mRequestQueue = Volley.newRequestQueue(this)
-
-        //String Request initialized
-        var mStringRequest = JsonArrayRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, null, com.android.volley.Response.Listener<JSONArray> { response ->
-            if (response != null) {
-                LanguagePack.instance.saveLanguageData(this@ManualLoginActivity, response.toString())
-                LanguagePack.instance.setLanguageData(response.toString())
-                SessionState.instance.isLogin = true
-                SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
-                moveToDashboard()
-            } else {
-                Utility.showSnackBar(activity_login_user_parent_layout, getString(R.string.internet_issue), this)
-            }
-        }, com.android.volley.Response.ErrorListener {
-            if (Utility.isNetworkAvailable(this@ManualLoginActivity)) {
-                fetchLanguagePackDetails()
-            } else {
-                Utility.showSnackBar(activity_login_user_parent_layout, getString(R.string.internet_issue), this)
-            }
-        })
-
-        mRequestQueue.add(mStringRequest)
+        val response = getJsonDataFromAsset(this)
+        if (response != null) {
+            LanguagePack.instance.saveLanguageData(this@ManualLoginActivity, response.toString())
+            LanguagePack.instance.setLanguageData(response.toString())
+        }
+        SessionState.instance.isLogin = true
+        SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
+        moveToDashboard()
     }
 
     private fun moveToDashboard() {

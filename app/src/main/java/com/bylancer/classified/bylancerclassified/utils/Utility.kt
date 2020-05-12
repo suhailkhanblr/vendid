@@ -8,27 +8,24 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.Settings
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import androidx.core.widget.NestedScrollView
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.telephony.TelephonyManager
 import android.text.Html
 import android.text.Layout.JUSTIFICATION_MODE_INTER_WORD
+import android.text.Spannable
+import android.text.SpannableStringBuilder
 import android.text.TextUtils
+import android.text.style.StyleSpan
 import android.util.Patterns
 import android.view.Gravity
 import android.view.View
@@ -42,6 +39,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.NestedScrollView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.agrawalsuneet.dotsloader.loaders.SlidingLoader
 import com.asksira.bsimagepicker.BSImagePicker
 import com.asksira.bsimagepicker.Utils
@@ -52,9 +56,11 @@ import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.notificationmessage.AddTokenStatus
 import com.bylancer.classified.bylancerclassified.widgets.CustomAlertDialog
 import com.gmail.samehadar.iosdialog.IOSDialog
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 import java.util.regex.Pattern
 
 
@@ -87,7 +93,11 @@ class Utility {
                 val sbView = snackbar.getView()
                 val textView = sbView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
                 textView?.typeface = ResourcesCompat.getFont(context, R.font.roboto_bold)
-                textView?.gravity = Gravity.CENTER
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    textView?.textAlignment = View.TEXT_ALIGNMENT_CENTER;
+                } else {
+                    textView?.gravity = Gravity.CENTER_HORIZONTAL;
+                }
                 textView?.textSize = 18.0f
                 textView?.setTextColor(context.resources.getColor(R.color.white_color_text))
                 snackbar.show()
@@ -572,7 +582,11 @@ fun Context.getPremiumAdItemsList() : ArrayList<PremiumObjectDetails> {
 }
 
 fun Context.showToast(message: String?) {
-    Toast.makeText(this, message ?: LanguagePack.getString(getString(R.string.some_wrong)), Toast.LENGTH_LONG).show()
+    Toast.makeText(this,
+            if (!isInternetAvailable()) getString(R.string.internet_issue) else message ?:
+            LanguagePack.getString(getString(R.string.some_wrong)),
+            Toast.LENGTH_LONG)
+            .show()
 }
 
 fun Context.calculateNoOfColumns(columnWidthDp: Float): Int {
@@ -615,5 +629,59 @@ fun isNumber(value: String): Boolean {
     } catch (e: NumberFormatException) { isNumber = false}
 
     return isNumber
+}
+
+@Suppress("DEPRECATION")
+fun Context.isInternetAvailable(): Boolean {
+    var result = false
+    val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val networkCapabilities = connectivityManager.activeNetwork ?: return false
+        val actNw =
+                connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+        result = when {
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+    } else {
+        connectivityManager.run {
+            connectivityManager.activeNetworkInfo?.run {
+                result = when (type) {
+                    ConnectivityManager.TYPE_WIFI -> true
+                    ConnectivityManager.TYPE_MOBILE -> true
+                    ConnectivityManager.TYPE_ETHERNET -> true
+                    else -> false
+                }
+
+            }
+        }
+    }
+
+    return result
+}
+
+fun getSpannableString(normalString: String?, spannedString: String?): SpannableStringBuilder {
+    if (normalString.isNullOrEmpty() || spannedString.isNullOrEmpty()) {
+        return SpannableStringBuilder("")
+    }
+    val str = String.format(normalString, spannedString)
+    val sb = SpannableStringBuilder(str)
+    val bss = StyleSpan(Typeface.BOLD)
+    sb.setSpan(bss, (normalString.length - 4), str.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    return sb
+}
+
+fun getJsonDataFromAsset(context: Context): String? {
+    val jsonString: String
+    val fileName = "language/all-languages.json"
+    try {
+        jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+    } catch (ioException: IOException) {
+        ioException.printStackTrace()
+        return null
+    }
+    return jsonString
 }
 

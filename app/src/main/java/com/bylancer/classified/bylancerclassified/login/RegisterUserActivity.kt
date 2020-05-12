@@ -12,6 +12,8 @@ import com.android.volley.toolbox.Volley
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.activities.BylancerBuilderActivity
 import com.bylancer.classified.bylancerclassified.dashboard.DashboardActivity
+import com.bylancer.classified.bylancerclassified.helper.OnOTPResponse
+import com.bylancer.classified.bylancerclassified.helper.PhoneNumberAuthHelper
 import com.bylancer.classified.bylancerclassified.utils.*
 import com.bylancer.classified.bylancerclassified.webservices.RetrofitController
 import com.bylancer.classified.bylancerclassified.webservices.registration.UserRegistrationData
@@ -39,7 +41,8 @@ class RegisterUserActivity : BylancerBuilderActivity(), View.OnFocusChangeListen
         register_email_id_edit_text.addTextChangedListener(this)
         register_username_edit_text.addTextChangedListener(this)
         register_user_password_edit_text.addTextChangedListener(this)
-        register_user_password_edit_text.setOnFocusChangeListener(this)
+        register_user_password_edit_text.onFocusChangeListener = this
+        //register_ccp.registerPhoneNumberTextView(register_phone_edit_text)
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -89,8 +92,16 @@ class RegisterUserActivity : BylancerBuilderActivity(), View.OnFocusChangeListen
                     Utility.showSnackBar(activity_register_user_parent_layout, LanguagePack.getString("Please enter correct Email id"), this)
                 } else if (register_user_password_edit_text.text.toString().length < 6) {
                     Utility.showSnackBar(activity_register_user_parent_layout, LanguagePack.getString("Please enter minimum 6 characters of Password"), this)
-                } else {
+                }/* else if (register_phone_edit_text.text.toString().length < 6) {
+                    Utility.showSnackBar(activity_register_user_parent_layout, LanguagePack.getString("Please enter correct phone number"), this)
+                } */else {
                     registerUser()
+                    /*PhoneNumberAuthHelper.startPhoneNumberVerification("+919962909777", object : OnOTPResponse {
+                        override fun onOTPResponse(code: Int) {
+
+                        }
+
+                    }, this@RegisterUserActivity)*/
                 }
             }
         }
@@ -143,28 +154,14 @@ class RegisterUserActivity : BylancerBuilderActivity(), View.OnFocusChangeListen
     }
 
     private fun fetchLanguagePackDetails() {
-        var mRequestQueue = Volley.newRequestQueue(this)
-
-        //String Request initialized
-        var mStringRequest = JsonArrayRequest(Request.Method.GET, AppConstants.BASE_URL + AppConstants.FETCH_LANGUAGE_PACK_URL, null, com.android.volley.Response.Listener<JSONArray> { response ->
-            if (response != null) {
-                LanguagePack.instance.saveLanguageData(this@RegisterUserActivity, response.toString())
-                LanguagePack.instance.setLanguageData(response.toString())
-                SessionState.instance.isLogin = true
-                SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
-                moveToDashboard()
-            } else {
-                Utility.showSnackBar(activity_register_user_parent_layout, getString(R.string.internet_issue), this)
-            }
-        }, com.android.volley.Response.ErrorListener {
-            if (Utility.isNetworkAvailable(this@RegisterUserActivity)) {
-                fetchLanguagePackDetails()
-            } else {
-                Utility.showSnackBar(activity_register_user_parent_layout, getString(R.string.internet_issue), this)
-            }
-        })
-
-        mRequestQueue.add(mStringRequest)
+        val response = getJsonDataFromAsset(this)
+        if (response != null) {
+            LanguagePack.instance.saveLanguageData(this@RegisterUserActivity, response.toString())
+            LanguagePack.instance.setLanguageData(response.toString())
+        }
+        SessionState.instance.isLogin = true
+        SessionState.instance.saveBooleanToPreferences(this, AppConstants.Companion.PREFERENCES.LOGIN_STATUS.toString(), true)
+        moveToDashboard()
     }
 
     private fun moveToDashboard() {

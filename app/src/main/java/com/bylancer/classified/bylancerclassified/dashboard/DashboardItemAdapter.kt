@@ -26,16 +26,14 @@ import com.bylancer.classified.bylancerclassified.webservices.productlist.Produc
 class DashboardItemAdapter(private val dashboardItemList : List<ProductsData>, private val onProductItemClickListener: OnProductItemClickListener, private val isFromMyProduct: Boolean = false) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        var holder : RecyclerView.ViewHolder? = null
-        when (DashboardItemTypes.getByVal(viewType)) {
+        return when (DashboardItemTypes.getByVal(viewType)) {
             DashboardItemTypes.TOP_LAYOUT -> {
-                holder = DashboardTopLayoutItem(R.layout.dashboard_top_item_layout, parent)
+                DashboardTopLayoutItem(R.layout.dashboard_top_item_layout, parent)
             }
             DashboardItemTypes.LIST_ITEM -> {
-                holder = DashboardListItemLayoutItem(R.layout.dashboard_top_picks_item_layout, parent)
+                DashboardListItemLayoutItem(R.layout.dashboard_top_picks_item_layout, parent)
             }
         }
-        return holder!!
     }
 
     override fun getItemCount(): Int {
@@ -43,7 +41,7 @@ class DashboardItemAdapter(private val dashboardItemList : List<ProductsData>, p
     }
 
     override fun onBindViewHolder(holder : RecyclerView.ViewHolder, position : Int) {
-        val dataModel : ProductsData = dashboardItemList.get(position)
+        val dataModel : ProductsData = dashboardItemList[position]
         when(DashboardItemTypes.getByVal(dataModel.itemType)) {
             DashboardItemTypes.TOP_LAYOUT -> {
                 val dashboardTopLayoutItem : DashboardTopLayoutItem =  holder as DashboardTopLayoutItem
@@ -63,15 +61,15 @@ class DashboardItemAdapter(private val dashboardItemList : List<ProductsData>, p
                 if (dataModel.currency != null) {
                     symbol = Utility.decodeUnicode(dataModel.currency!!)
                 }
-                if (AppConstants.CURRENCY_IN_LEFT.equals(dataModel.currencyInLeft)) {
-                    dashboardListItemLayout.listItemPrice!!.text  = symbol + dataModel.price
+                if (AppConstants.CURRENCY_IN_LEFT.equals(dataModel.currencyInLeft, true)) {
+                    dashboardListItemLayout.listItemPrice!!.text  = String.format("%s%s",symbol, dataModel.price)
                 } else {
-                    dashboardListItemLayout.listItemPrice!!.text  = dataModel.price + symbol
+                    dashboardListItemLayout.listItemPrice!!.text  = String.format("%s%s",dataModel.price, symbol)
                 }
 
                 dashboardListItemLayout.dashboardItemUrgentTagTextView?.visibility = View.GONE
 
-                if (AppConstants.IS_ACTIVE.equals(dataModel.featured)) {
+                if (AppConstants.IS_ACTIVE.equals(dataModel.featured, true)) {
                     dashboardListItemLayout.dashboardItemFeaturedTagTextView?.visibility = View.VISIBLE
                     dashboardListItemLayout.dashboardItemFeaturedTagTextView?.text = LanguagePack.getString("Featured")
                     dashboardListItemLayout.dashboardItemFeaturedTagTextView?.setBackgroundColor(getColor(dashboardListItemLayout.dashboardItemFeaturedTagTextView?.resources, R.color.new_ui_red_background)!!)
@@ -79,7 +77,7 @@ class DashboardItemAdapter(private val dashboardItemList : List<ProductsData>, p
                     dashboardListItemLayout.dashboardItemFeaturedTagTextView?.visibility = View.GONE
                 }
 
-                if (AppConstants.IS_ACTIVE.equals(dataModel.urgent)) {
+                if (AppConstants.IS_ACTIVE.equals(dataModel.urgent, true)) {
                     if (dashboardListItemLayout.dashboardItemFeaturedTagTextView?.text!!.isEmpty()) {
                         dashboardListItemLayout.dashboardItemFeaturedTagTextView?.visibility = View.VISIBLE
                         dashboardListItemLayout.dashboardItemFeaturedTagTextView?.setBackgroundColor(getColor(dashboardListItemLayout.dashboardItemFeaturedTagTextView?.resources, R.color.denied_red)!!)
@@ -98,7 +96,7 @@ class DashboardItemAdapter(private val dashboardItemList : List<ProductsData>, p
                     dashboardListItemLayout.dashboardItemFeaturedTagTextView?.visibility = View.GONE
                 }
 
-                if (AppConstants.IS_ACTIVE.equals(dataModel.highlight)) {
+                if (AppConstants.IS_ACTIVE.equals(dataModel.highlight, true)) {
                     dashboardListItemLayout.dashboardItemCardView?.background = ContextCompat.getDrawable(dashboardListItemLayout.dashboardFeaturedItemParentLayout?.context!!, R.drawable.layout_shadow)
                     dashboardListItemLayout.dashboardFeaturedItemParentLayout?.setBackgroundColor(getColor(dashboardListItemLayout.dashboardFeaturedItemParentLayout?.resources, R.color.swipe_refresh_orange)!!)
                     dashboardListItemLayout.listItemDescription?.setTextColor(getColor(dashboardListItemLayout.dashboardFeaturedItemParentLayout?.resources, R.color.list_drawer_background_pressed)!!)
@@ -120,7 +118,7 @@ class DashboardItemAdapter(private val dashboardItemList : List<ProductsData>, p
                     dashboardListItemLayout.listItemDistance?.setTypeface(getNormalTypeFace(dashboardListItemLayout.listItemDistance?.context!!), Typeface.NORMAL)
                 }
 
-                if (isFromMyProduct && !AppConstants.PRODUCT_ACTIVE.equals(dataModel?.status)) {
+                if (isFromMyProduct && !AppConstants.PRODUCT_ACTIVE.equals(dataModel.status, true)) {
                     holder.dashboardItemStatusTextView?.visibility = View.VISIBLE
                     holder.dashboardItemStatusTextView?.text = LanguagePack.getString("Pending")
                 } else {
@@ -129,9 +127,7 @@ class DashboardItemAdapter(private val dashboardItemList : List<ProductsData>, p
 
                 Glide.with(dashboardListItemLayout.listItemImageView!!.context).load(dataModel.picture).apply(RequestOptions().fitCenter()).into(dashboardListItemLayout.listItemImageView!!)
                 dashboardListItemLayout.itemView.setOnClickListener {
-                    if(onProductItemClickListener != null) {
-                        onProductItemClickListener.onProductItemClicked(dataModel.id, dataModel.productName, dataModel.username)
-                    }
+                    onProductItemClickListener?.onProductItemClicked(dataModel.id, dataModel.productName, dataModel.username)
                 }
 
             }
@@ -177,9 +173,9 @@ class DashboardItemAdapter(private val dashboardItemList : List<ProductsData>, p
         }
     }
 
-    enum class DashboardItemTypes private constructor(val type: Int) {
+    enum class DashboardItemTypes constructor(val type: Int) {
         TOP_LAYOUT(0),
-        LIST_ITEM(1) {};
+        LIST_ITEM(1);
 
         companion object {
             internal fun getByVal(type : Int) : DashboardItemTypes {

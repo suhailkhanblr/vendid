@@ -46,25 +46,28 @@ class DashboardActivity : BylancerBuilderActivity() {
     val MY_PERMISSIONS_REQUEST_LOCATION = 88
     private var mChatBadgeTextView: AppCompatTextView? = null
     private var mNotificationBadgeTextView: AppCompatTextView? = null
+    private lateinit var mBottomNavigationView: BottomNavigationView
 
     override fun setLayoutView() = R.layout.activity_dashboard
 
     override fun initialize(savedInstanceState: Bundle?) {
-        disableShiftMode(bottom_navigation_menu)
+        mBottomNavigationView = findViewById(R.id.bottom_navigation_menu)
+        disableShiftMode(mBottomNavigationView)
         if (SessionState.instance.selectedCountryCode.isNullOrEmpty()) {
             SessionState.instance.selectedCountryCode = getCurrentCountry()
         }
 
         commitFragment(0)
-
         Utility.checkLocationAndPhonePermission(MY_PERMISSIONS_REQUEST_LOCATION, this)
-
         initializeNotification()
-
         setUpListeners()
 
-        if (!BuildConfig.VERSION_CODE.toString().equals(SessionState.instance.appVersionFromServer)) {
-            showAppUpgradeAlert()
+        SessionState.instance.appVersionFromServer?.let {
+            try {
+                if (BuildConfig.VERSION_CODE > it.toInt()) {
+                    showAppUpgradeAlert()
+                }
+            } catch (e: NumberFormatException) {}
         }
 
         if (SessionState.instance.isGoogleBannerSupported) {
@@ -79,7 +82,7 @@ class DashboardActivity : BylancerBuilderActivity() {
             bylancer_ad_view_layout.visibility = View.GONE
         }
 
-        bottom_navigation_menu.setOnNavigationItemSelectedListener {
+        mBottomNavigationView.setOnNavigationItemSelectedListener {
             menuItem ->
                 if (menuItem.itemId != R.id.action_upload_product) {
                     menuItem.isChecked = true
@@ -99,12 +102,8 @@ class DashboardActivity : BylancerBuilderActivity() {
                         true
                     }
                     R.id.action_upload_product -> {
-                        if (SessionState.instance.isLoggedIn) {
-                            startActivity(UploadCategorySelectionActivity::class.java, false)
-                        } else  {
-                            startActivity(LoginRequiredActivity::class.java, false)
-                        }
-                        true
+                        startUploadScreen()
+                        false
                     }
                     R.id.action_chat -> {
                         removeBadgeFromIcon(3)
@@ -128,6 +127,18 @@ class DashboardActivity : BylancerBuilderActivity() {
                         true
                     }
         }}
+
+        start_upload_button.setOnClickListener {
+            startUploadScreen()
+        }
+    }
+
+    private fun startUploadScreen() {
+        if (SessionState.instance.isLoggedIn) {
+            startActivity(UploadCategorySelectionActivity::class.java, false)
+        } else  {
+            startActivity(LoginRequiredActivity::class.java, false)
+        }
     }
 
     private fun initializeNotification() {
@@ -244,7 +255,7 @@ class DashboardActivity : BylancerBuilderActivity() {
             }
         }
         val delay = (1000 * 60 * AppConstants.BANNER_DELAY)
-        timer.schedule(bannerTask, 0L, delay.toLong())
+        timer.schedule(bannerTask, delay.toLong(), delay.toLong())
     }
 
     private fun loadBannerAd() {
@@ -304,7 +315,7 @@ class DashboardActivity : BylancerBuilderActivity() {
     }
 
     private fun showBadgeOnIcon(index: Int, count: String) {
-        val bottomNavigationMenuView = bottom_navigation_menu?.getChildAt(0) as BottomNavigationMenuView
+        val bottomNavigationMenuView = mBottomNavigationView?.getChildAt(0) as BottomNavigationMenuView
         val itemView = bottomNavigationMenuView?.getChildAt(index) as BottomNavigationItemView
         val badge = LayoutInflater.from(this).inflate(R.layout.badge_layout, itemView, true)
         val badgeTextView = badge.findViewById<AppCompatTextView>(R.id.notifications_badge)

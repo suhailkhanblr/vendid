@@ -21,7 +21,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LanguageSelectionActivity : BylancerBuilderActivity(), LanguageSelection {
-    var mProgressDialog: IOSDialog? = null
 
     override fun setLayoutView() = R.layout.activity_language_selection
 
@@ -64,25 +63,12 @@ class LanguageSelectionActivity : BylancerBuilderActivity(), LanguageSelection {
                     val appConfigUrl: AppConfigModel = response.body()!!
                     AppConfigDetail.saveAppConfigData(this@LanguageSelectionActivity, Gson().toJson(appConfigUrl))
                     AppConfigDetail.initialize(Gson().toJson(appConfigUrl))
+                    startActivity(DashboardActivity :: class.java, false)
                 }
                 dismissProgressDialog()
             }
 
         })
-    }
-
-    private fun showProgressDialog(message: String) {
-        mProgressDialog = Utility.showProgressView(this@LanguageSelectionActivity, message)
-        mProgressDialog?.show()
-    }
-
-    private fun dismissProgressDialog() {
-        if (mProgressDialog != null) {
-            mProgressDialog?.dismiss()
-            mProgressDialog = null
-            startActivity(DashboardActivity :: class.java, false)
-            finish()
-        }
     }
 }
 

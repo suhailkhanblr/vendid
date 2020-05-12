@@ -209,7 +209,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
         product_detail_description_detail.text = descriptionHtmlSpan
 
         product_detail_product_status_desc.text = dashboardDetailModel.status
-        product_detail_phone_number_desc.text = if(AppConstants.HIDE_PHONE.equals(dashboardDetailModel.hidePhone)) dashboardDetailModel.phone else getString(R.string.hidden)
+        product_detail_phone_number_desc.text = if(AppConstants.NO.equals(dashboardDetailModel.hidePhone, true)) dashboardDetailModel.phone else getString(R.string.hidden)
         product_detail_posted_by_desc.text = dashboardDetailModel.sellerName
         phoneNumber = dashboardDetailModel.phone
         ownerEmail = dashboardDetailModel.sellerEmail
@@ -335,11 +335,12 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             }
             R.id.product_detail_screen_call -> {
                 if (SessionState.instance.isLoggedIn) {
-                    if(!phoneNumber.isNullOrEmpty() && checkLocationPermission()) {
+                    if(!phoneNumber.isNullOrEmpty() && checkLocationPermission()
+                            && AppConstants.NO.equals(mDashboardDetailModel?.hidePhone, true)) {
                         val intent = Intent(Intent.ACTION_CALL)
                         intent.data = Uri.parse("tel:" + phoneNumber)
                         startActivity(intent)
-                    }  else if (phoneNumber.isNullOrEmpty()){
+                    }  else {
                         Utility.showSnackBar(dashboard_product_detail_parent_layout, getString(R.string.phone_number_undefined), this@DashboardProductDetailActivity)
                     }
                 } else {
@@ -348,7 +349,8 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
             }
             R.id.product_detail_screen_sms -> {
                 if (SessionState.instance.isLoggedIn) {
-                    if (!phoneNumber.isNullOrEmpty()) {
+                    if (!phoneNumber.isNullOrEmpty()
+                            && AppConstants.NO.equals(mDashboardDetailModel?.hidePhone, true)) {
                         startActivityForResult(Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNumber, null)), 0)
                     } else {
                         Utility.showSnackBar(dashboard_product_detail_parent_layout, getString(R.string.phone_number_undefined), this@DashboardProductDetailActivity)
@@ -568,7 +570,7 @@ class DashboardProductDetailActivity: BylancerBuilderActivity(), Callback<Dashbo
     }
 
     override fun onProductBecamePremium(productId: String) {
-        if (!this.isFinishing && productId.equals(mDashboardDetailModel?.productId)) {
+        if (!this.isFinishing && productId.equals(mDashboardDetailModel?.productId, true)) {
             go_premium_ad_button?.visibility = View.GONE
             make_an_offer_text_view?.visibility = View.VISIBLE
         }

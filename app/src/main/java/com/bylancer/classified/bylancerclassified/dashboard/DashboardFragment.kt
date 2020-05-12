@@ -163,7 +163,6 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
         dashboard_recycler_view.isNestedScrollingEnabled = false
         dashboard_recycler_view.itemAnimator = DefaultItemAnimator()
         dashboard_recycler_view.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation)
-        dashboard_recycler_view.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, (0 * resources.displayMetrics.density).roundToInt(), true))
     }
 
     private fun showItemSearchBar() {
@@ -234,7 +233,7 @@ class DashboardFragment : BylancerBuilderFragment(), Callback<List<ProductsData>
                 searchItemList.clear()
                 searchItemList.add(DashboardSearchItemModel(LanguagePack.getString("All")))
                 for (subCategoryName in subCategory!!) {
-                    searchItemList.add(DashboardSearchItemModel(LanguagePack.getString(subCategoryName.name!!)))
+                    searchItemList.add(DashboardSearchItemModel(LanguagePack.getString(subCategoryName.name)))
                 }
             }
 

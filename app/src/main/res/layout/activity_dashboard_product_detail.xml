@@ -240,14 +240,14 @@
 
                         <ImageView
                             android:id="@+id/product_detail_share_image_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/share_icon_size"
+                            android:layout_height="@dimen/share_icon_size"
                             android:layout_marginEnd="25dp"
                             android:onClick="onClick"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/product_detail_favorite_image_view"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/ic_share" />
+                            android:src="@drawable/ic_share_detail" />
 
                         <ImageView
                             android:id="@+id/product_detail_warning_image_view"

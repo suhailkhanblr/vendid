@@ -40,7 +40,10 @@ class AppConstants {
         const val UPLOAD_PRODUCT_PREMIUM_TRANSACTION_URL = "api/v1/index.php?action=payment_success_saving"
         const val GET_UNREAD_MESSAGE_COUNT_URL = "api/v1/index.php?action=unread_note_chat_count"
         const val GET_TRANSACTION_VENDOR_CRED_URL = "api/v1/index.php?action=payment_api_detail_config"
+        const val GET_MEMBERSHIP_PLAN_URL = "api/v1/index.php?action=get_membership_plan"
+        const val GET_USER_MEMBERSHIP_PLAN_URL = "api/v1/index.php?action=get_userMembership_by_id"
         const val UPLOAD_PRODUCT_ADDITIONAL_INFO_URL = BASE_URL + "api/v1/?action=getCustomFieldByCatID&catid=%s&subcatid=%s&additionalinfo=%s"
+        const val MEMBERSHIP_URL = BASE_URL + "membership/changeplan?username=%s&password=%s&isApp=%s"
         const val FLAG_IMAGE_URL = "https://www.countryflags.io/%s/flat/64.png"
         const val IS_ADMIN_APP = false
         const val IS_APP_CONFIG_RELOAD_REQUIRED = true // UPDATE IT TO FALSE IF YOU DON'T WANT TO RELOAD YOUR CATEGORIES EVERY LAUNCH
@@ -60,7 +63,10 @@ class AppConstants {
         const val PRODUCT_OWNER_NAME = "product_owner_name"
         const val TERMS_CONDITION_TITLE = "terms_condition_title"
         const val TERMS_CONDITION_URL = "terms_condition_url"
-        const val HIDE_PHONE = "yes"
+        const val HIDE_PHONE = "1"
+        const val HIDE_PHONE_NO = "0"
+        const val IS_NEGOTIABLE_NO = "0"
+        const val IS_NEGOTIABLE_YES = "1"
         const val YES = "yes"
         const val NO = "no"
         const val IS_ACTIVE = "1"
@@ -95,6 +101,9 @@ class AppConstants {
         const val PREMIUM_ADS_HIGHLIGHTED_COST = 1
         //COSTING ENDS
 
+        const val SELECTED = 1
+        const val UNSELECTED = 0
+
         const val IMAGE_PICKER_FRAGMENT = "picker"
         const val SELECTED_CATEGORY_POSITION = "selected_category_position"
         const val SELECTED_SUB_CATEGORY_ID = "selected_sub_category_id"
@@ -106,7 +115,7 @@ class AppConstants {
         const val ADDITIONAL_INFO_ACTIVITY_TITLE = "ADDITIONAL_INFO_ACTIVITY_TITLE"
         const val DIRECTION_RTL = "rtl"
 
-        const val BANNER_DELAY = 2.0
+        const val BANNER_DELAY = 3.0
         const val INTERSTITIAL_DELAY = 3.0
         const val FACEBOOK_INTERSTITIAL_PLACEMENT = "2244587745860156_2351931271792469"
 
@@ -115,8 +124,13 @@ class AppConstants {
         const val PULL_TO_REFRESH_COLOR_SCHEME = Color.WHITE
 
         const val PAYMENT_TYPE_PREMIUM = "premium"
+        const val PAYMENT_TYPE_APP_PREMIUM= "subscr"
         const val PAYMENT_TRANSACTION_DETAILS = "package"
         const val PRODUCT_ACTIVE = "active"
+
+        const val PLAN_BUSINESS = "Business"
+        const val PLAN_PROFESSIONAL = "Proffesional"
+        const val PLAN_BASIC = "Basic"
 
 
         /*PayUMoney Constants */

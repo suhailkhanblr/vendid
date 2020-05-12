@@ -1,17 +1,22 @@
 package com.bylancer.classified.bylancerclassified.dashboard
 
 import android.content.Context
-import androidx.viewpager.widget.PagerAdapter
-import androidx.appcompat.widget.AppCompatTextView
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bylancer.classified.bylancerclassified.R
 import com.bylancer.classified.bylancerclassified.utils.LanguagePack
 import com.bylancer.classified.bylancerclassified.utils.Utility
+import com.himangi.imagepreview.ImagePreviewActivity
+import com.himangi.imagepreview.PreviewFile
+
 
 class ProductDetailViewPagerAdapter(private val mContext: Context, private val images: List<String>, private val imagePath:String, private val adView: String?) : PagerAdapter() {
 
@@ -28,6 +33,22 @@ class ProductDetailViewPagerAdapter(private val mContext: Context, private val i
         } else {
             Glide.with(mContext).load(imagePath + images[position]).apply(RequestOptions().placeholder(Utility.getCircularProgressDrawable(mContext))).into(productImage)
         }
+
+        val fullPathImageList = arrayListOf<PreviewFile>()
+        for (image in images) {
+            fullPathImageList.add(PreviewFile(String.format("%s%s", imagePath, image), ""))
+        }
+
+        val parentLayout = layout.findViewById(R.id.product_detail_image_parent_layout) as FrameLayout
+        parentLayout?.context?.let {
+            parentLayout?.setOnClickListener { _ ->
+                val fullImageIntent = Intent(it, ImagePreviewActivity::class.java)
+                fullImageIntent.putExtra(ImagePreviewActivity.IMAGE_LIST, fullPathImageList)
+                fullImageIntent.putExtra(ImagePreviewActivity.CURRENT_ITEM, position)
+                it.startActivity(fullImageIntent)
+            }
+        }
+
         collection.addView(layout)
         return layout
     }
