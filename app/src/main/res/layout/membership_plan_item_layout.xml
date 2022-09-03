@@ -148,7 +148,7 @@
             android:paddingBottom="@dimen/margin_ten"
             android:background="@drawable/rounded_background_premium"/>
 
-        <com.bylancer.classified.bylancerclassified.widgets.CurrentPlanShinnyTextView
+        <com.phoenix.vendido.buysell.widgets.CurrentPlanShinnyTextView
             android:id="@+id/current_plan_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

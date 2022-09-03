@@ -291,7 +291,7 @@
                                 android:clickable="true"
                                 android:background="@drawable/rounded_background_premium">
 
-                                <com.bylancer.classified.bylancerclassified.widgets.ShinnyTextView
+                                <com.phoenix.vendido.buysell.widgets.ShinnyTextView
                                     android:id="@+id/go_premium_ad_button"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
